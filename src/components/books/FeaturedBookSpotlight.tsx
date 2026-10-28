@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import DownloadButton from '@/components/common/DownloadButton';
-import { sanitizeImageUrl } from '@/lib/media';
+import { sanitizeImageUrl, sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
 
 interface FeaturedBookSpotlightProps {
   badge?: string | null;
@@ -25,6 +25,8 @@ export default function FeaturedBookSpotlight({
   pdfFile,
 }: FeaturedBookSpotlightProps) {
   const [isAbstractOpen, setIsAbstractOpen] = useState(false);
+  const hasValidPdf = isValidPdfUrl(pdfFile);
+  const pdfUrl = hasValidPdf ? sanitizeDocumentUrl(pdfFile) : null;
 
   return (
     <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
@@ -89,15 +91,26 @@ export default function FeaturedBookSpotlight({
 
           {/* Action Buttons */}
           <div className="pt-2 flex flex-wrap gap-3">
+            {hasValidPdf && pdfUrl && (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-card border border-border text-primary text-xs font-bold rounded hover:bg-muted transition-all flex items-center gap-1.5"
+              >
+                <span>View PDF ↗</span>
+              </a>
+            )}
+
             <DownloadButton
-              file={pdfFile || undefined}
-              filename={pdfFile ? `${(title || 'featured-monograph').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf` : undefined}
-              disabled={!pdfFile}
+              file={pdfUrl || undefined}
+              filename={hasValidPdf ? `${(title || 'featured-monograph').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf` : undefined}
+              disabled={!hasValidPdf}
               disabledTooltip="Publication PDF not yet available"
               className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold rounded flex items-center gap-1.5 transition-all"
             >
               <span>⬇️</span>
-              <span>{downloadButtonText || 'Download PDF'}</span>
+              <span>{hasValidPdf ? (downloadButtonText || 'Download PDF') : `${downloadButtonText || 'Download PDF'} (Unavailable)`}</span>
             </DownloadButton>
 
             <button

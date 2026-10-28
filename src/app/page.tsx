@@ -64,7 +64,7 @@ export default async function Home() {
           <aside className="lg:col-span-4 space-y-8">
             <DailyEpistleCard data={data.newsletter} />
             <ZoomMeetingCard data={data.zoomMeeting} />
-            <QuickStudyLinksWidget />
+            <QuickStudyLinksWidget data={data.quickStudyLinksWidget} />
             <AnnouncementsWidget data={data.announcementsWidget} />
             <UsefulToolsWidget data={data.usefulToolsWidget} />
           </aside>

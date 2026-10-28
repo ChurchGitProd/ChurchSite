@@ -2,6 +2,16 @@ import { defineConfig } from "tinacms";
 import { scripturaCmsCallback } from "./adminCustomizer";
 import YouTubeUrlField from "./components/YouTubeUrlField";
 
+// Validation helper ensuring uploaded/selected document has .pdf extension
+const validatePdfField = (val?: string) => {
+  if (!val) return undefined;
+  const clean = String(val).split('?')[0].split('#')[0].toLowerCase().trim();
+  if (!clean.endsWith('.pdf')) {
+    return 'Please select or upload a valid PDF document (.pdf extension required).';
+  }
+  return undefined;
+};
+
 // Your hosting provider's Git API URL
 
 
@@ -113,6 +123,9 @@ export default defineConfig({
             name: "pdfFile",
             label: "Book Monograph PDF",
             description: "Upload or select a PDF monograph file for digital download",
+            ui: {
+              validate: validatePdfField,
+            },
           },
           {
             type: "rich-text",
@@ -277,6 +290,9 @@ export default defineConfig({
             name: "pdfFile",
             label: "Magazine Issue PDF",
             description: "Upload or select a PDF magazine issue file for digital download",
+            ui: {
+              validate: validatePdfField,
+            },
           },
           {
             type: "rich-text",
@@ -636,6 +652,9 @@ export default defineConfig({
             name: "pdfFile",
             label: "Research Document PDF",
             description: "Upload or select a research paper or treatise PDF file for digital consultation",
+            ui: {
+              validate: validatePdfField,
+            },
           },
           {
             type: "rich-text",
@@ -719,6 +738,9 @@ export default defineConfig({
             name: "pdfFile",
             label: "Archival Document / Transcript PDF",
             description: "Upload or select an archival facsimile or transcript PDF file",
+            ui: {
+              validate: validatePdfField,
+            },
           },
           {
             type: "rich-text",
@@ -881,44 +903,65 @@ export default defineConfig({
             fields: [
               {
                 type: "string",
+                name: "badgeText",
+                label: "Hero Badge Text",
+                description: "Pill badge at top of hero (e.g. PREMIUM DIGITAL BIBLE LIBRARY & SCHOLARLY ARCHIVE)",
+              },
+              {
+                type: "string",
+                name: "headingLine1",
+                label: "Heading Line 1 (Bold Blue)",
+                description: "First line in bold blue sans-serif typography (e.g. Unveiling the Depth of)",
+              },
+              {
+                type: "string",
+                name: "headingLine2",
+                label: "Heading Line 2 (Gold Script)",
+                description: "Second line in elegant gold handwritten script typography (e.g. Holy Scripture)",
+              },
+              {
+                type: "string",
                 name: "headline",
-                label: "Headline",
-                required: true,
+                label: "Combined Headline (Fallback)",
+                description: "Legacy combined title fallback",
               },
               {
                 type: "string",
                 name: "subheadline",
-                label: "Subheadline",
+                label: "Subheadline / Description",
                 required: true,
+                ui: {
+                  component: "textarea",
+                },
               },
               {
                 type: "string",
                 name: "ctaText",
-                label: "CTA Button Text",
+                label: "Primary CTA Button Text",
                 required: true,
               },
               {
                 type: "string",
                 name: "ctaLink",
-                label: "CTA Button Link",
+                label: "Primary CTA Button Destination Link",
                 required: true,
               },
               {
                 type: "string",
                 name: "secondaryCtaText",
-                label: "Secondary CTA Text",
+                label: "Secondary CTA Button Text",
                 required: true,
               },
               {
                 type: "string",
                 name: "secondaryCtaLink",
-                label: "Secondary CTA Link",
+                label: "Secondary CTA Button Destination Link",
                 required: true,
               },
               {
                 type: "image",
                 name: "heroImage",
-                label: "Hero Image",
+                label: "Hero Featured Image",
               },
             ],
           },
@@ -998,6 +1041,12 @@ export default defineConfig({
                     name: "image",
                     label: "Lesson Image",
                   },
+                  {
+                    type: "string",
+                    name: "link",
+                    label: "Lesson Route / URL (optional)",
+                    description: "Target route for this lesson (e.g. /lessons/genesis-1-11-the-theology-of-creation)",
+                  },
                 ],
               },
               {
@@ -1045,6 +1094,12 @@ export default defineConfig({
                     type: "image",
                     name: "image",
                     label: "Lesson Image",
+                  },
+                  {
+                    type: "string",
+                    name: "link",
+                    label: "Lesson Route / URL (optional)",
+                    description: "Target route for this lesson (e.g. /lessons/grace-justification-and-new-life)",
                   },
                 ],
               },
@@ -1412,6 +1467,53 @@ export default defineConfig({
                     type: "string",
                     name: "link",
                     label: "Tool Link",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "quickStudyLinksWidget",
+            label: "Quick Study Links Widget",
+            fields: [
+              {
+                type: "string",
+                name: "title",
+                label: "Widget Title",
+              },
+              {
+                type: "object",
+                name: "links",
+                label: "Study Links",
+                list: true,
+                fields: [
+                  {
+                    type: "string",
+                    name: "title",
+                    label: "Link Title",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "href",
+                    label: "Target Route / URL",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "icon",
+                    label: "Icon Name",
+                    options: [
+                      "BookOpen",
+                      "Bookmark",
+                      "Clipboard",
+                      "Folder",
+                      "FileText",
+                      "Video",
+                      "Image",
+                      "Globe"
+                    ],
                   },
                 ],
               },
@@ -2359,6 +2461,9 @@ export default defineConfig({
                 name: "pdfFile",
                 label: "Featured Book PDF",
                 description: "Upload or select a PDF file for this featured spotlight monograph",
+                ui: {
+                  validate: validatePdfField,
+                },
               },
             ],
           },
@@ -2622,6 +2727,9 @@ export default defineConfig({
                 name: "pdfFile",
                 label: "Magazine Issue PDF",
                 description: "Upload or select a PDF for digital magazine download",
+                ui: {
+                  validate: validatePdfField,
+                },
               },
             ],
           },
@@ -3362,6 +3470,15 @@ export default defineConfig({
                 label: "Link Text",
                 required: true,
               },
+              {
+                type: "image",
+                name: "pdfFile",
+                label: "Featured Document PDF",
+                description: "Upload or select a PDF file for this featured archival document (optional)",
+                ui: {
+                  validate: validatePdfField,
+                },
+              },
             ],
           },
           {
@@ -3705,7 +3822,161 @@ export default defineConfig({
             ],
           },
         ],
-      }
+      },
+      {
+        name: "global",
+        label: "Website Navigation & Branding",
+        path: "content/global",
+        format: "json",
+        match: {
+          include: "index",
+        },
+        ui: {
+          global: true,
+        },
+        fields: [
+          {
+            type: "string",
+            name: "siteName",
+            label: "Website Brand Name",
+            description: "Displayed in header and footer (e.g. SCRIPTURA)",
+            required: true,
+          },
+          {
+            type: "string",
+            name: "siteTagline",
+            label: "Brand Subtitle / Tagline",
+            description: "Displayed under brand name (e.g. Digital Library)",
+          },
+          {
+            type: "string",
+            name: "logoIcon",
+            label: "Brand Logo Icon / Emoji",
+            description: "Logo icon or emoji displayed in header badge (e.g. 📚)",
+          },
+          {
+            type: "string",
+            name: "footerDescription",
+            label: "Footer Brand Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+          {
+            type: "string",
+            name: "copyrightText",
+            label: "Copyright Notice Text",
+            description: "Text after copyright year (e.g. All rights reserved.)",
+          },
+          {
+            type: "object",
+            name: "topNavLinks",
+            label: "Top Navigation Links",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label ? `${item.label} (${item.href})` : "Navigation Link",
+              }),
+            },
+            fields: [
+              { type: "string", name: "id", label: "Identifier (e.g. home, about, contact)", required: true },
+              { type: "string", name: "label", label: "Link Label", required: true },
+              { type: "string", name: "href", label: "Destination URL", required: true },
+            ],
+          },
+          {
+            type: "object",
+            name: "navSections",
+            label: "Navigation Dropdown Menus",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label ? `Dropdown: ${item.label}` : "Dropdown Menu",
+              }),
+            },
+            fields: [
+              { type: "string", name: "id", label: "Menu ID (e.g. bible, hub, connect)", required: true },
+              { type: "string", name: "label", label: "Menu Label (e.g. Bible, Knowledge Hub)", required: true },
+              {
+                type: "object",
+                name: "items",
+                label: "Dropdown Sub-Links",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.label ? `${item.label} (${item.href})` : "Sub-Link",
+                  }),
+                },
+                fields: [
+                  { type: "string", name: "id", label: "Link ID", required: true },
+                  { type: "string", name: "label", label: "Link Label", required: true },
+                  { type: "string", name: "href", label: "Destination URL", required: true },
+                ],
+              },
+            ],
+          },
+          {
+            type: "string",
+            name: "footerQuickLinksTitle",
+            label: "Footer Quick Links Column Title",
+          },
+          {
+            type: "object",
+            name: "footerQuickLinks",
+            label: "Footer Quick Links",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label ? `${item.label} (${item.href})` : "Footer Link",
+              }),
+            },
+            fields: [
+              { type: "string", name: "label", label: "Link Label", required: true },
+              { type: "string", name: "href", label: "Destination URL", required: true },
+            ],
+          },
+          {
+            type: "string",
+            name: "footerResourcesTitle",
+            label: "Footer Resources Column Title",
+          },
+          {
+            type: "object",
+            name: "footerResources",
+            label: "Footer Resources Links",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label ? `${item.label} (${item.href})` : "Footer Link",
+              }),
+            },
+            fields: [
+              { type: "string", name: "label", label: "Link Label", required: true },
+              { type: "string", name: "href", label: "Destination URL", required: true },
+            ],
+          },
+          {
+            type: "string",
+            name: "footerConnectTitle",
+            label: "Footer Connect Column Title",
+          },
+          {
+            type: "object",
+            name: "footerConnect",
+            label: "Footer Connect Links",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label ? `${item.label} (${item.href})` : "Footer Link",
+              }),
+            },
+            fields: [
+              { type: "string", name: "label", label: "Link Label", required: true },
+              { type: "string", name: "href", label: "Destination URL", required: true },
+            ],
+          },
+        ],
+      },
     ],
   },
 });

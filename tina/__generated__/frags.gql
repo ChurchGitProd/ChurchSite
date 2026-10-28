@@ -152,6 +152,9 @@ fragment HomeParts on Home {
   announcementSubtext
   hero {
     __typename
+    badgeText
+    headingLine1
+    headingLine2
     headline
     subheadline
     ctaText
@@ -177,6 +180,7 @@ fragment HomeParts on Home {
       description
       readTime
       image
+      link
     }
     lesson2 {
       __typename
@@ -187,6 +191,7 @@ fragment HomeParts on Home {
       description
       readTime
       image
+      link
     }
   }
   newsletter {
@@ -279,6 +284,16 @@ fragment HomeParts on Home {
       __typename
       name
       link
+    }
+  }
+  quickStudyLinksWidget {
+    __typename
+    title
+    links {
+      __typename
+      title
+      href
+      icon
     }
   }
   quarterlyNewsletter {
@@ -710,6 +725,7 @@ fragment ArchivesParts on Archives {
     description
     category
     linkText
+    pdfFile
   }
   classificationsTitle
   accessPolicy {
@@ -785,5 +801,49 @@ fragment PageParts on Page {
     ctaText
     ctaLink
     heroImage
+  }
+}
+
+fragment GlobalParts on Global {
+  __typename
+  siteName
+  siteTagline
+  logoIcon
+  footerDescription
+  copyrightText
+  topNavLinks {
+    __typename
+    id
+    label
+    href
+  }
+  navSections {
+    __typename
+    id
+    label
+    items {
+      __typename
+      id
+      label
+      href
+    }
+  }
+  footerQuickLinksTitle
+  footerQuickLinks {
+    __typename
+    label
+    href
+  }
+  footerResourcesTitle
+  footerResources {
+    __typename
+    label
+    href
+  }
+  footerConnectTitle
+  footerConnect {
+    __typename
+    label
+    href
   }
 }

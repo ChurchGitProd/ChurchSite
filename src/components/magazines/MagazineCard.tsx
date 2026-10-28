@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { sanitizeImageUrl } from '@/lib/media';
+import { sanitizeImageUrl, isValidPdfUrl } from '@/lib/media';
 
 export interface MagazineCardData {
   slug: string;
@@ -14,6 +14,7 @@ export interface MagazineCardData {
   contributorsCount?: number | null;
   articlesCount?: number | null;
   pagesCount?: number | null;
+  pdfFile?: string | null;
 }
 
 interface MagazineCardProps {
@@ -38,6 +39,11 @@ export default function MagazineCard({ magazine }: MagazineCardProps) {
           <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground text-xs">
             No Cover
           </div>
+        )}
+        {isValidPdfUrl(magazine.pdfFile) && (
+          <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-primary/90 text-primary-foreground text-[9px] font-bold rounded shadow-sm">
+            PDF
+          </span>
         )}
       </div>
       <div className="space-y-1">

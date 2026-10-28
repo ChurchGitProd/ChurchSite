@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/lib/useTheme';
-import { NAV_SECTIONS, TOP_NAV_HOME, TOP_NAV_ABOUT, TOP_NAV_CONTACT } from '@/lib/navConfig';
+import { NAV_SECTIONS, TOP_NAV_HOME, TOP_NAV_ABOUT, TOP_NAV_CONTACT, OTHER_TOP_NAV_LINKS, globalSettings } from '@/lib/navConfig';
 
 interface HeaderProps {
   activePage?: string;
@@ -60,11 +60,11 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
           {/* Logo & Brand */}
           <Link href="/" className="flex items-center gap-3 group" onClick={closeMenu}>
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-md transition-transform group-hover:scale-105">
-              <span className="text-xl text-tertiary">📚</span>
+              <span className="text-xl text-tertiary">{globalSettings.logoIcon || '📚'}</span>
             </div>
             <div>
-              <span className="block font-heading text-xl font-bold tracking-tight text-primary">SCRIPTURA</span>
-              <span className="block text-[10px] tracking-widest text-muted-foreground uppercase font-sans -mt-1">Digital Library</span>
+              <span className="block font-heading text-xl font-bold tracking-tight text-primary">{globalSettings.siteName || 'SCRIPTURA'}</span>
+              <span className="block text-[10px] tracking-widest text-muted-foreground uppercase font-sans -mt-1">{globalSettings.siteTagline || 'Digital Library'}</span>
             </div>
           </Link>
 
@@ -80,7 +80,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             </Link>
 
             {NAV_SECTIONS.map((section) => {
-              const isSectionActive = section.items.some((item) => item.id === activePage);
+              const isSectionActive = section.items?.some((item) => item.id === activePage);
               return (
                 <div key={section.id} className="relative group">
                   <button
@@ -94,10 +94,10 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                     aria-haspopup="true"
                   >
                     <span>{section.label}</span>
-                    <span className="text-xs transition-transform group-hover:rotate-180">▼</span>
+                    <span className="text-xs transition-transform group-hover:rotate-180 group-focus-within:rotate-180">▼</span>
                   </button>
-                  <div className="absolute left-0 mt-2 w-48 bg-card rounded-xl border border-border shadow-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    {section.items.map((item) => (
+                  <div className="absolute left-0 mt-2 w-48 bg-card rounded-xl border border-border shadow-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50">
+                    {section.items?.map((item) => (
                       <Link
                         key={item.id}
                         href={item.href}
@@ -113,22 +113,17 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
               );
             })}
 
-            <Link
-              href={TOP_NAV_ABOUT.href}
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                activePage === TOP_NAV_ABOUT.id ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-primary'
-              }`}
-            >
-              {TOP_NAV_ABOUT.label}
-            </Link>
-            <Link
-              href={TOP_NAV_CONTACT.href}
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                activePage === TOP_NAV_CONTACT.id ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-primary'
-              }`}
-            >
-              {TOP_NAV_CONTACT.label}
-            </Link>
+            {OTHER_TOP_NAV_LINKS.map((link) => (
+              <Link
+                key={link.id}
+                href={link.href}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  activePage === link.id ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Right Header Actions */}
@@ -198,11 +193,11 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
         <div className="flex items-center justify-between p-4 border-b border-border bg-card">
           <Link href="/" className="flex items-center gap-2.5" onClick={closeMenu}>
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-              <span className="text-base text-tertiary">📚</span>
+              <span className="text-base text-tertiary">{globalSettings.logoIcon || '📚'}</span>
             </div>
             <div>
-              <span className="block font-heading text-lg font-bold tracking-tight text-primary">SCRIPTURA</span>
-              <span className="block text-[9px] tracking-widest text-muted-foreground uppercase font-sans -mt-0.5">Digital Library</span>
+              <span className="block font-heading text-lg font-bold tracking-tight text-primary">{globalSettings.siteName || 'SCRIPTURA'}</span>
+              <span className="block text-[9px] tracking-widest text-muted-foreground uppercase font-sans -mt-0.5">{globalSettings.siteTagline || 'Digital Library'}</span>
             </div>
           </Link>
           <button
@@ -263,7 +258,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                   </button>
                   {isOpen && (
                     <div id={`mobile-submenu-${section.id}`} className="pl-4 pr-2 py-1 space-y-1 bg-muted/30 rounded-lg mt-1">
-                      {section.items.map((item) => {
+                      {section.items?.map((item) => {
                         const isActive = activePage === item.id;
                         return (
                           <Link
@@ -286,27 +281,19 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
               );
             })}
 
-            {/* About Link */}
-            <Link
-              href={TOP_NAV_ABOUT.href}
-              onClick={closeMenu}
-              className={`block px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                activePage === TOP_NAV_ABOUT.id ? 'bg-primary/10 text-primary font-semibold border-l-2 border-primary' : 'text-foreground hover:bg-muted'
-              }`}
-            >
-              {TOP_NAV_ABOUT.label}
-            </Link>
-
-            {/* Contact Office Link */}
-            <Link
-              href={TOP_NAV_CONTACT.href}
-              onClick={closeMenu}
-              className={`block px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                activePage === TOP_NAV_CONTACT.id ? 'bg-primary/10 text-primary font-semibold border-l-2 border-primary' : 'text-foreground hover:bg-muted'
-              }`}
-            >
-              {TOP_NAV_CONTACT.label}
-            </Link>
+            {/* Other Top Navigation Links */}
+            {OTHER_TOP_NAV_LINKS.map((link) => (
+              <Link
+                key={link.id}
+                href={link.href}
+                onClick={closeMenu}
+                className={`block px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                  activePage === link.id ? 'bg-primary/10 text-primary font-semibold border-l-2 border-primary' : 'text-foreground hover:bg-muted'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
 

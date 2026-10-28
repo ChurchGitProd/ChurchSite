@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import DownloadButton from '@/components/common/DownloadButton';
+import { sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
 
 interface BookDetailActionsProps {
   abstract?: string | null;
@@ -19,6 +20,9 @@ export default function BookDetailActions({
   const [isAbstractOpen, setIsAbstractOpen] = useState(false);
   const hasAbstract = Boolean(abstract && abstract.trim());
   const abstractElementId = `book-abstract-${slug}`;
+
+  const hasValidPdf = isValidPdfUrl(pdfFile);
+  const pdfUrl = hasValidPdf ? sanitizeDocumentUrl(pdfFile) : null;
 
   return (
     <div className="space-y-6 pt-4 border-t border-border">
@@ -54,15 +58,36 @@ export default function BookDetailActions({
 
       {/* Action Buttons Row */}
       <div className="flex flex-wrap items-center gap-4">
+        {hasValidPdf && pdfUrl ? (
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2.5 bg-muted text-primary border border-border text-xs font-bold rounded hover:bg-tertiary/20 hover:text-primary transition-all flex items-center gap-1.5"
+          >
+            <span>View PDF ↗</span>
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            className="px-4 py-2.5 bg-muted/40 border border-border text-muted-foreground text-xs font-semibold rounded cursor-not-allowed opacity-60 flex items-center gap-1.5"
+            title="Publication PDF is currently unavailable for viewing"
+          >
+            <span>PDF Unavailable</span>
+          </button>
+        )}
+
         <DownloadButton
-          file={pdfFile || undefined}
-          filename={pdfFile ? `${slug}.pdf` : undefined}
-          disabled={!pdfFile}
+          file={pdfUrl || undefined}
+          filename={hasValidPdf ? `${slug}.pdf` : undefined}
+          disabled={!hasValidPdf}
           disabledTooltip="Publication PDF not yet available"
           className="px-5 py-2.5 bg-primary text-primary-foreground text-xs font-bold rounded flex items-center gap-2"
         >
           <span>⬇️</span>
-          <span>{pdfFile ? 'Download Monograph (PDF)' : 'Download PDF (Archived)'}</span>
+          <span>{hasValidPdf ? 'Download Monograph (PDF)' : 'Download PDF (Unavailable)'}</span>
         </DownloadButton>
 
         {hasAbstract ? (

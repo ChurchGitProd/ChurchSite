@@ -136,6 +136,8 @@ export type Query = {
   quickLinksConnection: QuickLinksConnection;
   page: Page;
   pageConnection: PageConnection;
+  global: Global;
+  globalConnection: GlobalConnection;
 };
 
 
@@ -564,6 +566,21 @@ export type QueryPageConnectionArgs = {
   filter?: InputMaybe<PageFilter>;
 };
 
+
+export type QueryGlobalArgs = {
+  relativePath?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGlobalConnectionArgs = {
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<GlobalFilter>;
+};
+
 export type DocumentFilter = {
   book?: InputMaybe<BookFilter>;
   lesson?: InputMaybe<LessonFilter>;
@@ -592,6 +609,7 @@ export type DocumentFilter = {
   resources?: InputMaybe<ResourcesFilter>;
   quickLinks?: InputMaybe<QuickLinksFilter>;
   page?: InputMaybe<PageFilter>;
+  global?: InputMaybe<GlobalFilter>;
 };
 
 export type DocumentConnectionEdges = {
@@ -631,7 +649,7 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Book | Lesson | Magazine | DailyLetter | BibleReference | Video | BibleImage | LibraryResource | ArchiveDocument | UsefulResource | QuickLink | Home | About | Contact | ZoomInfo | Books | Lessons | Magazines | Newsletter | References | Videos | Images | Library | Archives | Resources | QuickLinks | Page | Folder;
+export type DocumentNode = Book | Lesson | Magazine | DailyLetter | BibleReference | Video | BibleImage | LibraryResource | ArchiveDocument | UsefulResource | QuickLink | Home | About | Contact | ZoomInfo | Books | Lessons | Magazines | Newsletter | References | Videos | Images | Library | Archives | Resources | QuickLinks | Page | Global | Folder;
 
 export type Book = Node & Document & {
   __typename?: 'Book';
@@ -1126,7 +1144,10 @@ export type QuickLinkConnection = Connection & {
 
 export type HomeHero = {
   __typename?: 'HomeHero';
-  headline: Scalars['String']['output'];
+  badgeText?: Maybe<Scalars['String']['output']>;
+  headingLine1?: Maybe<Scalars['String']['output']>;
+  headingLine2?: Maybe<Scalars['String']['output']>;
+  headline?: Maybe<Scalars['String']['output']>;
   subheadline: Scalars['String']['output'];
   ctaText: Scalars['String']['output'];
   ctaLink: Scalars['String']['output'];
@@ -1150,6 +1171,7 @@ export type HomeFeaturedLessonsLesson1 = {
   description: Scalars['String']['output'];
   readTime: Scalars['String']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  link?: Maybe<Scalars['String']['output']>;
 };
 
 export type HomeFeaturedLessonsLesson2 = {
@@ -1161,6 +1183,7 @@ export type HomeFeaturedLessonsLesson2 = {
   description: Scalars['String']['output'];
   readTime: Scalars['String']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  link?: Maybe<Scalars['String']['output']>;
 };
 
 export type HomeFeaturedLessons = {
@@ -1284,6 +1307,19 @@ export type HomeUsefulToolsWidget = {
   tools?: Maybe<Array<Maybe<HomeUsefulToolsWidgetTools>>>;
 };
 
+export type HomeQuickStudyLinksWidgetLinks = {
+  __typename?: 'HomeQuickStudyLinksWidgetLinks';
+  title: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+  icon?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeQuickStudyLinksWidget = {
+  __typename?: 'HomeQuickStudyLinksWidget';
+  title?: Maybe<Scalars['String']['output']>;
+  links?: Maybe<Array<Maybe<HomeQuickStudyLinksWidgetLinks>>>;
+};
+
 export type HomeQuarterlyNewsletter = {
   __typename?: 'HomeQuarterlyNewsletter';
   title?: Maybe<Scalars['String']['output']>;
@@ -1306,6 +1342,7 @@ export type Home = Node & Document & {
   featuredPublications?: Maybe<HomeFeaturedPublications>;
   announcementsWidget?: Maybe<HomeAnnouncementsWidget>;
   usefulToolsWidget?: Maybe<HomeUsefulToolsWidget>;
+  quickStudyLinksWidget?: Maybe<HomeQuickStudyLinksWidget>;
   quarterlyNewsletter?: Maybe<HomeQuarterlyNewsletter>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
@@ -1313,6 +1350,9 @@ export type Home = Node & Document & {
 };
 
 export type HomeHeroFilter = {
+  badgeText?: InputMaybe<StringFilter>;
+  headingLine1?: InputMaybe<StringFilter>;
+  headingLine2?: InputMaybe<StringFilter>;
   headline?: InputMaybe<StringFilter>;
   subheadline?: InputMaybe<StringFilter>;
   ctaText?: InputMaybe<StringFilter>;
@@ -1335,6 +1375,7 @@ export type HomeFeaturedLessonsLesson1Filter = {
   description?: InputMaybe<StringFilter>;
   readTime?: InputMaybe<StringFilter>;
   image?: InputMaybe<ImageFilter>;
+  link?: InputMaybe<StringFilter>;
 };
 
 export type HomeFeaturedLessonsLesson2Filter = {
@@ -1345,6 +1386,7 @@ export type HomeFeaturedLessonsLesson2Filter = {
   description?: InputMaybe<StringFilter>;
   readTime?: InputMaybe<StringFilter>;
   image?: InputMaybe<ImageFilter>;
+  link?: InputMaybe<StringFilter>;
 };
 
 export type HomeFeaturedLessonsFilter = {
@@ -1452,6 +1494,17 @@ export type HomeUsefulToolsWidgetFilter = {
   tools?: InputMaybe<HomeUsefulToolsWidgetToolsFilter>;
 };
 
+export type HomeQuickStudyLinksWidgetLinksFilter = {
+  title?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+  icon?: InputMaybe<StringFilter>;
+};
+
+export type HomeQuickStudyLinksWidgetFilter = {
+  title?: InputMaybe<StringFilter>;
+  links?: InputMaybe<HomeQuickStudyLinksWidgetLinksFilter>;
+};
+
 export type HomeQuarterlyNewsletterFilter = {
   title?: InputMaybe<StringFilter>;
   description?: InputMaybe<StringFilter>;
@@ -1472,6 +1525,7 @@ export type HomeFilter = {
   featuredPublications?: InputMaybe<HomeFeaturedPublicationsFilter>;
   announcementsWidget?: InputMaybe<HomeAnnouncementsWidgetFilter>;
   usefulToolsWidget?: InputMaybe<HomeUsefulToolsWidgetFilter>;
+  quickStudyLinksWidget?: InputMaybe<HomeQuickStudyLinksWidgetFilter>;
   quarterlyNewsletter?: InputMaybe<HomeQuarterlyNewsletterFilter>;
 };
 
@@ -2597,6 +2651,7 @@ export type ArchivesFeaturedArchive = {
   description: Scalars['String']['output'];
   category: Scalars['String']['output'];
   linkText: Scalars['String']['output'];
+  pdfFile?: Maybe<Scalars['String']['output']>;
 };
 
 export type ArchivesAccessPolicy = {
@@ -2632,6 +2687,7 @@ export type ArchivesFeaturedArchiveFilter = {
   description?: InputMaybe<StringFilter>;
   category?: InputMaybe<StringFilter>;
   linkText?: InputMaybe<StringFilter>;
+  pdfFile?: InputMaybe<ImageFilter>;
 };
 
 export type ArchivesAccessPolicyFilter = {
@@ -2860,6 +2916,127 @@ export type PageConnection = Connection & {
   edges?: Maybe<Array<Maybe<PageConnectionEdges>>>;
 };
 
+export type GlobalTopNavLinks = {
+  __typename?: 'GlobalTopNavLinks';
+  id: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+};
+
+export type GlobalNavSectionsItems = {
+  __typename?: 'GlobalNavSectionsItems';
+  id: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+};
+
+export type GlobalNavSections = {
+  __typename?: 'GlobalNavSections';
+  id: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  items?: Maybe<Array<Maybe<GlobalNavSectionsItems>>>;
+};
+
+export type GlobalFooterQuickLinks = {
+  __typename?: 'GlobalFooterQuickLinks';
+  label: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+};
+
+export type GlobalFooterResources = {
+  __typename?: 'GlobalFooterResources';
+  label: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+};
+
+export type GlobalFooterConnect = {
+  __typename?: 'GlobalFooterConnect';
+  label: Scalars['String']['output'];
+  href: Scalars['String']['output'];
+};
+
+export type Global = Node & Document & {
+  __typename?: 'Global';
+  siteName: Scalars['String']['output'];
+  siteTagline?: Maybe<Scalars['String']['output']>;
+  logoIcon?: Maybe<Scalars['String']['output']>;
+  footerDescription?: Maybe<Scalars['String']['output']>;
+  copyrightText?: Maybe<Scalars['String']['output']>;
+  topNavLinks?: Maybe<Array<Maybe<GlobalTopNavLinks>>>;
+  navSections?: Maybe<Array<Maybe<GlobalNavSections>>>;
+  footerQuickLinksTitle?: Maybe<Scalars['String']['output']>;
+  footerQuickLinks?: Maybe<Array<Maybe<GlobalFooterQuickLinks>>>;
+  footerResourcesTitle?: Maybe<Scalars['String']['output']>;
+  footerResources?: Maybe<Array<Maybe<GlobalFooterResources>>>;
+  footerConnectTitle?: Maybe<Scalars['String']['output']>;
+  footerConnect?: Maybe<Array<Maybe<GlobalFooterConnect>>>;
+  id: Scalars['ID']['output'];
+  _sys: SystemInfo;
+  _values: Scalars['JSON']['output'];
+};
+
+export type GlobalTopNavLinksFilter = {
+  id?: InputMaybe<StringFilter>;
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type GlobalNavSectionsItemsFilter = {
+  id?: InputMaybe<StringFilter>;
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type GlobalNavSectionsFilter = {
+  id?: InputMaybe<StringFilter>;
+  label?: InputMaybe<StringFilter>;
+  items?: InputMaybe<GlobalNavSectionsItemsFilter>;
+};
+
+export type GlobalFooterQuickLinksFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type GlobalFooterResourcesFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type GlobalFooterConnectFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type GlobalFilter = {
+  siteName?: InputMaybe<StringFilter>;
+  siteTagline?: InputMaybe<StringFilter>;
+  logoIcon?: InputMaybe<StringFilter>;
+  footerDescription?: InputMaybe<StringFilter>;
+  copyrightText?: InputMaybe<StringFilter>;
+  topNavLinks?: InputMaybe<GlobalTopNavLinksFilter>;
+  navSections?: InputMaybe<GlobalNavSectionsFilter>;
+  footerQuickLinksTitle?: InputMaybe<StringFilter>;
+  footerQuickLinks?: InputMaybe<GlobalFooterQuickLinksFilter>;
+  footerResourcesTitle?: InputMaybe<StringFilter>;
+  footerResources?: InputMaybe<GlobalFooterResourcesFilter>;
+  footerConnectTitle?: InputMaybe<StringFilter>;
+  footerConnect?: InputMaybe<GlobalFooterConnectFilter>;
+};
+
+export type GlobalConnectionEdges = {
+  __typename?: 'GlobalConnectionEdges';
+  cursor: Scalars['String']['output'];
+  node?: Maybe<Global>;
+};
+
+export type GlobalConnection = Connection & {
+  __typename?: 'GlobalConnection';
+  pageInfo: PageInfo;
+  totalCount: Scalars['Float']['output'];
+  edges?: Maybe<Array<Maybe<GlobalConnectionEdges>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addPendingDocument: DocumentNode;
@@ -2921,6 +3098,8 @@ export type Mutation = {
   createQuickLinks: QuickLinks;
   updatePage: Page;
   createPage: Page;
+  updateGlobal: Global;
+  createGlobal: Global;
 };
 
 
@@ -3280,6 +3459,18 @@ export type MutationCreatePageArgs = {
   params: PageMutation;
 };
 
+
+export type MutationUpdateGlobalArgs = {
+  relativePath: Scalars['String']['input'];
+  params: GlobalMutation;
+};
+
+
+export type MutationCreateGlobalArgs = {
+  relativePath: Scalars['String']['input'];
+  params: GlobalMutation;
+};
+
 export type DocumentUpdateMutation = {
   book?: InputMaybe<BookMutation>;
   lesson?: InputMaybe<LessonMutation>;
@@ -3308,6 +3499,7 @@ export type DocumentUpdateMutation = {
   resources?: InputMaybe<ResourcesMutation>;
   quickLinks?: InputMaybe<QuickLinksMutation>;
   page?: InputMaybe<PageMutation>;
+  global?: InputMaybe<GlobalMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -3339,6 +3531,7 @@ export type DocumentMutation = {
   resources?: InputMaybe<ResourcesMutation>;
   quickLinks?: InputMaybe<QuickLinksMutation>;
   page?: InputMaybe<PageMutation>;
+  global?: InputMaybe<GlobalMutation>;
 };
 
 export type BookMutation = {
@@ -3479,6 +3672,9 @@ export type QuickLinkMutation = {
 };
 
 export type HomeHeroMutation = {
+  badgeText?: InputMaybe<Scalars['String']['input']>;
+  headingLine1?: InputMaybe<Scalars['String']['input']>;
+  headingLine2?: InputMaybe<Scalars['String']['input']>;
   headline?: InputMaybe<Scalars['String']['input']>;
   subheadline?: InputMaybe<Scalars['String']['input']>;
   ctaText?: InputMaybe<Scalars['String']['input']>;
@@ -3501,6 +3697,7 @@ export type HomeFeaturedLessonsLesson1Mutation = {
   description?: InputMaybe<Scalars['String']['input']>;
   readTime?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
+  link?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type HomeFeaturedLessonsLesson2Mutation = {
@@ -3511,6 +3708,7 @@ export type HomeFeaturedLessonsLesson2Mutation = {
   description?: InputMaybe<Scalars['String']['input']>;
   readTime?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
+  link?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type HomeFeaturedLessonsMutation = {
@@ -3618,6 +3816,17 @@ export type HomeUsefulToolsWidgetMutation = {
   tools?: InputMaybe<Array<InputMaybe<HomeUsefulToolsWidgetToolsMutation>>>;
 };
 
+export type HomeQuickStudyLinksWidgetLinksMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeQuickStudyLinksWidgetMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  links?: InputMaybe<Array<InputMaybe<HomeQuickStudyLinksWidgetLinksMutation>>>;
+};
+
 export type HomeQuarterlyNewsletterMutation = {
   title?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -3638,6 +3847,7 @@ export type HomeMutation = {
   featuredPublications?: InputMaybe<HomeFeaturedPublicationsMutation>;
   announcementsWidget?: InputMaybe<HomeAnnouncementsWidgetMutation>;
   usefulToolsWidget?: InputMaybe<HomeUsefulToolsWidgetMutation>;
+  quickStudyLinksWidget?: InputMaybe<HomeQuickStudyLinksWidgetMutation>;
   quarterlyNewsletter?: InputMaybe<HomeQuarterlyNewsletterMutation>;
 };
 
@@ -4085,6 +4295,7 @@ export type ArchivesFeaturedArchiveMutation = {
   description?: InputMaybe<Scalars['String']['input']>;
   category?: InputMaybe<Scalars['String']['input']>;
   linkText?: InputMaybe<Scalars['String']['input']>;
+  pdfFile?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ArchivesAccessPolicyMutation = {
@@ -4173,6 +4384,55 @@ export type PageMutation = {
   hero?: InputMaybe<PageHeroMutation>;
 };
 
+export type GlobalTopNavLinksMutation = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GlobalNavSectionsItemsMutation = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GlobalNavSectionsMutation = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  items?: InputMaybe<Array<InputMaybe<GlobalNavSectionsItemsMutation>>>;
+};
+
+export type GlobalFooterQuickLinksMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GlobalFooterResourcesMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GlobalFooterConnectMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GlobalMutation = {
+  siteName?: InputMaybe<Scalars['String']['input']>;
+  siteTagline?: InputMaybe<Scalars['String']['input']>;
+  logoIcon?: InputMaybe<Scalars['String']['input']>;
+  footerDescription?: InputMaybe<Scalars['String']['input']>;
+  copyrightText?: InputMaybe<Scalars['String']['input']>;
+  topNavLinks?: InputMaybe<Array<InputMaybe<GlobalTopNavLinksMutation>>>;
+  navSections?: InputMaybe<Array<InputMaybe<GlobalNavSectionsMutation>>>;
+  footerQuickLinksTitle?: InputMaybe<Scalars['String']['input']>;
+  footerQuickLinks?: InputMaybe<Array<InputMaybe<GlobalFooterQuickLinksMutation>>>;
+  footerResourcesTitle?: InputMaybe<Scalars['String']['input']>;
+  footerResources?: InputMaybe<Array<InputMaybe<GlobalFooterResourcesMutation>>>;
+  footerConnectTitle?: InputMaybe<Scalars['String']['input']>;
+  footerConnect?: InputMaybe<Array<InputMaybe<GlobalFooterConnectMutation>>>;
+};
+
 export type BookPartsFragment = { __typename: 'Book', title: string, author: string, description: string, abstract?: string | null, format: string, subject: string, coverImage: string, featured?: string | null, pdfFile?: string | null, body?: any | null };
 
 export type LessonPartsFragment = { __typename: 'Lesson', title: string, book: string, chapters: string, description: string, content?: any | null, teacher: string, division: string, difficulty: string, image?: string | null };
@@ -4195,7 +4455,7 @@ export type UsefulResourcePartsFragment = { __typename: 'UsefulResource', title:
 
 export type QuickLinkPartsFragment = { __typename: 'QuickLink', title: string, subtitle: string, targetUrl: string, icon: string, description?: string | null, body?: any | null };
 
-export type HomePartsFragment = { __typename: 'Home', announcementText: string, announcementSubtext?: string | null, hero?: { __typename: 'HomeHero', headline: string, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null };
+export type HomePartsFragment = { __typename: 'Home', announcementText: string, announcementSubtext?: string | null, hero?: { __typename: 'HomeHero', badgeText?: string | null, headingLine1?: string | null, headingLine2?: string | null, headline?: string | null, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quickStudyLinksWidget?: { __typename: 'HomeQuickStudyLinksWidget', title?: string | null, links?: Array<{ __typename: 'HomeQuickStudyLinksWidgetLinks', title: string, href: string, icon?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null };
 
 export type AboutPartsFragment = { __typename: 'About', announcementText: string, announcementSubtext?: string | null, introTitle: string, introParagraph1: string, introParagraph2: string, leadershipTitle?: string | null, hero?: { __typename: 'AboutHero', badge: string, headline: string, subheadline: string } | null, mission?: { __typename: 'AboutMission', title: string, description: string } | null, vision?: { __typename: 'AboutVision', title: string, description: string } | null, statementOfFaith?: { __typename: 'AboutStatementOfFaith', badge: string, title: string, point1Title: string, point1Text: string, point2Title: string, point2Text: string, point3Title: string, point3Text: string } | null, quoteWidget?: { __typename: 'AboutQuoteWidget', quote: string, author: string } | null, leadership?: Array<{ __typename: 'AboutLeadership', name: string, role: string, avatar: string, bio: string } | null> | null, academicOffice?: { __typename: 'AboutAcademicOffice', title?: string | null, description?: string | null, address?: string | null, email?: string | null, buttonText?: string | null, buttonLink?: string | null } | null };
 
@@ -4219,13 +4479,15 @@ export type ImagesPartsFragment = { __typename: 'Images', announcementText: stri
 
 export type LibraryPartsFragment = { __typename: 'Library', announcementText: string, announcementSubtext?: string | null, searchPlaceholder: string, categoriesTitle: string, popularTitle: string, recentTitle: string, hero?: { __typename: 'LibraryHero', badge: string, headline: string, subheadline: string } | null, featuredResource?: { __typename: 'LibraryFeaturedResource', badge: string, tag: string, title: string, description: string, details: string, linkText: string } | null };
 
-export type ArchivesPartsFragment = { __typename: 'Archives', announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null };
+export type ArchivesPartsFragment = { __typename: 'Archives', announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string, pdfFile?: string | null } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null };
 
 export type ResourcesPartsFragment = { __typename: 'Resources', announcementText: string, announcementSubtext?: string | null, searchPlaceholder: string, popularResourcesTitle: string, recentAdditionsTitle: string, categoryTagsTitle: string, hero?: { __typename: 'ResourcesHero', badge: string, headline: string, subheadline: string } | null, featuredResource?: { __typename: 'ResourcesFeaturedResource', badge: string, tag: string, title: string, description: string, rating: string, linkText: string, linkUrl: string } | null };
 
 export type QuickLinksPartsFragment = { __typename: 'QuickLinks', announcementText: string, announcementSubtext?: string | null, categorySectionTitle: string, searchSectionTitle: string, searchPlaceholder: string, shortcutsSectionTitle: string, hero?: { __typename: 'QuickLinksHero', badge: string, headline: string, subheadline: string } | null, featuredBanner?: { __typename: 'QuickLinksFeaturedBanner', badge: string, tag: string, title: string, description: string, button1Text: string, button1Link: string, button2Text: string, button2Link: string, button3Text: string, button3Link: string } | null };
 
 export type PagePartsFragment = { __typename: 'Page', title: string, description: string, hero?: { __typename: 'PageHero', headline: string, subheadline?: string | null, ctaText?: string | null, ctaLink?: string | null, heroImage?: string | null } | null };
+
+export type GlobalPartsFragment = { __typename: 'Global', siteName: string, siteTagline?: string | null, logoIcon?: string | null, footerDescription?: string | null, copyrightText?: string | null, footerQuickLinksTitle?: string | null, footerResourcesTitle?: string | null, footerConnectTitle?: string | null, topNavLinks?: Array<{ __typename: 'GlobalTopNavLinks', id: string, label: string, href: string } | null> | null, navSections?: Array<{ __typename: 'GlobalNavSections', id: string, label: string, items?: Array<{ __typename: 'GlobalNavSectionsItems', id: string, label: string, href: string } | null> | null } | null> | null, footerQuickLinks?: Array<{ __typename: 'GlobalFooterQuickLinks', label: string, href: string } | null> | null, footerResources?: Array<{ __typename: 'GlobalFooterResources', label: string, href: string } | null> | null, footerConnect?: Array<{ __typename: 'GlobalFooterConnect', label: string, href: string } | null> | null };
 
 export type BookQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -4441,7 +4703,7 @@ export type HomeQueryVariables = Exact<{
 }>;
 
 
-export type HomeQuery = { __typename?: 'Query', home: { __typename: 'Home', id: string, announcementText: string, announcementSubtext?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'HomeHero', headline: string, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null } };
+export type HomeQuery = { __typename?: 'Query', home: { __typename: 'Home', id: string, announcementText: string, announcementSubtext?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'HomeHero', badgeText?: string | null, headingLine1?: string | null, headingLine2?: string | null, headline?: string | null, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quickStudyLinksWidget?: { __typename: 'HomeQuickStudyLinksWidget', title?: string | null, links?: Array<{ __typename: 'HomeQuickStudyLinksWidgetLinks', title: string, href: string, icon?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null } };
 
 export type HomeConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -4453,7 +4715,7 @@ export type HomeConnectionQueryVariables = Exact<{
 }>;
 
 
-export type HomeConnectionQuery = { __typename?: 'Query', homeConnection: { __typename?: 'HomeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'HomeConnectionEdges', cursor: string, node?: { __typename: 'Home', id: string, announcementText: string, announcementSubtext?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'HomeHero', headline: string, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null } | null } | null> | null } };
+export type HomeConnectionQuery = { __typename?: 'Query', homeConnection: { __typename?: 'HomeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'HomeConnectionEdges', cursor: string, node?: { __typename: 'Home', id: string, announcementText: string, announcementSubtext?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'HomeHero', badgeText?: string | null, headingLine1?: string | null, headingLine2?: string | null, headline?: string | null, subheadline: string, ctaText: string, ctaLink: string, secondaryCtaText: string, secondaryCtaLink: string, heroImage?: string | null } | null, scriptureOfTheDay?: { __typename: 'HomeScriptureOfTheDay', verse: string, reference: string } | null, featuredLessons?: { __typename: 'HomeFeaturedLessons', sectionTitle: string, lesson1?: { __typename: 'HomeFeaturedLessonsLesson1', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null, lesson2?: { __typename: 'HomeFeaturedLessonsLesson2', category: string, reference: string, author: string, title: string, description: string, readTime: string, image?: string | null, link?: string | null } | null } | null, newsletter?: { __typename: 'HomeNewsletter', title: string, description: string, buttonText: string } | null, zoomMeeting?: { __typename: 'HomeZoomMeeting', title: string, description: string, date: string, time: string, buttonText: string, buttonLink: string } | null, latestReferences?: { __typename: 'HomeLatestReferences', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeLatestReferencesItems', reference?: string | null, category?: string | null, title?: string | null, description?: string | null, tags?: Array<string | null> | null, link?: string | null } | null> | null } | null, featuredVideos?: { __typename: 'HomeFeaturedVideos', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeFeaturedVideosItems', series?: string | null, title?: string | null, description?: string | null, duration?: string | null, image?: string | null, link?: string | null } | null> | null } | null, galleryPreview?: { __typename: 'HomeGalleryPreview', sectionTitle?: string | null, items?: Array<{ __typename: 'HomeGalleryPreviewItems', title?: string | null, category?: string | null, image?: string | null } | null> | null } | null, featuredPublications?: { __typename: 'HomeFeaturedPublications', sectionTitle?: string | null, book?: { __typename: 'HomeFeaturedPublicationsBook', badge?: string | null, title?: string | null, author?: string | null, description?: string | null, coverImage?: string | null, downloadLink?: string | null } | null, magazine?: { __typename: 'HomeFeaturedPublicationsMagazine', badge?: string | null, title?: string | null, issue?: string | null, description?: string | null, coverImage?: string | null, readLink?: string | null } | null } | null, announcementsWidget?: { __typename: 'HomeAnnouncementsWidget', title?: string | null, items?: Array<{ __typename: 'HomeAnnouncementsWidgetItems', date?: string | null, title?: string | null, description?: string | null } | null> | null } | null, usefulToolsWidget?: { __typename: 'HomeUsefulToolsWidget', title?: string | null, tools?: Array<{ __typename: 'HomeUsefulToolsWidgetTools', name?: string | null, link?: string | null } | null> | null } | null, quickStudyLinksWidget?: { __typename: 'HomeQuickStudyLinksWidget', title?: string | null, links?: Array<{ __typename: 'HomeQuickStudyLinksWidgetLinks', title: string, href: string, icon?: string | null } | null> | null } | null, quarterlyNewsletter?: { __typename: 'HomeQuarterlyNewsletter', title?: string | null, description?: string | null, buttonText?: string | null } | null } | null } | null> | null } };
 
 export type AboutQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -4669,7 +4931,7 @@ export type ArchivesQueryVariables = Exact<{
 }>;
 
 
-export type ArchivesQuery = { __typename?: 'Query', archives: { __typename: 'Archives', id: string, announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null } };
+export type ArchivesQuery = { __typename?: 'Query', archives: { __typename: 'Archives', id: string, announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string, pdfFile?: string | null } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null } };
 
 export type ArchivesConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -4681,7 +4943,7 @@ export type ArchivesConnectionQueryVariables = Exact<{
 }>;
 
 
-export type ArchivesConnectionQuery = { __typename?: 'Query', archivesConnection: { __typename?: 'ArchivesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'ArchivesConnectionEdges', cursor: string, node?: { __typename: 'Archives', id: string, announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null } | null } | null> | null } };
+export type ArchivesConnectionQuery = { __typename?: 'Query', archivesConnection: { __typename?: 'ArchivesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'ArchivesConnectionEdges', cursor: string, node?: { __typename: 'Archives', id: string, announcementText: string, announcementSubtext?: string | null, catalogInfo: string, classificationsTitle: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'ArchivesHero', badge: string, headline: string, subheadline: string } | null, featuredArchive?: { __typename: 'ArchivesFeaturedArchive', badge: string, catalogRef: string, title: string, description: string, category: string, linkText: string, pdfFile?: string | null } | null, accessPolicy?: { __typename: 'ArchivesAccessPolicy', title: string, description: string } | null } | null } | null> | null } };
 
 export type ResourcesQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -4739,6 +5001,25 @@ export type PageConnectionQueryVariables = Exact<{
 
 
 export type PageConnectionQuery = { __typename?: 'Query', pageConnection: { __typename?: 'PageConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PageConnectionEdges', cursor: string, node?: { __typename: 'Page', id: string, title: string, description: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, hero?: { __typename: 'PageHero', headline: string, subheadline?: string | null, ctaText?: string | null, ctaLink?: string | null, heroImage?: string | null } | null } | null } | null> | null } };
+
+export type GlobalQueryVariables = Exact<{
+  relativePath: Scalars['String']['input'];
+}>;
+
+
+export type GlobalQuery = { __typename?: 'Query', global: { __typename: 'Global', id: string, siteName: string, siteTagline?: string | null, logoIcon?: string | null, footerDescription?: string | null, copyrightText?: string | null, footerQuickLinksTitle?: string | null, footerResourcesTitle?: string | null, footerConnectTitle?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, topNavLinks?: Array<{ __typename: 'GlobalTopNavLinks', id: string, label: string, href: string } | null> | null, navSections?: Array<{ __typename: 'GlobalNavSections', id: string, label: string, items?: Array<{ __typename: 'GlobalNavSectionsItems', id: string, label: string, href: string } | null> | null } | null> | null, footerQuickLinks?: Array<{ __typename: 'GlobalFooterQuickLinks', label: string, href: string } | null> | null, footerResources?: Array<{ __typename: 'GlobalFooterResources', label: string, href: string } | null> | null, footerConnect?: Array<{ __typename: 'GlobalFooterConnect', label: string, href: string } | null> | null } };
+
+export type GlobalConnectionQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<GlobalFilter>;
+}>;
+
+
+export type GlobalConnectionQuery = { __typename?: 'Query', globalConnection: { __typename?: 'GlobalConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'GlobalConnectionEdges', cursor: string, node?: { __typename: 'Global', id: string, siteName: string, siteTagline?: string | null, logoIcon?: string | null, footerDescription?: string | null, copyrightText?: string | null, footerQuickLinksTitle?: string | null, footerResourcesTitle?: string | null, footerConnectTitle?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, topNavLinks?: Array<{ __typename: 'GlobalTopNavLinks', id: string, label: string, href: string } | null> | null, navSections?: Array<{ __typename: 'GlobalNavSections', id: string, label: string, items?: Array<{ __typename: 'GlobalNavSectionsItems', id: string, label: string, href: string } | null> | null } | null> | null, footerQuickLinks?: Array<{ __typename: 'GlobalFooterQuickLinks', label: string, href: string } | null> | null, footerResources?: Array<{ __typename: 'GlobalFooterResources', label: string, href: string } | null> | null, footerConnect?: Array<{ __typename: 'GlobalFooterConnect', label: string, href: string } | null> | null } | null } | null> | null } };
 
 export const BookPartsFragmentDoc = gql`
     fragment BookParts on Book {
@@ -4906,6 +5187,9 @@ export const HomePartsFragmentDoc = gql`
   announcementSubtext
   hero {
     __typename
+    badgeText
+    headingLine1
+    headingLine2
     headline
     subheadline
     ctaText
@@ -4931,6 +5215,7 @@ export const HomePartsFragmentDoc = gql`
       description
       readTime
       image
+      link
     }
     lesson2 {
       __typename
@@ -4941,6 +5226,7 @@ export const HomePartsFragmentDoc = gql`
       description
       readTime
       image
+      link
     }
   }
   newsletter {
@@ -5033,6 +5319,16 @@ export const HomePartsFragmentDoc = gql`
       __typename
       name
       link
+    }
+  }
+  quickStudyLinksWidget {
+    __typename
+    title
+    links {
+      __typename
+      title
+      href
+      icon
     }
   }
   quarterlyNewsletter {
@@ -5476,6 +5772,7 @@ export const ArchivesPartsFragmentDoc = gql`
     description
     category
     linkText
+    pdfFile
   }
   classificationsTitle
   accessPolicy {
@@ -5554,6 +5851,51 @@ export const PagePartsFragmentDoc = gql`
     ctaText
     ctaLink
     heroImage
+  }
+}
+    `;
+export const GlobalPartsFragmentDoc = gql`
+    fragment GlobalParts on Global {
+  __typename
+  siteName
+  siteTagline
+  logoIcon
+  footerDescription
+  copyrightText
+  topNavLinks {
+    __typename
+    id
+    label
+    href
+  }
+  navSections {
+    __typename
+    id
+    label
+    items {
+      __typename
+      id
+      label
+      href
+    }
+  }
+  footerQuickLinksTitle
+  footerQuickLinks {
+    __typename
+    label
+    href
+  }
+  footerResourcesTitle
+  footerResources {
+    __typename
+    label
+    href
+  }
+  footerConnectTitle
+  footerConnect {
+    __typename
+    label
+    href
   }
 }
     `;
@@ -7096,6 +7438,63 @@ export const PageConnectionDocument = gql`
   }
 }
     ${PagePartsFragmentDoc}`;
+export const GlobalDocument = gql`
+    query global($relativePath: String!) {
+  global(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...GlobalParts
+  }
+}
+    ${GlobalPartsFragmentDoc}`;
+export const GlobalConnectionDocument = gql`
+    query globalConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: GlobalFilter) {
+  globalConnection(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    sort: $sort
+    filter: $filter
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+        ...GlobalParts
+      }
+    }
+  }
+}
+    ${GlobalPartsFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
@@ -7260,6 +7659,12 @@ export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) 
       },
     pageConnection(variables?: PageConnectionQueryVariables, options?: C): Promise<{data: PageConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageConnectionQueryVariables, query: string}> {
         return requester<{data: PageConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageConnectionQueryVariables, query: string}, PageConnectionQueryVariables>(PageConnectionDocument, variables, options);
+      },
+    global(variables: GlobalQueryVariables, options?: C): Promise<{data: GlobalQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: GlobalQueryVariables, query: string}> {
+        return requester<{data: GlobalQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: GlobalQueryVariables, query: string}, GlobalQueryVariables>(GlobalDocument, variables, options);
+      },
+    globalConnection(variables?: GlobalConnectionQueryVariables, options?: C): Promise<{data: GlobalConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: GlobalConnectionQueryVariables, query: string}> {
+        return requester<{data: GlobalConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: GlobalConnectionQueryVariables, query: string}, GlobalConnectionQueryVariables>(GlobalConnectionDocument, variables, options);
       }
     };
   }

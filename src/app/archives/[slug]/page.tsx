@@ -138,22 +138,37 @@ export default async function ArchiveDetailPage({
           {/* Actions */}
           <div className="pt-6 border-t border-border flex flex-wrap items-center gap-4">
             {document.pdfFile ? (
-              <DownloadButton
-                file={document.pdfFile}
-                filename={`${params.slug}.pdf`}
-                disabled={false}
-                className="px-6 py-2.5 bg-primary text-primary-foreground font-bold text-xs rounded hover:bg-primary/90 transition-all uppercase tracking-wider"
-              >
-                {document.actionLabel || 'Download Archival PDF'}
-              </DownloadButton>
+              <>
+                <a
+                  href={document.pdfFile}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-2.5 bg-primary text-primary-foreground font-bold text-xs rounded hover:bg-primary/90 transition-all uppercase tracking-wider inline-flex items-center gap-2"
+                  title={`View ${document.title} PDF in a new tab`}
+                  aria-label={`View ${document.title} PDF in a new tab`}
+                >
+                  <span>View PDF</span>
+                  <span className="text-xs" aria-hidden="true">↗</span>
+                </a>
+                <DownloadButton
+                  file={document.pdfFile}
+                  filename={`${params.slug}.pdf`}
+                  disabled={false}
+                  className="px-6 py-2.5 border border-border bg-card text-primary font-bold text-xs rounded hover:bg-muted transition-all uppercase tracking-wider inline-flex items-center gap-2"
+                  title={`Download ${document.title} PDF`}
+                  ariaLabel={`Download ${document.title} PDF`}
+                >
+                  <span>{document.actionLabel && document.actionLabel.toLowerCase().includes('download') ? document.actionLabel : 'Download PDF'}</span>
+                  <span className="text-xs" aria-hidden="true">⬇</span>
+                </DownloadButton>
+              </>
             ) : isDownload ? (
-              <DownloadButton
-                disabled={true}
-                disabledTooltip={`${document.title} archival PDF is not yet digitized`}
-                className="px-6 py-2.5 bg-primary text-primary-foreground font-bold text-xs rounded hover:bg-primary/90 transition-all uppercase tracking-wider"
+              <span
+                className="px-4 py-2 border border-border bg-muted text-muted-foreground text-xs rounded font-medium select-none cursor-not-allowed opacity-75 inline-flex items-center gap-1.5"
+                title={`${document.title} archival PDF is not yet digitized`}
               >
-                {document.actionLabel || 'View PDF'} (Unavailable)
-              </DownloadButton>
+                <span>PDF Unavailable</span>
+              </span>
             ) : (
               <span
                 className="px-4 py-2 border border-border bg-muted text-muted-foreground text-xs rounded font-medium select-none"

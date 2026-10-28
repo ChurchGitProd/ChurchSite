@@ -36,6 +36,7 @@ export default async function Magazines() {
       contributorsCount: node.contributorsCount,
       articlesCount: node.articlesCount,
       pagesCount: node.pagesCount,
+      pdfFile: node.pdfFile,
     }));
 
   // Canonical display order matching original HTML source

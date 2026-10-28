@@ -1,4 +1,5 @@
 import React from 'react';
+import { sanitizeDocumentUrl } from '@/lib/media';
 
 interface DownloadButtonProps {
   url?: string;
@@ -9,6 +10,7 @@ interface DownloadButtonProps {
   disabled?: boolean;
   disabledTooltip?: string;
   ariaLabel?: string;
+  title?: string;
 }
 
 export default function DownloadButton({
@@ -20,8 +22,11 @@ export default function DownloadButton({
   disabled = false,
   disabledTooltip = 'Document currently unavailable',
   ariaLabel,
+  title,
 }: DownloadButtonProps) {
-  const isUnavailable = disabled || (!url && !file);
+  const rawTarget = file || url || '';
+  const sanitizedTarget = sanitizeDocumentUrl(rawTarget);
+  const isUnavailable = disabled || (!url && !file) || !sanitizedTarget;
 
   if (isUnavailable) {
     return (
@@ -30,7 +35,7 @@ export default function DownloadButton({
         disabled
         aria-disabled="true"
         aria-label={ariaLabel}
-        title={disabledTooltip}
+        title={title || disabledTooltip}
         className={`${className} opacity-60 cursor-not-allowed`}
       >
         {children}
@@ -39,13 +44,15 @@ export default function DownloadButton({
   }
 
   // Determine effective target
-  const rawTarget = file || url || '';
-  const isLocalPath = rawTarget.startsWith('/') || rawTarget.startsWith('uploads/') || rawTarget.startsWith('documents/');
+  const isLocalPath =
+    sanitizedTarget.startsWith('/') ||
+    sanitizedTarget.startsWith('uploads/') ||
+    sanitizedTarget.startsWith('documents/');
 
   let downloadHref: string;
   if (isLocalPath) {
-    // Direct static CDN link ensures large files (up to 100MB+) download reliably without Vercel 4.5MB Serverless function limit
-    downloadHref = rawTarget.startsWith('/') ? rawTarget : `/${rawTarget}`;
+    // Direct static CDN link ensures large files (up to 100MB+) download reliably without serverless function limits
+    downloadHref = sanitizedTarget.startsWith('/') ? sanitizedTarget : `/${sanitizedTarget}`;
   } else {
     const queryParams = new URLSearchParams();
     if (url) queryParams.set('url', url);
@@ -59,6 +66,7 @@ export default function DownloadButton({
       href={downloadHref}
       download={filename || true}
       aria-label={ariaLabel}
+      title={title}
       className={className}
     >
       {children}

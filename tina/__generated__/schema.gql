@@ -108,6 +108,8 @@ type Query {
   quickLinksConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: QuickLinksFilter): QuickLinksConnection!
   page(relativePath: String): Page!
   pageConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: PageFilter): PageConnection!
+  global(relativePath: String): Global!
+  globalConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: GlobalFilter): GlobalConnection!
 }
 
 input DocumentFilter {
@@ -138,6 +140,7 @@ input DocumentFilter {
   resources: ResourcesFilter
   quickLinks: QuickLinksFilter
   page: PageFilter
+  global: GlobalFilter
 }
 
 type DocumentConnectionEdges {
@@ -163,7 +166,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Book | Lesson | Magazine | DailyLetter | BibleReference | Video | BibleImage | LibraryResource | ArchiveDocument | UsefulResource | QuickLink | Home | About | Contact | ZoomInfo | Books | Lessons | Magazines | Newsletter | References | Videos | Images | Library | Archives | Resources | QuickLinks | Page | Folder
+union DocumentNode = Book | Lesson | Magazine | DailyLetter | BibleReference | Video | BibleImage | LibraryResource | ArchiveDocument | UsefulResource | QuickLink | Home | About | Contact | ZoomInfo | Books | Lessons | Magazines | Newsletter | References | Videos | Images | Library | Archives | Resources | QuickLinks | Page | Global | Folder
 
 type Book implements Node & Document {
   title: String!
@@ -624,7 +627,10 @@ type QuickLinkConnection implements Connection {
 }
 
 type HomeHero {
-  headline: String!
+  badgeText: String
+  headingLine1: String
+  headingLine2: String
+  headline: String
   subheadline: String!
   ctaText: String!
   ctaLink: String!
@@ -646,6 +652,7 @@ type HomeFeaturedLessonsLesson1 {
   description: String!
   readTime: String!
   image: String
+  link: String
 }
 
 type HomeFeaturedLessonsLesson2 {
@@ -656,6 +663,7 @@ type HomeFeaturedLessonsLesson2 {
   description: String!
   readTime: String!
   image: String
+  link: String
 }
 
 type HomeFeaturedLessons {
@@ -763,6 +771,17 @@ type HomeUsefulToolsWidget {
   tools: [HomeUsefulToolsWidgetTools]
 }
 
+type HomeQuickStudyLinksWidgetLinks {
+  title: String!
+  href: String!
+  icon: String
+}
+
+type HomeQuickStudyLinksWidget {
+  title: String
+  links: [HomeQuickStudyLinksWidgetLinks]
+}
+
 type HomeQuarterlyNewsletter {
   title: String
   description: String
@@ -783,6 +802,7 @@ type Home implements Node & Document {
   featuredPublications: HomeFeaturedPublications
   announcementsWidget: HomeAnnouncementsWidget
   usefulToolsWidget: HomeUsefulToolsWidget
+  quickStudyLinksWidget: HomeQuickStudyLinksWidget
   quarterlyNewsletter: HomeQuarterlyNewsletter
   id: ID!
   _sys: SystemInfo!
@@ -790,6 +810,9 @@ type Home implements Node & Document {
 }
 
 input HomeHeroFilter {
+  badgeText: StringFilter
+  headingLine1: StringFilter
+  headingLine2: StringFilter
   headline: StringFilter
   subheadline: StringFilter
   ctaText: StringFilter
@@ -812,6 +835,7 @@ input HomeFeaturedLessonsLesson1Filter {
   description: StringFilter
   readTime: StringFilter
   image: ImageFilter
+  link: StringFilter
 }
 
 input HomeFeaturedLessonsLesson2Filter {
@@ -822,6 +846,7 @@ input HomeFeaturedLessonsLesson2Filter {
   description: StringFilter
   readTime: StringFilter
   image: ImageFilter
+  link: StringFilter
 }
 
 input HomeFeaturedLessonsFilter {
@@ -929,6 +954,17 @@ input HomeUsefulToolsWidgetFilter {
   tools: HomeUsefulToolsWidgetToolsFilter
 }
 
+input HomeQuickStudyLinksWidgetLinksFilter {
+  title: StringFilter
+  href: StringFilter
+  icon: StringFilter
+}
+
+input HomeQuickStudyLinksWidgetFilter {
+  title: StringFilter
+  links: HomeQuickStudyLinksWidgetLinksFilter
+}
+
 input HomeQuarterlyNewsletterFilter {
   title: StringFilter
   description: StringFilter
@@ -949,6 +985,7 @@ input HomeFilter {
   featuredPublications: HomeFeaturedPublicationsFilter
   announcementsWidget: HomeAnnouncementsWidgetFilter
   usefulToolsWidget: HomeUsefulToolsWidgetFilter
+  quickStudyLinksWidget: HomeQuickStudyLinksWidgetFilter
   quarterlyNewsletter: HomeQuarterlyNewsletterFilter
 }
 
@@ -1997,6 +2034,7 @@ type ArchivesFeaturedArchive {
   description: String!
   category: String!
   linkText: String!
+  pdfFile: String
 }
 
 type ArchivesAccessPolicy {
@@ -2030,6 +2068,7 @@ input ArchivesFeaturedArchiveFilter {
   description: StringFilter
   category: StringFilter
   linkText: StringFilter
+  pdfFile: ImageFilter
 }
 
 input ArchivesAccessPolicyFilter {
@@ -2242,6 +2281,118 @@ type PageConnection implements Connection {
   edges: [PageConnectionEdges]
 }
 
+type GlobalTopNavLinks {
+  id: String!
+  label: String!
+  href: String!
+}
+
+type GlobalNavSectionsItems {
+  id: String!
+  label: String!
+  href: String!
+}
+
+type GlobalNavSections {
+  id: String!
+  label: String!
+  items: [GlobalNavSectionsItems]
+}
+
+type GlobalFooterQuickLinks {
+  label: String!
+  href: String!
+}
+
+type GlobalFooterResources {
+  label: String!
+  href: String!
+}
+
+type GlobalFooterConnect {
+  label: String!
+  href: String!
+}
+
+type Global implements Node & Document {
+  siteName: String!
+  siteTagline: String
+  logoIcon: String
+  footerDescription: String
+  copyrightText: String
+  topNavLinks: [GlobalTopNavLinks]
+  navSections: [GlobalNavSections]
+  footerQuickLinksTitle: String
+  footerQuickLinks: [GlobalFooterQuickLinks]
+  footerResourcesTitle: String
+  footerResources: [GlobalFooterResources]
+  footerConnectTitle: String
+  footerConnect: [GlobalFooterConnect]
+  id: ID!
+  _sys: SystemInfo!
+  _values: JSON!
+}
+
+input GlobalTopNavLinksFilter {
+  id: StringFilter
+  label: StringFilter
+  href: StringFilter
+}
+
+input GlobalNavSectionsItemsFilter {
+  id: StringFilter
+  label: StringFilter
+  href: StringFilter
+}
+
+input GlobalNavSectionsFilter {
+  id: StringFilter
+  label: StringFilter
+  items: GlobalNavSectionsItemsFilter
+}
+
+input GlobalFooterQuickLinksFilter {
+  label: StringFilter
+  href: StringFilter
+}
+
+input GlobalFooterResourcesFilter {
+  label: StringFilter
+  href: StringFilter
+}
+
+input GlobalFooterConnectFilter {
+  label: StringFilter
+  href: StringFilter
+}
+
+input GlobalFilter {
+  siteName: StringFilter
+  siteTagline: StringFilter
+  logoIcon: StringFilter
+  footerDescription: StringFilter
+  copyrightText: StringFilter
+  topNavLinks: GlobalTopNavLinksFilter
+  navSections: GlobalNavSectionsFilter
+  footerQuickLinksTitle: StringFilter
+  footerQuickLinks: GlobalFooterQuickLinksFilter
+  footerResourcesTitle: StringFilter
+  footerResources: GlobalFooterResourcesFilter
+  footerConnectTitle: StringFilter
+  footerConnect: GlobalFooterConnectFilter
+}
+
+type GlobalConnectionEdges {
+  cursor: String!
+  node: Global
+}
+
+type GlobalConnection implements Connection {
+  pageInfo: PageInfo!
+  totalCount: Float!
+  edges: [GlobalConnectionEdges]
+}
+
 type Mutation {
   addPendingDocument(collection: String!, relativePath: String!, template: String): DocumentNode!
   updateDocument(collection: String, relativePath: String!, params: DocumentUpdateMutation!): DocumentNode!
@@ -2302,6 +2453,8 @@ type Mutation {
   createQuickLinks(relativePath: String!, params: QuickLinksMutation!): QuickLinks!
   updatePage(relativePath: String!, params: PageMutation!): Page!
   createPage(relativePath: String!, params: PageMutation!): Page!
+  updateGlobal(relativePath: String!, params: GlobalMutation!): Global!
+  createGlobal(relativePath: String!, params: GlobalMutation!): Global!
 }
 
 input DocumentUpdateMutation {
@@ -2332,6 +2485,7 @@ input DocumentUpdateMutation {
   resources: ResourcesMutation
   quickLinks: QuickLinksMutation
   page: PageMutation
+  global: GlobalMutation
   relativePath: String
 }
 
@@ -2363,6 +2517,7 @@ input DocumentMutation {
   resources: ResourcesMutation
   quickLinks: QuickLinksMutation
   page: PageMutation
+  global: GlobalMutation
 }
 
 input BookMutation {
@@ -2503,6 +2658,9 @@ input QuickLinkMutation {
 }
 
 input HomeHeroMutation {
+  badgeText: String
+  headingLine1: String
+  headingLine2: String
   headline: String
   subheadline: String
   ctaText: String
@@ -2525,6 +2683,7 @@ input HomeFeaturedLessonsLesson1Mutation {
   description: String
   readTime: String
   image: String
+  link: String
 }
 
 input HomeFeaturedLessonsLesson2Mutation {
@@ -2535,6 +2694,7 @@ input HomeFeaturedLessonsLesson2Mutation {
   description: String
   readTime: String
   image: String
+  link: String
 }
 
 input HomeFeaturedLessonsMutation {
@@ -2642,6 +2802,17 @@ input HomeUsefulToolsWidgetMutation {
   tools: [HomeUsefulToolsWidgetToolsMutation]
 }
 
+input HomeQuickStudyLinksWidgetLinksMutation {
+  title: String
+  href: String
+  icon: String
+}
+
+input HomeQuickStudyLinksWidgetMutation {
+  title: String
+  links: [HomeQuickStudyLinksWidgetLinksMutation]
+}
+
 input HomeQuarterlyNewsletterMutation {
   title: String
   description: String
@@ -2662,6 +2833,7 @@ input HomeMutation {
   featuredPublications: HomeFeaturedPublicationsMutation
   announcementsWidget: HomeAnnouncementsWidgetMutation
   usefulToolsWidget: HomeUsefulToolsWidgetMutation
+  quickStudyLinksWidget: HomeQuickStudyLinksWidgetMutation
   quarterlyNewsletter: HomeQuarterlyNewsletterMutation
 }
 
@@ -3109,6 +3281,7 @@ input ArchivesFeaturedArchiveMutation {
   description: String
   category: String
   linkText: String
+  pdfFile: String
 }
 
 input ArchivesAccessPolicyMutation {
@@ -3195,6 +3368,55 @@ input PageMutation {
   title: String
   description: String
   hero: PageHeroMutation
+}
+
+input GlobalTopNavLinksMutation {
+  id: String
+  label: String
+  href: String
+}
+
+input GlobalNavSectionsItemsMutation {
+  id: String
+  label: String
+  href: String
+}
+
+input GlobalNavSectionsMutation {
+  id: String
+  label: String
+  items: [GlobalNavSectionsItemsMutation]
+}
+
+input GlobalFooterQuickLinksMutation {
+  label: String
+  href: String
+}
+
+input GlobalFooterResourcesMutation {
+  label: String
+  href: String
+}
+
+input GlobalFooterConnectMutation {
+  label: String
+  href: String
+}
+
+input GlobalMutation {
+  siteName: String
+  siteTagline: String
+  logoIcon: String
+  footerDescription: String
+  copyrightText: String
+  topNavLinks: [GlobalTopNavLinksMutation]
+  navSections: [GlobalNavSectionsMutation]
+  footerQuickLinksTitle: String
+  footerQuickLinks: [GlobalFooterQuickLinksMutation]
+  footerResourcesTitle: String
+  footerResources: [GlobalFooterResourcesMutation]
+  footerConnectTitle: String
+  footerConnect: [GlobalFooterConnectMutation]
 }
 
 schema {

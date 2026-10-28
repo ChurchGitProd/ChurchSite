@@ -10,6 +10,7 @@ interface LessonItem {
   description?: string | null;
   readTime?: string | null;
   image?: string | null;
+  link?: string | null;
 }
 
 interface FeaturedLessonsData {
@@ -108,7 +109,7 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
                   <span>{lesson.readTime || '30 mins read'}</span>
                 </span>
                 <Link
-                  href={idx === 0 ? '/lessons/genesis-1-11-the-theology-of-creation' : '/lessons/grace-justification-and-new-life'}
+                  href={lesson.link || (idx === 0 ? '/lessons/genesis-1-11-the-theology-of-creation' : '/lessons/grace-justification-and-new-life')}
                   className="text-primary font-semibold hover:underline"
                 >
                   Read Lesson

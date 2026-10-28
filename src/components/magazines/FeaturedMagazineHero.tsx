@@ -1,5 +1,5 @@
 import DownloadButton from '@/components/common/DownloadButton';
-import { sanitizeImageUrl } from '@/lib/media';
+import { sanitizeImageUrl, sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
 
 interface FeaturedMagazineHeroProps {
   badge?: string | null;
@@ -26,6 +26,9 @@ export default function FeaturedMagazineHero({
   downloadButtonText = 'Download PDF',
   pdfFile,
 }: FeaturedMagazineHeroProps) {
+  const hasValidPdf = isValidPdfUrl(pdfFile);
+  const pdfUrl = hasValidPdf ? sanitizeDocumentUrl(pdfFile) : null;
+
   return (
     <div
       id="featured-issue"
@@ -82,15 +85,25 @@ export default function FeaturedMagazineHero({
             >
               {readButtonText || 'Read Issue'}
             </a>
+            {hasValidPdf && pdfUrl && (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-primary-foreground/20 text-primary-foreground border border-primary-foreground/30 font-bold text-xs rounded hover:bg-primary-foreground/30 transition-all uppercase tracking-wider inline-flex items-center gap-1.5"
+              >
+                <span>View PDF ↗</span>
+              </a>
+            )}
             <DownloadButton
-              file={pdfFile || undefined}
-              filename={pdfFile ? `${(title || 'featured-issue').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf` : undefined}
-              disabled={!pdfFile}
+              file={pdfUrl || undefined}
+              filename={hasValidPdf ? `${(title || 'featured-issue').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf` : undefined}
+              disabled={!hasValidPdf}
               disabledTooltip="Winter 2024 Magazine PDF edition is not yet available"
               className="px-5 py-2.5 bg-primary-foreground text-primary font-bold text-xs rounded uppercase tracking-wider flex items-center gap-1.5"
             >
-              <span>{pdfFile ? '⬇️' : ''}</span>
-              <span>{pdfFile ? (downloadButtonText || 'Download PDF') : `${downloadButtonText || 'Download PDF'} (Unavailable)`}</span>
+              <span>{hasValidPdf ? '⬇️' : ''}</span>
+              <span>{hasValidPdf ? (downloadButtonText || 'Download PDF') : `${downloadButtonText || 'Download PDF'} (Unavailable)`}</span>
             </DownloadButton>
           </div>
         </div>

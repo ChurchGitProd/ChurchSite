@@ -2,34 +2,39 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ 
+import { globalSettings } from "@/lib/navConfig";
+
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-const playfair = Playfair_Display({ 
+const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-heading",
 });
 
+const siteFullName = `${globalSettings.siteName || 'Scriptura'} ${globalSettings.siteTagline || 'Digital Library'}`;
+const siteDescription = globalSettings.footerDescription || "Exploring the Sacred Texts with Scholarly Precision & Reverence";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://scriptura.library'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://scripturadigitallibrary.netlify.app'),
   title: {
-    default: "Scriptura Digital Library",
-    template: "%s | Scriptura Digital Library",
+    default: siteFullName,
+    template: `%s | ${siteFullName}`,
   },
-  description: "Exploring the Sacred Texts with Scholarly Precision & Reverence",
+  description: siteDescription,
   openGraph: {
-    title: "Scriptura Digital Library",
-    description: "Exploring the Sacred Texts with Scholarly Precision & Reverence",
-    siteName: "Scriptura Digital Library",
+    title: siteFullName,
+    description: siteDescription,
+    siteName: siteFullName,
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scriptura Digital Library",
-    description: "Exploring the Sacred Texts with Scholarly Precision & Reverence",
+    title: siteFullName,
+    description: siteDescription,
   },
 };
 

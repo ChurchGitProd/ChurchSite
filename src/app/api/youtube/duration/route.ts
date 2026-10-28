@@ -94,12 +94,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      videoId,
-      duration: formatted,
-      rawDuration: isoDuration,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        videoId,
+        duration: formatted,
+        rawDuration: isoDuration,
+      },
+      {
+        headers: {
+          'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+        },
+      }
+    );
   } catch (err: any) {
     return NextResponse.json(
       {

@@ -7,7 +7,7 @@ import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip
 import DownloadButton from '@/components/common/DownloadButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { client } from '../../../../tina/__generated__/client';
-import { sanitizeImageUrl } from '@/lib/media';
+import { sanitizeImageUrl, sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
 
 interface MagazineDetailPageProps {
   params: {
@@ -49,6 +49,9 @@ export default async function MagazineDetailPage({
   if (!magazine) {
     notFound();
   }
+
+  const hasValidPdf = isValidPdfUrl(magazine.pdfFile);
+  const pdfUrl = hasValidPdf ? sanitizeDocumentUrl(magazine.pdfFile) : null;
 
   return (
     <div
@@ -181,14 +184,35 @@ export default async function MagazineDetailPage({
 
               {/* Action Buttons */}
               <div className="pt-4 flex flex-wrap items-center gap-4">
+                {hasValidPdf && pdfUrl ? (
+                  <a
+                    href={pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-2.5 bg-muted text-primary border border-border font-bold text-xs rounded hover:bg-tertiary/20 hover:text-primary transition-all uppercase tracking-wider inline-flex items-center gap-1.5"
+                  >
+                    <span>View PDF ↗</span>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="px-6 py-2.5 bg-muted/40 text-muted-foreground border border-border font-bold text-xs rounded cursor-not-allowed opacity-60 uppercase tracking-wider inline-flex items-center gap-1.5"
+                    title="Digital PDF edition is currently unavailable for viewing"
+                  >
+                    <span>PDF Unavailable</span>
+                  </button>
+                )}
+
                 <DownloadButton
-                  file={magazine.pdfFile || undefined}
-                  filename={magazine.pdfFile ? `${params.slug}.pdf` : undefined}
-                  disabled={!magazine.pdfFile}
+                  file={pdfUrl || undefined}
+                  filename={hasValidPdf ? `${params.slug}.pdf` : undefined}
+                  disabled={!hasValidPdf}
                   disabledTooltip="Digital edition is not yet available for download"
                   className="px-6 py-2.5 bg-primary text-primary-foreground font-bold text-xs rounded hover:bg-primary/90 transition-all uppercase tracking-wider"
                 >
-                  {magazine.pdfFile ? 'Download Digital Edition (PDF)' : 'Download PDF (Unavailable)'}
+                  {hasValidPdf ? 'Download Digital Edition (PDF)' : 'Download PDF (Unavailable)'}
                 </DownloadButton>
 
                 <Link
