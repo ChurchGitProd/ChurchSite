@@ -33,6 +33,8 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*
+!.env.example
 
 # Vercel
 .vercel
@@ -43,3 +45,4 @@ next-env.d.ts
 
 # Scratch
 scratch/
+tina/__generated__/
