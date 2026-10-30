@@ -37,46 +37,6 @@
   --blue-tint-5: #FCFEFE;
 }
 
-/* ── Dark Theme Variables ── */
-.dark, [data-theme="dark"] {
-  --background: #0B132B;
-  --foreground: #F1F5F9;
-  --primary: #4A75EA;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E293B;
-  --secondary-foreground: #F1F5F9;
-  --tertiary: #DFBE87;
-  --muted: #162447;
-  --muted-foreground: #94A3B8;
-  --accent: #1F2D5A;
-  --accent-foreground: #F1F5F9;
-  --card: #111C38;
-  --card-foreground: #F1F5F9;
-  --destructive: #EF4444;
-  --border: #22325A;
-  --input: #22325A;
-  --ring: #4A75EA;
-
-  --blue-primary: #1D3557;
-  --blue-tint-1: #162B45;
-  --blue-tint-2: #122137;
-  --blue-tint-3: #0F1C2E;
-  --blue-tint-4: #0C1726;
-  --blue-tint-5: #0A1320;
-}
-
-/* Dark mode overrides for inline gradients & light sections */
-.dark [style*="radial-gradient"] {
-  background: radial-gradient(circle at top left, rgba(48, 92, 222, 0.18), transparent 45%),
-              radial-gradient(circle at bottom right, rgba(48, 92, 222, 0.12), transparent 50%),
-              linear-gradient(180deg, #0B132B 0%, #0F172A 35%, #111C38 70%, #0E1A38 100%) !important;
-}
-
-.dark [style*="#F4FBFC"],
-.dark section[style*="background: rgb(244, 251, 252)"] {
-  background: #111C38 !important;
-}
-
 /* ==========================================================================
    CSS Reset & Base Styles
    ========================================================================== */

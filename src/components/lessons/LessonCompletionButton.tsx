@@ -34,7 +34,7 @@ export default function LessonCompletionButton({ slug, title }: LessonCompletion
         aria-pressed={completed}
         className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer select-none shrink-0 ${
           completed
-            ? 'bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800'
+            ? 'bg-emerald-600 text-white hover:bg-emerald-700'
             : 'bg-primary text-primary-foreground hover:bg-primary/90'
         }`}
         title={completed ? 'Click to mark as incomplete' : 'Mark lesson complete'}

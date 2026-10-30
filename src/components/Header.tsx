@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useTheme } from '@/lib/useTheme';
 import { NAV_SECTIONS, TOP_NAV_HOME, TOP_NAV_ABOUT, TOP_NAV_CONTACT, OTHER_TOP_NAV_LINKS, globalSettings } from '@/lib/navConfig';
 
 interface HeaderProps {
@@ -10,7 +9,6 @@ interface HeaderProps {
 }
 
 export default function Header({ activePage = 'home' }: HeaderProps) {
-  const { theme, toggleTheme, mounted } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>({
     bible: false,
@@ -139,19 +137,6 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                 🔍
               </span>
             </div>
-
-            {/* Theme Toggle Button */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              title={mounted && theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              aria-label={mounted && theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <span className="text-lg" aria-hidden="true">
-                {mounted && theme === 'dark' ? '☀️' : '🌙'}
-              </span>
-            </button>
 
             {/* Mobile Hamburger Button */}
             <button
@@ -297,19 +282,8 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
           </nav>
         </div>
 
-        {/* Mobile Drawer Footer: Theme indicator & close action */}
-        <div className="p-4 border-t border-border bg-muted/40 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Theme:</span>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="min-h-[40px] inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-card border border-border text-xs font-medium text-foreground hover:text-primary transition-colors shadow-sm"
-              aria-label={mounted && theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <span>{mounted && theme === 'dark' ? '☀️ Light' : '🌙 Dark'}</span>
-            </button>
-          </div>
+        {/* Mobile Drawer Footer: close action */}
+        <div className="p-4 border-t border-border bg-muted/40 flex items-center justify-end">
           <button
             type="button"
             onClick={closeMenu}
