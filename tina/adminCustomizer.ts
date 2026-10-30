@@ -1479,7 +1479,23 @@ export function setupAdminEnhancements() {
   setInterval(checkUI, 1000);
 }
 
+let activeCms: any = null;
+
+export function nextFreeScriptureDay(): number {
+  try {
+    const forms: any[] = activeCms?.state?.forms ?? [];
+    const form = forms.find(({ tinaForm }) => tinaForm?.values?.scriptureOfTheDay)?.tinaForm;
+    const entries: any[] = form?.values?.scriptureOfTheDay?.dailyVerses ?? [];
+    const used = new Set(entries.map((entry) => Number(entry?.day)).filter(Boolean));
+    for (let day = 1; day <= 31; day++) if (!used.has(day)) return day;
+  } catch {
+    // Fall through to default
+  }
+  return 1;
+}
+
 export const scripturaCmsCallback = (cms: any) => {
+  activeCms = cms;
   if (typeof window !== "undefined" && typeof document !== "undefined") {
     setupAdminEnhancements();
   }

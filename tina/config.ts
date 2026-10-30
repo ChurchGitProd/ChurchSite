@@ -1,5 +1,5 @@
 import { defineConfig } from "tinacms";
-import { scripturaCmsCallback } from "./adminCustomizer";
+import { scripturaCmsCallback, nextFreeScriptureDay } from "./adminCustomizer";
 import YouTubeUrlField from "./components/YouTubeUrlField";
 
 // Validation helper ensuring uploaded/selected document has .pdf extension
@@ -978,18 +978,19 @@ export default defineConfig({
                   "Add one entry per day of the month. The website shows the entry matching today's date (India time, switching at 12:00 AM) and repeats every month. Edit any entry at any time to change that day.",
                 list: true,
                 ui: {
-                  itemProps: (item) => ({
+                  max: 31,
+                  defaultItem: () => ({ day: nextFreeScriptureDay(), verse: "", reference: "" }),
+                  itemProps: (item: any) => ({
                     label: item?.day
                       ? `Day ${item.day}${item?.reference ? ` — ${item.reference}` : ""}`
-                      : "New Day",
+                      : "Day (not set)",
                   }),
-                },
+                } as any,
                 fields: [
                   {
                     type: "number",
                     name: "day",
                     label: "Day of Month (1 – 31)",
-                    required: true,
                     ui: {
                       validate: (val?: number) => {
                         if (!Number.isInteger(val) || (val as number) < 1 || (val as number) > 31) {
@@ -1002,7 +1003,6 @@ export default defineConfig({
                     type: "string",
                     name: "verse",
                     label: "Verse Text",
-                    required: true,
                     ui: {
                       component: "textarea",
                     },
@@ -1011,7 +1011,6 @@ export default defineConfig({
                     type: "string",
                     name: "reference",
                     label: "Scripture Reference",
-                    required: true,
                   },
                 ],
               },
