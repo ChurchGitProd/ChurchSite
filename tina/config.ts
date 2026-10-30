@@ -1227,49 +1227,6 @@ export default defineConfig({
           },
           {
             type: "object",
-            name: "zoomMeeting",
-            label: "Upcoming Zoom Meeting",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Meeting Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Meeting Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "date",
-                label: "Meeting Date",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "time",
-                label: "Meeting Time",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "buttonText",
-                label: "Button Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "buttonLink",
-                label: "Button Link",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
             name: "latestReferences",
             label: "Latest Bible References Section",
             fields: [
@@ -2054,7 +2011,7 @@ export default defineConfig({
             type: "object",
             name: "featuredMeeting",
             label: "Featured Meeting Card",
-            description: "The next live seminar. Add its Zoom link in the \"Zoom Meeting Link\" field below: this one link is used on the Zoom page and on the announcement bar across the whole site.",
+            description: "The next live seminar. This is the single source of truth: it feeds this page, the Zoom banner at the bottom of the home page, and the announcement bar link across the whole site. Update it here once and all three stay in sync.",
             fields: [
               {
                 type: "string",
@@ -2090,6 +2047,7 @@ export default defineConfig({
                 type: "string",
                 name: "time",
                 label: "Time",
+                description: "Include the time zone, e.g. '7:00 PM IST' or '7:00 PM - 8:30 PM EST'. Times without a zone are read as India time (IST). Used to decide which seminar is next and when it shows as Live.",
                 required: true,
               },
               {
@@ -2107,8 +2065,8 @@ export default defineConfig({
               {
                 type: "string",
                 name: "zoomUrl",
-                label: "Zoom Meeting Link (also used by the announcement bar)",
-                description: "Paste the full Zoom link here (it must start with https:// and be a zoom.us link). It powers the Join Meeting button on this page AND the clickable Zoom text on the announcement bar at the top of every page.",
+                label: "Zoom Meeting Link (shared site-wide)",
+                description: "Paste the full Zoom link here (it must start with https:// and be a zoom.us link). It powers the Join Meeting button on this page, the Join button on the home page Zoom banner, AND the clickable Zoom text on the announcement bar at the top of every page.",
               },
             ],
           },
@@ -2250,7 +2208,7 @@ export default defineConfig({
                 type: "string",
                 name: "status",
                 label: "Status (e.g. Upcoming, Recording Available)",
-                required: true,
+                description: "Only sessions marked 'Upcoming' can appear in the home page Zoom banner and the announcement bar link. The soonest upcoming date wins.",
               },
               {
                 type: "string",
@@ -2276,7 +2234,7 @@ export default defineConfig({
                 type: "string",
                 name: "actionUrl",
                 label: "Action URL (e.g. /videos for recordings)",
-                description: "For recordings use a page path like /videos. For an upcoming session you can paste its Zoom link here; the announcement bar uses the soonest upcoming date.",
+                description: "For recordings use a page path like /videos. For an upcoming session you can paste its Zoom link here; the home page banner and announcement bar use the soonest upcoming date.",
               },
               {
                 type: "boolean",

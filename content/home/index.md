@@ -52,15 +52,6 @@ featuredLessons:
     description: "Investigating the author of Hebrews' comparison between the Levitical priesthood and Christ's eternal high priesthood."
     readTime: 40 mins read
     image: https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png
-zoomMeeting:
-  title: 'Hermeneutics Roundtable: Covenant Theology'
-  description: >-
-    An open theological discussion with Dr. Vance and guest scholars. Includes a
-    Q&A session on Genesis covenants.
-  date: 'Thursday, March 20, 2025'
-  time: '7:00 PM - 8:30 PM EST'
-  buttonText: Join Zoom Meeting
-  buttonLink: /zoom-info
 latestReferences:
   sectionTitle: Latest Bible References
   items:

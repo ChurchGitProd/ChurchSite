@@ -9,16 +9,24 @@ import FeaturedVideosSection from '@/components/home/FeaturedVideosSection';
 import GalleryPreviewSection from '@/components/home/GalleryPreviewSection';
 import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsSection';
 import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
+import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const homeData = await client.queries.home(
-    { relativePath: "index.md" },
-    { fetchOptions: { cache: "no-store" } }
-  );
+  const [homeData, zoomInfoData] = await Promise.all([
+    client.queries.home(
+      { relativePath: "index.md" },
+      { fetchOptions: { cache: "no-store" } }
+    ),
+    client.queries.zoomInfo(
+      { relativePath: "index.md" },
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
+  ]);
   const data = homeData.data.home;
+  const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
 
   return (
     <div
@@ -32,6 +40,7 @@ export default async function Home() {
       <AnnouncementBar
         text={data.announcementText}
         subtext={data.announcementSubtext}
+        zoomInfoData={zoomInfoData?.data?.zoomInfo}
       />
 
       {/* Universal Header (Sticky) */}
@@ -50,7 +59,7 @@ export default async function Home() {
         <FeaturedVideosSection data={data.featuredVideos} />
         <GalleryPreviewSection data={data.galleryPreview} />
         <FeaturedPublicationsSection data={data.featuredPublications} />
-        <ZoomMeetingCard data={data.zoomMeeting} />
+        <ZoomMeetingCard seminar={seminar} />
       </main>
 
       {/* Universal Footer */}
