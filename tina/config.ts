@@ -204,6 +204,15 @@ export default defineConfig({
             label: "Lesson Cover Image",
             description: "Optional cover image for this expository lesson",
           },
+          {
+            type: "image",
+            name: "pdfFile",
+            label: "Lesson PDF",
+            description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
+            ui: {
+              validate: validatePdfField,
+            },
+          },
         ],
       },
       {
@@ -1088,10 +1097,13 @@ export default defineConfig({
                     label: "Lesson Image",
                   },
                   {
-                    type: "string",
-                    name: "link",
-                    label: "Lesson Route / URL (optional)",
-                    description: "Target route for this lesson (e.g. /lessons/genesis-1-11-the-theology-of-creation)",
+                    type: "image",
+                    name: "pdfFile",
+                    label: "Lesson PDF",
+                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
+                    ui: {
+                      validate: validatePdfField,
+                    },
                   },
                 ],
               },
@@ -1142,10 +1154,13 @@ export default defineConfig({
                     label: "Lesson Image",
                   },
                   {
-                    type: "string",
-                    name: "link",
-                    label: "Lesson Route / URL (optional)",
-                    description: "Target route for this lesson (e.g. /lessons/grace-justification-and-new-life)",
+                    type: "image",
+                    name: "pdfFile",
+                    label: "Lesson PDF",
+                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
+                    ui: {
+                      validate: validatePdfField,
+                    },
                   },
                 ],
               },

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ReadPdfLink from '@/components/common/ReadPdfLink';
 
 export interface LessonCardData {
   slug: string;
@@ -7,6 +8,7 @@ export interface LessonCardData {
   division: string;
   teacher: string;
   description: string;
+  pdfFile?: string | null;
 }
 
 interface LessonCardProps {
@@ -35,12 +37,12 @@ export default function LessonCard({ lesson }: LessonCardProps) {
       </div>
       <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
         <span>{lesson.teacher}</span>
-        <Link
-          href={`/lessons/${lesson.slug}`}
+        <ReadPdfLink
+          pdfFile={lesson.pdfFile}
           className="text-primary font-semibold hover:underline"
         >
           Read Lesson
-        </Link>
+        </ReadPdfLink>
       </div>
     </div>
   );

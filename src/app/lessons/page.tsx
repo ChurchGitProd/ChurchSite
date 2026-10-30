@@ -31,6 +31,7 @@ export default async function Lessons() {
       division: node.division,
       teacher: node.teacher,
       description: node.description,
+      pdfFile: node.pdfFile || null,
     }));
 
   // Preserve Genesis 1-11 as the top featured spotlight, display remaining in grid
@@ -94,6 +95,7 @@ export default async function Lessons() {
             <FeaturedLessonSpotlight
               data={data.featuredLesson}
               slug={featuredSlug}
+              pdfFile={allLessons.find((l) => l.slug === featuredSlug)?.pdfFile}
             />
 
             {/* Interactive Lesson Explorer (Search, Filter, Counter, Grid, Pagination) */}

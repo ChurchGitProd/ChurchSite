@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { sanitizeImageUrl } from '@/lib/media';
+import ReadPdfLink from '@/components/common/ReadPdfLink';
 
 interface FeaturedLessonData {
   badge?: string | null;
@@ -14,11 +15,13 @@ interface FeaturedLessonSpotlightProps {
   data?: FeaturedLessonData | null;
   slug?: string;
   image?: string;
+  pdfFile?: string | null;
 }
 
 export default function FeaturedLessonSpotlight({
   data,
   slug = 'genesis-1-11-the-theology-of-creation',
+  pdfFile,
   image = 'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
 }: FeaturedLessonSpotlightProps) {
   const badge = data?.badge || 'Featured Lesson';
@@ -56,12 +59,12 @@ export default function FeaturedLessonSpotlight({
         </p>
         <div className="pt-2 flex items-center justify-between text-xs text-muted-foreground">
           <span>Teacher: {teacher}</span>
-          <Link
-            href={`/lessons/${slug}`}
+          <ReadPdfLink
+            pdfFile={pdfFile}
             className="text-primary font-semibold hover:underline"
           >
             {linkText}
-          </Link>
+          </ReadPdfLink>
         </div>
       </div>
     </div>

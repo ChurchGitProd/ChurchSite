@@ -33,7 +33,6 @@ featuredLessons:
     readTime: 45 mins read
     image: >-
       https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png
-    link: /lessons/genesis-1-11-the-theology-of-creation
   lesson2:
     category: Epistles
     reference: Romans 5-8
@@ -45,7 +44,6 @@ featuredLessons:
     readTime: 50 mins read
     image: >-
       https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png
-    link: /lessons/grace-justification-and-new-life
 newsletter:
   title: The Daily Epistle of Paul and Thomas
   description: >-

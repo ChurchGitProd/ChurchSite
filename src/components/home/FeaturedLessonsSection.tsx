@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Clock, ArrowRight } from 'lucide-react';
 import { sanitizeImageUrl } from '@/lib/media';
+import ReadPdfLink from '@/components/common/ReadPdfLink';
 
 interface LessonItem {
   category?: string | null;
@@ -10,7 +11,7 @@ interface LessonItem {
   description?: string | null;
   readTime?: string | null;
   image?: string | null;
-  link?: string | null;
+  pdfFile?: string | null;
 }
 
 interface FeaturedLessonsData {
@@ -108,12 +109,12 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
                   <Clock className="w-3.5 h-3.5 text-tertiary" />
                   <span>{lesson.readTime || '30 mins read'}</span>
                 </span>
-                <Link
-                  href={lesson.link || (idx === 0 ? '/lessons/genesis-1-11-the-theology-of-creation' : '/lessons/grace-justification-and-new-life')}
+                <ReadPdfLink
+                  pdfFile={lesson.pdfFile}
                   className="text-primary font-semibold hover:underline"
                 >
                   Read Lesson
-                </Link>
+                </ReadPdfLink>
               </div>
             </div>
           </div>
