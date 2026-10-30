@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import AboutHero from '@/components/about/AboutHero';
 import IntroMissionSection from '@/components/about/IntroMissionSection';
 import StatementOfFaithSection from '@/components/about/StatementOfFaithSection';
@@ -86,9 +85,6 @@ export default async function About() {
           </aside>
         </div>
       </main>
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedImageSpotlight from '@/components/images/FeaturedImageSpotlight';
 import ImagesExplorer from '@/components/images/ImagesExplorer';
 import { ImageCardData } from '@/components/images/ImageCard';
@@ -111,9 +110,6 @@ export default async function Images() {
           archiveTitle={data.archiveTitle}
         />
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

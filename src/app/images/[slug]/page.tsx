@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import DownloadButton from '@/components/common/DownloadButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, BookOpen, Download, Calendar, FileText } from 'lucide-react';
@@ -184,9 +183,6 @@ export default async function ImageDetailPage({ params }: ImagePageProps) {
           </section>
         )}
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

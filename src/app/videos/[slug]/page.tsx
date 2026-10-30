@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, BookOpen, Clock, Calendar, VideoOff } from 'lucide-react';
 import { getYouTubeEmbedUrl } from '@/lib/youtube';
@@ -222,9 +221,6 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
           </div>
         </section>
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

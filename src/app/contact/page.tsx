@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import ContactHero from '@/components/contact/ContactHero';
 import ContactInfoCards from '@/components/contact/ContactInfoCards';
 import ContactForm from '@/components/contact/ContactForm';
@@ -78,9 +77,6 @@ export default async function Contact() {
           />
         </div>
       </main>
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

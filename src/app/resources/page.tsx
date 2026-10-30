@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import ResourcesExplorer from '@/components/resources/ResourcesExplorer';
 import { ResourceItemData } from '@/components/resources/ResourceCard';
 import { client } from '../../../tina/__generated__/client';
@@ -117,9 +116,6 @@ export default async function Resources() {
         recentAdditionsTitle={data.recentAdditionsTitle}
         categoryTagsTitle={data.categoryTagsTitle}
       />
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

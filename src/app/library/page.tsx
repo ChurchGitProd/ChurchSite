@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import LibraryExplorer from '@/components/library/LibraryExplorer';
 import { LibraryResourceData } from '@/components/library/LibraryResourceCard';
 import { client } from '../../../tina/__generated__/client';
@@ -112,9 +111,6 @@ export default async function Library() {
           recentTitle: data.recentTitle,
         }}
       />
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

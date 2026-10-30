@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedDevotionalCard from '@/components/newsletter/FeaturedDevotionalCard';
 import DailyLetterList from '@/components/newsletter/DailyLetterList';
 import NewsletterSignupForm from '@/components/newsletter/NewsletterSignupForm';
@@ -115,9 +114,6 @@ export default async function Newsletter() {
           <ScriptureQuoteBlock data={data.scriptureQuote} />
         </div>
       </main>
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

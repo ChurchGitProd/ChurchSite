@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedLessonSpotlight from '@/components/lessons/FeaturedLessonSpotlight';
 import CourseProgressCard from '@/components/lessons/CourseProgressCard';
 import UpcomingSeminarsCard from '@/components/lessons/UpcomingSeminarsCard';
@@ -119,9 +118,6 @@ export default async function Lessons() {
           </aside>
         </div>
       </main>
-
-      {/* Shared Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedBookSpotlight from '@/components/books/FeaturedBookSpotlight';
 import BooksExplorer from '@/components/books/BooksExplorer';
 import BooksSidebar from '@/components/books/BooksSidebar';
@@ -137,9 +136,6 @@ export default async function Books() {
           />
         </div>
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

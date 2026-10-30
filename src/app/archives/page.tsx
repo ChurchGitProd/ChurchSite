@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedArchiveBlock from '@/components/archives/FeaturedArchiveBlock';
 import ArchiveSidebar from '@/components/archives/ArchiveSidebar';
 import ArchivesExplorer from '@/components/archives/ArchivesExplorer';
@@ -116,9 +115,6 @@ export default async function Archives() {
           />
         }
       />
-
-      {/* 9. Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* 10. Universal Footer */}
       <Footer />

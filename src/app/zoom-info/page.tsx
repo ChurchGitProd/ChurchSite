@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import ZoomHero from '@/components/zoom-info/ZoomHero';
 import FeaturedMeetingCard from '@/components/zoom-info/FeaturedMeetingCard';
 import MeetingDetailCards from '@/components/zoom-info/MeetingDetailCards';
@@ -91,9 +90,6 @@ export default async function ZoomInfoPage() {
           />
         </div>
       </main>
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

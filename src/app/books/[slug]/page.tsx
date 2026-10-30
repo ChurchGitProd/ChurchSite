@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import DownloadButton from '@/components/common/DownloadButton';
 import BookDetailActions from '@/components/books/BookDetailActions';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
@@ -180,9 +179,6 @@ export default async function BookDetailPage({ params }: BookPageProps) {
           </div>
         </div>
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

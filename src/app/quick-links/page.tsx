@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import QuickLinksExplorer from '@/components/quick-links/QuickLinksExplorer';
 import { ShortcutCardData } from '@/components/quick-links/ShortcutCard';
 import { client } from '../../../tina/__generated__/client';
@@ -113,9 +112,6 @@ export default async function QuickLinks() {
         shortcutsSectionTitle={data.shortcutsSectionTitle}
         shortcuts={allShortcuts}
       />
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>

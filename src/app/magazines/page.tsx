@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedMagazineHero from '@/components/magazines/FeaturedMagazineHero';
 import MagazineSpotlight from '@/components/magazines/MagazineSpotlight';
 import MagazinesExplorer from '@/components/magazines/MagazinesExplorer';
@@ -143,9 +142,6 @@ export default async function Magazines() {
           ) : null
         }
       />
-
-      {/* 10. Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* 11. Universal Footer */}
       <Footer />

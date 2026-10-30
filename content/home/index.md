@@ -172,11 +172,5 @@ featuredPublications:
       description: Exploring biblical eschatology, resurrection hope, and the consummation of all things.
       coverImage: https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop
       readLink: /magazines/fall-2024-eschatology-and-hope
-quarterlyNewsletter:
-  title: Subscribe to Scripture Quarterly
-  description: >-
-    Get theological journals, research updates, and scripture study guides
-    delivered quarterly.
-  buttonText: Subscribe
 ---
 

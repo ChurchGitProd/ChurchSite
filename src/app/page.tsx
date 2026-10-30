@@ -9,7 +9,6 @@ import FeaturedVideosSection from '@/components/home/FeaturedVideosSection';
 import GalleryPreviewSection from '@/components/home/GalleryPreviewSection';
 import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsSection';
 import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
@@ -53,9 +52,6 @@ export default async function Home() {
         <FeaturedPublicationsSection data={data.featuredPublications} />
         <ZoomMeetingCard data={data.zoomMeeting} />
       </main>
-
-      {/* Pre-Footer Newsletter Strip */}
-      <QuarterlyNewsletterStrip data={data.quarterlyNewsletter} />
 
       {/* Universal Footer */}
       <Footer />

@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import CourseProgressCard from '@/components/lessons/CourseProgressCard';
 import UpcomingSeminarsCard from '@/components/lessons/UpcomingSeminarsCard';
 import LessonCompletionButton from '@/components/lessons/LessonCompletionButton';
@@ -168,9 +167,6 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
           </aside>
         </div>
       </main>
-
-      {/* Shared Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

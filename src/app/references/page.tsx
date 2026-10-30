@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedReferenceSpotlight from '@/components/references/FeaturedReferenceSpotlight';
 import RelatedLessonCard from '@/components/references/RelatedLessonCard';
 import ReferencesExplorer from '@/components/references/ReferencesExplorer';
@@ -118,9 +117,6 @@ export default async function References() {
           />
         }
       />
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

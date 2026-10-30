@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import FeaturedVideoHero from '@/components/videos/FeaturedVideoHero';
 import VideosExplorer from '@/components/videos/VideosExplorer';
 import { VideoCardData } from '@/components/videos/VideoCard';
@@ -112,9 +111,6 @@ export default async function Videos() {
           lecturesTitle={data.lecturesTitle}
         />
       </main>
-
-      {/* Quarterly Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       {/* Universal Footer */}
       <Footer />

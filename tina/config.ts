@@ -1508,28 +1508,6 @@ export default defineConfig({
               },
             ],
           },
-          {
-            type: "object",
-            name: "quarterlyNewsletter",
-            label: "Pre-Footer Quarterly Newsletter Strip",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-              },
-              {
-                type: "string",
-                name: "buttonText",
-                label: "Button Text",
-              },
-            ],
-          },
         ],
       },
       {

@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { client } from '../../../../tina/__generated__/client';
 
@@ -155,9 +154,6 @@ export default async function QuickLinkDetailPage({
           </div>
         </div>
       </main>
-
-      {/* Newsletter Strip */}
-      <QuarterlyNewsletterStrip />
 
       <Footer />
     </div>
