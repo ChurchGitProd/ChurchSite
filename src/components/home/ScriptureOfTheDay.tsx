@@ -20,7 +20,7 @@ export default function ScriptureOfTheDay({ data }: ScriptureOfTheDayProps) {
           &ldquo;{verse}&rdquo;
         </blockquote>
         <cite className="block text-sm font-sans font-semibold text-muted-foreground not-italic">
-          — {reference}
+          {reference}
         </cite>
       </div>
     </section>
