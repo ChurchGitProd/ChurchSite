@@ -1164,30 +1164,62 @@ export default defineConfig({
                   },
                 ],
               },
-            ],
-          },
-          {
-            type: "object",
-            name: "newsletter",
-            label: "Newsletter Signup Section",
-            fields: [
               {
-                type: "string",
-                name: "title",
-                label: "Newsletter Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Newsletter Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "buttonText",
-                label: "Button Text",
-                required: true,
+                type: "object",
+                name: "lesson3",
+                label: "Lesson 3",
+                fields: [
+                  {
+                    type: "string",
+                    name: "category",
+                    label: "Category",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "reference",
+                    label: "Scripture Reference",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "author",
+                    label: "Author",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "title",
+                    label: "Title",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "description",
+                    label: "Description",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "readTime",
+                    label: "Read Time",
+                    required: true,
+                  },
+                  {
+                    type: "image",
+                    name: "image",
+                    label: "Lesson Image",
+                  },
+                  {
+                    type: "image",
+                    name: "pdfFile",
+                    label: "Lesson PDF",
+                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
+                    ui: {
+                      validate: validatePdfField,
+                    },
+                  },
+                ],
               },
             ],
           },
@@ -1388,8 +1420,12 @@ export default defineConfig({
               },
               {
                 type: "object",
-                name: "book",
-                label: "Featured Book",
+                name: "books",
+                label: "Featured Books",
+                list: true,
+                ui: {
+                  itemProps: (item: any) => ({ label: item?.title || "New Book" }),
+                },
                 fields: [
                   {
                     type: "string",
@@ -1428,8 +1464,12 @@ export default defineConfig({
               },
               {
                 type: "object",
-                name: "magazine",
-                label: "Featured Magazine",
+                name: "magazines",
+                label: "Featured Magazines",
+                list: true,
+                ui: {
+                  itemProps: (item: any) => ({ label: item?.title || "New Magazine" }),
+                },
                 fields: [
                   {
                     type: "string",
@@ -1463,118 +1503,6 @@ export default defineConfig({
                     type: "string",
                     name: "readLink",
                     label: "Read Link",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "announcementsWidget",
-            label: "Platform Announcements Widget",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Widget Title",
-              },
-              {
-                type: "object",
-                name: "items",
-                label: "Announcements",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "date",
-                    label: "Date",
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "usefulToolsWidget",
-            label: "Useful Tools Widget",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Widget Title",
-              },
-              {
-                type: "object",
-                name: "tools",
-                label: "Tools",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "name",
-                    label: "Tool Name",
-                  },
-                  {
-                    type: "string",
-                    name: "link",
-                    label: "Tool Link",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "quickStudyLinksWidget",
-            label: "Quick Study Links Widget",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Widget Title",
-              },
-              {
-                type: "object",
-                name: "links",
-                label: "Study Links",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Link Title",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "href",
-                    label: "Target Route / URL",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "icon",
-                    label: "Icon Name",
-                    options: [
-                      "BookOpen",
-                      "Bookmark",
-                      "Clipboard",
-                      "Folder",
-                      "FileText",
-                      "Video",
-                      "Image",
-                      "Globe"
-                    ],
                   },
                 ],
               },

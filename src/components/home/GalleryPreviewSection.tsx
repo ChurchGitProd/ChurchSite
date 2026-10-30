@@ -39,6 +39,21 @@ export default function GalleryPreviewSection({ data }: GalleryPreviewSectionPro
       image:
         'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
     },
+    {
+      title: 'The Southern Steps of Jerusalem',
+      category: 'Archaeology',
+      image: '/uploads/The Southern Steps of Jerusalem.jpg',
+    },
+    {
+      title: 'The Great Isaiah Scroll Replica',
+      category: 'Manuscript',
+      image: '/uploads/The Great Isaiah Scroll Replica.png',
+    },
+    {
+      title: 'Greek Codex Transcription Annotations',
+      category: 'Scribal Study',
+      image: '/uploads/Greek Codex Transcription Annotations.jpg',
+    },
   ];
 
   const items =
@@ -66,7 +81,7 @@ export default function GalleryPreviewSection({ data }: GalleryPreviewSectionPro
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {items.map((item, idx) => (
           <Link
             key={idx}

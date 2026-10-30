@@ -44,13 +44,14 @@ featuredLessons:
     readTime: 50 mins read
     image: >-
       https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png
-newsletter:
-  title: The Daily Epistle of Paul and Thomas
-  description: >-
-    Receive a scholarly, editorial commentary, cross-references, and historical
-    background directly to your inbox every morning. Free from fluff, focused
-    entirely on the scripture text.
-  buttonText: Subscribe to Epistle of Paul and Thomas
+  lesson3:
+    category: Epistles
+    reference: Hebrews 8-10
+    author: Prof. Julian Mercer
+    title: 'The Better Covenant & Sanctuary'
+    description: "Investigating the author of Hebrews' comparison between the Levitical priesthood and Christ's eternal high priesthood."
+    readTime: 40 mins read
+    image: https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png
 zoomMeeting:
   title: 'Hermeneutics Roundtable: Covenant Theology'
   description: >-
@@ -107,6 +108,12 @@ featuredVideos:
       image: >-
         https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png
       link: /videos
+    - series: Covenant Series
+      title: The Abrahamic Promise Explored
+      description: A historical-legal examination of the sovereign oath structure in Genesis 15.
+      duration: '41:20'
+      image: https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png
+      link: /videos/the-abrahamic-promise-explored
 galleryPreview:
   sectionTitle: Bible Image Gallery Preview
   items:
@@ -122,65 +129,49 @@ galleryPreview:
       category: Scholarly Study
       image: >-
         https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png
+    - title: The Southern Steps of Jerusalem
+      category: Archaeology
+      image: /uploads/The Southern Steps of Jerusalem.jpg
+    - title: The Great Isaiah Scroll Replica
+      category: Manuscript
+      image: /uploads/The Great Isaiah Scroll Replica.png
+    - title: Greek Codex Transcription Annotations
+      category: Scribal Study
+      image: /uploads/Greek Codex Transcription Annotations.jpg
 featuredPublications:
   sectionTitle: Featured Books & Magazines
-  book:
-    badge: Book Highlight
-    title: The Abrahamic Promise
-    author: Dr. Vance
-    description: >-
-      A deep dive into the legal, historical, and spiritual ramifications of the
-      covenant made in Genesis 15.
-    coverImage: >-
-      https://images.unsplash.com/photo-1532012197267-da84d127e765?w=200&h=267&fit=crop
-    downloadLink: /uploads/Abraham Promise.pdf
-  magazine:
-    badge: Quarterly Issue
-    title: Biblical Archaeology Review
-    issue: Issue
-    description: >-
-      Exploring the latest excavations in Jerusalem and their correlation with
-      Old Testament chronicles.
-    coverImage: >-
-      https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=267&fit=crop
-    readLink: /magazines
-announcementsWidget:
-  title: Platform Announcements
-  items:
-    - date: 'March 14, 2025'
-      title: Greek Interlinear Concordance Added
+  books:
+    - badge: Book Highlight
+      title: The Abrahamic Promise
+      author: Dr. Vance
       description: >-
-        New scholarly translation guides are now accessible within the Bible
-        References module.
-    - date: 'March 08, 2025'
-      title: Spring Theological Journal Published
+        A deep dive into the legal, historical, and spiritual ramifications of the
+        covenant made in Genesis 15.
+      coverImage: >-
+        https://images.unsplash.com/photo-1532012197267-da84d127e765?w=200&h=267&fit=crop
+      downloadLink: /uploads/Abraham Promise.pdf
+    - badge: Book Highlight
+      title: Hermeneutics Handbook
+      author: Prof. Mercer
+      description: The grammatical-historical method outlined with practical textual analysis exercises.
+      coverImage: https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop
+      downloadLink: /uploads/hermeneutics.pdf
+  magazines:
+    - badge: Quarterly Issue
+      title: Biblical Archaeology Review
+      issue: Issue
       description: >-
-        The Spring edition of Scripture Quarterly is now live on the Magazines
-        page.
-usefulToolsWidget:
-  title: Useful Tools
-  tools:
-    - name: Strong's Concordance Search
-      link: /resources
-    - name: Greek-Hebrew Lexicon
-      link: /resources
-    - name: Biblical Atlas Maps
-      link: /resources
-quickStudyLinksWidget:
-  title: Quick Study Links
-  links:
-    - title: Bible Texts
-      href: /references
-      icon: BookOpen
-    - title: All Lessons
-      href: /lessons
-      icon: Bookmark
-    - title: Publications
-      href: /books
-      icon: Clipboard
-    - title: Archives
-      href: /archives
-      icon: Folder
+        Exploring the latest excavations in Jerusalem and their correlation with
+        Old Testament chronicles.
+      coverImage: >-
+        https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=267&fit=crop
+      readLink: /magazines
+    - badge: Quarterly Issue
+      title: Eschatology & Hope
+      issue: Fall 2024
+      description: Exploring biblical eschatology, resurrection hope, and the consummation of all things.
+      coverImage: https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop
+      readLink: /magazines/fall-2024-eschatology-and-hope
 quarterlyNewsletter:
   title: Subscribe to Scripture Quarterly
   description: >-

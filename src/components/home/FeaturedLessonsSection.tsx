@@ -18,6 +18,7 @@ interface FeaturedLessonsData {
   sectionTitle?: string | null;
   lesson1?: LessonItem | null;
   lesson2?: LessonItem | null;
+  lesson3?: LessonItem | null;
 }
 
 interface FeaturedLessonsSectionProps {
@@ -50,11 +51,23 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
       image:
         'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
     },
+    {
+      category: 'Epistles',
+      reference: 'Hebrews 8-10',
+      author: 'Prof. Julian Mercer',
+      title: 'The Better Covenant & Sanctuary',
+      description:
+        "Investigating the author of Hebrews' comparison between the Levitical priesthood and Christ's eternal high priesthood.",
+      readTime: '40 mins read',
+      image:
+        'https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png',
+    },
   ];
 
   const lessons: LessonItem[] = [
     data?.lesson1 || defaultLessons[0],
     data?.lesson2 || defaultLessons[1],
+    data?.lesson3 || defaultLessons[2],
   ].filter(Boolean) as LessonItem[];
 
   return (
@@ -73,7 +86,7 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {lessons.map((lesson, idx) => (
           <div
             key={idx}

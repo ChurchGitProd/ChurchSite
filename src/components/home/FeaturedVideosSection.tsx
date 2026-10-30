@@ -44,6 +44,16 @@ export default function FeaturedVideosSection({ data }: FeaturedVideosSectionPro
         'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
       link: '/videos',
     },
+    {
+      series: 'Covenant Series',
+      title: 'The Abrahamic Promise Explored',
+      description:
+        'A historical-legal examination of the sovereign oath structure in Genesis 15.',
+      duration: '41:20',
+      image:
+        'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
+      link: '/videos',
+    },
   ];
 
   const videos =
@@ -67,7 +77,7 @@ export default function FeaturedVideosSection({ data }: FeaturedVideosSectionPro
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {videos.map((video, idx) => (
           <Link
             key={idx}

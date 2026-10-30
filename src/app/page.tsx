@@ -8,11 +8,7 @@ import LatestReferencesSection from '@/components/home/LatestReferencesSection';
 import FeaturedVideosSection from '@/components/home/FeaturedVideosSection';
 import GalleryPreviewSection from '@/components/home/GalleryPreviewSection';
 import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsSection';
-import DailyEpistleCard from '@/components/home/sidebar/DailyEpistleCard';
-import ZoomMeetingCard from '@/components/home/sidebar/ZoomMeetingCard';
-import QuickStudyLinksWidget from '@/components/home/sidebar/QuickStudyLinksWidget';
-import AnnouncementsWidget from '@/components/home/sidebar/AnnouncementsWidget';
-import UsefulToolsWidget from '@/components/home/sidebar/UsefulToolsWidget';
+import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
 import QuarterlyNewsletterStrip from '@/components/home/QuarterlyNewsletterStrip';
 import { client } from "../../tina/__generated__/client";
 
@@ -49,26 +45,13 @@ export default async function Home() {
       <ScriptureOfTheDay data={data.scriptureOfTheDay} />
 
       {/* Main Content Layout */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Featured Content Grid */}
-          <div className="lg:col-span-8 space-y-16">
-            <FeaturedLessonsSection data={data.featuredLessons} />
-            <LatestReferencesSection data={data.latestReferences} />
-            <FeaturedVideosSection data={data.featuredVideos} />
-            <GalleryPreviewSection data={data.galleryPreview} />
-            <FeaturedPublicationsSection data={data.featuredPublications} />
-          </div>
-
-          {/* Right Column: Sidebar Widgets */}
-          <aside className="lg:col-span-4 space-y-8">
-            <DailyEpistleCard data={data.newsletter} />
-            <ZoomMeetingCard data={data.zoomMeeting} />
-            <QuickStudyLinksWidget data={data.quickStudyLinksWidget} />
-            <AnnouncementsWidget data={data.announcementsWidget} />
-            <UsefulToolsWidget data={data.usefulToolsWidget} />
-          </aside>
-        </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full space-y-16">
+        <FeaturedLessonsSection data={data.featuredLessons} />
+        <LatestReferencesSection data={data.latestReferences} />
+        <FeaturedVideosSection data={data.featuredVideos} />
+        <GalleryPreviewSection data={data.galleryPreview} />
+        <FeaturedPublicationsSection data={data.featuredPublications} />
+        <ZoomMeetingCard data={data.zoomMeeting} />
       </main>
 
       {/* Pre-Footer Newsletter Strip */}
