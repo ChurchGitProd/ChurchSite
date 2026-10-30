@@ -971,16 +971,63 @@ export default defineConfig({
             label: "Scripture of the Day",
             fields: [
               {
+                type: "object",
+                name: "dailyVerses",
+                label: "Daily Verses (Day 1 – 31)",
+                description:
+                  "Add one entry per day of the month. The website shows the entry matching today's date (India time, switching at 12:00 AM) and repeats every month. Edit any entry at any time to change that day.",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.day
+                      ? `Day ${item.day}${item?.reference ? ` — ${item.reference}` : ""}`
+                      : "New Day",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "number",
+                    name: "day",
+                    label: "Day of Month (1 – 31)",
+                    required: true,
+                    ui: {
+                      validate: (val?: number) => {
+                        if (!Number.isInteger(val) || (val as number) < 1 || (val as number) > 31) {
+                          return "Enter a whole number from 1 to 31.";
+                        }
+                      },
+                    },
+                  },
+                  {
+                    type: "string",
+                    name: "verse",
+                    label: "Verse Text",
+                    required: true,
+                    ui: {
+                      component: "textarea",
+                    },
+                  },
+                  {
+                    type: "string",
+                    name: "reference",
+                    label: "Scripture Reference",
+                    required: true,
+                  },
+                ],
+              },
+              {
                 type: "string",
                 name: "verse",
-                label: "Verse Text",
-                required: true,
+                label: "Fallback Verse Text",
+                description: "Shown only when no Daily Verse exists for any day.",
+                ui: {
+                  component: "textarea",
+                },
               },
               {
                 type: "string",
                 name: "reference",
-                label: "Scripture Reference",
-                required: true,
+                label: "Fallback Scripture Reference",
               },
             ],
           },
