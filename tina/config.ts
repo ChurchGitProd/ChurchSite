@@ -897,13 +897,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -1522,13 +1524,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -1790,13 +1794,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2009,13 +2015,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2046,6 +2054,7 @@ export default defineConfig({
             type: "object",
             name: "featuredMeeting",
             label: "Featured Meeting Card",
+            description: "The next live seminar. Add its Zoom link in the \"Zoom Meeting Link\" field below: this one link is used on the Zoom page and on the announcement bar across the whole site.",
             fields: [
               {
                 type: "string",
@@ -2098,8 +2107,8 @@ export default defineConfig({
               {
                 type: "string",
                 name: "zoomUrl",
-                label: "Real Zoom Meeting Link",
-                description: "Paste the actual Zoom meeting URL.",
+                label: "Zoom Meeting Link (also used by the announcement bar)",
+                description: "Paste the full Zoom link here (it must start with https:// and be a zoom.us link). It powers the Join Meeting button on this page AND the clickable Zoom text on the announcement bar at the top of every page.",
               },
             ],
           },
@@ -2267,6 +2276,7 @@ export default defineConfig({
                 type: "string",
                 name: "actionUrl",
                 label: "Action URL (e.g. /videos for recordings)",
+                description: "For recordings use a page path like /videos. For an upcoming session you can paste its Zoom link here; the announcement bar uses the soonest upcoming date.",
               },
               {
                 type: "boolean",
@@ -2344,13 +2354,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2466,13 +2478,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2598,13 +2612,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2726,13 +2742,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -2872,13 +2890,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3004,13 +3024,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3124,13 +3146,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3243,13 +3267,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3357,13 +3383,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3487,13 +3515,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
@@ -3607,13 +3637,15 @@ export default defineConfig({
           {
             type: "string",
             name: "announcementText",
-            label: "Announcement Bar Text",
+            label: "Announcement Bar Message",
+            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
             required: true,
           },
           {
             type: "string",
             name: "announcementSubtext",
-            label: "Announcement Subtext",
+            label: "Announcement Bar Zoom Text (clickable)",
+            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
           },
           {
             type: "object",
