@@ -1,72 +1,26 @@
 import Link from 'next/link';
 import { ArrowRight, Play } from 'lucide-react';
 import { sanitizeImageUrl } from '@/lib/media';
-
-interface VideoItem {
-  series?: string | null;
-  title?: string | null;
-  description?: string | null;
-  duration?: string | null;
-  image?: string | null;
-  link?: string | null;
-}
-
-interface FeaturedVideosData {
-  sectionTitle?: string | null;
-  items?: (VideoItem | null)[] | null;
-}
+import { FeaturedVideoItem } from '@/lib/featuredVideos';
 
 interface FeaturedVideosSectionProps {
-  data?: FeaturedVideosData | null;
+  sectionTitle?: string | null;
+  videos?: FeaturedVideoItem[];
 }
 
-export default function FeaturedVideosSection({ data }: FeaturedVideosSectionProps) {
-  const sectionTitle = data?.sectionTitle || 'Featured Bible Videos';
+export default function FeaturedVideosSection({ sectionTitle, videos }: FeaturedVideosSectionProps) {
+  const items = videos ?? [];
 
-  const defaultVideos: VideoItem[] = [
-    {
-      series: 'Hermeneutics Series',
-      title: 'How to Read Biblical Poetry',
-      description:
-        'Unpacking the parallelisms, figurative language, and structural beauty of Hebrew poetic literature.',
-      duration: '24:15',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
-      link: '/videos',
-    },
-    {
-      series: 'Archaeology Series',
-      title: 'The Dead Sea Scrolls Discovery',
-      description:
-        'An introduction to the Qumran caves, the manuscripts found, and their impact on modern biblical scholarship.',
-      duration: '32:40',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
-      link: '/videos',
-    },
-    {
-      series: 'Covenant Series',
-      title: 'The Abrahamic Promise Explored',
-      description:
-        'A historical-legal examination of the sovereign oath structure in Genesis 15.',
-      duration: '41:20',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
-      link: '/videos',
-    },
-  ];
-
-  const videos =
-    data?.items && data.items.length > 0
-      ? (data.items.filter(Boolean) as VideoItem[])
-      : defaultVideos;
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section id="videos" className="space-y-6">
       <div className="flex items-center justify-between border-b border-border pb-3">
         <h2 className="text-2xl font-heading font-bold text-primary flex items-center gap-2">
           <span className="w-1.5 h-6 bg-tertiary rounded"></span>
-          {sectionTitle}
+          {sectionTitle || 'Featured Bible Videos'}
         </h2>
         <Link
           href="/videos"
@@ -78,15 +32,15 @@ export default function FeaturedVideosSection({ data }: FeaturedVideosSectionPro
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {videos.map((video, idx) => (
+        {items.map((video) => (
           <Link
-            key={idx}
-            href={video.link || '/videos'}
+            key={video.slug}
+            href={`/videos/${video.slug}`}
             className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl transition-all flex flex-col group"
           >
             <div className="h-44 overflow-hidden relative bg-primary">
               <img
-                src={sanitizeImageUrl(video.image || defaultVideos[idx]?.image || '')}
+                src={sanitizeImageUrl(video.thumbnail || '')}
                 className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
                 alt={video.title || 'Video cover'}
               />

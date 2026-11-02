@@ -5,6 +5,7 @@ import AnnouncementBar from '@/components/home/AnnouncementBar';
 import FeaturedVideoHero from '@/components/videos/FeaturedVideoHero';
 import VideosExplorer from '@/components/videos/VideosExplorer';
 import { VideoCardData } from '@/components/videos/VideoCard';
+import { refTitle } from '@/lib/featuredVideos';
 import { client } from '../../../tina/__generated__/client';
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +24,8 @@ export default async function Videos() {
     .map((node) => ({
       slug: node._sys.filename,
       title: node.title,
-      series: node.series,
-      speaker: node.speaker,
+      series: refTitle(node.series),
+      speaker: refTitle(node.speaker),
       scripture: node.scripture,
       duration: node.duration,
       description: node.description,

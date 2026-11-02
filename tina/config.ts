@@ -447,6 +447,18 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "video").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "video";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -455,18 +467,22 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
+            type: "reference",
             name: "series",
             label: "Series Tag",
-            options: ["Hermeneutics Series", "Archaeology Series", "Covenant Series"],
+            collections: ["series"],
             required: true,
+            description:
+              "Pick the video's series. To add or remove options, open the 'Video Series' collection in the left sidebar and create or delete a series.",
           },
           {
-            type: "string",
+            type: "reference",
             name: "speaker",
             label: "Speaker",
-            options: ["Dr. Charles Vance", "Prof. Julian Mercer", "Dr. Thomas Keller"],
+            collections: ["speaker"],
             required: true,
+            description:
+              "Pick the speaker. To add or remove names, open the 'Speakers' collection in the left sidebar.",
           },
           {
             type: "string",
@@ -481,9 +497,14 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
+            type: "datetime",
             name: "recordedDate",
             label: "Recorded Date",
+            description:
+              "Pick the date this lecture was recorded. When two featured videos claim the same home-page position, the one with the newer Recorded Date wins.",
+            ui: {
+              dateFormat: "MMM DD, YYYY",
+            },
           },
           {
             type: "string",
@@ -509,10 +530,84 @@ export default defineConfig({
             },
           },
           {
+            type: "string",
+            name: "featured",
+            label: "Featured on Home Page",
+            options: ["no", "yes"],
+            description:
+              "Set to 'Yes' to show this video in the 'Featured Bible Videos' section on the home page.",
+          },
+          {
+            type: "string",
+            name: "featuredPosition",
+            label: "Home Page Position",
+            options: ["1", "2", "3"],
+            description:
+              "Only needed when 'Featured on Home Page' is Yes. 1 = left card, 2 = middle card, 3 = right card. If another featured video already uses this position, the one with the newer Recorded Date takes the slot — afterwards set the old video's 'Featured on Home Page' back to 'No' to keep things tidy.",
+          },
+          {
             type: "rich-text",
             name: "body",
             label: "Lecture Notes & Outline",
             isBody: true,
+          },
+        ],
+      },
+      {
+        name: "series",
+        label: "Video Series",
+        path: "content/video-series",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Series Name",
+            required: true,
+            description:
+              "Shown as the small tag on video cards, e.g. 'Hermeneutics Series'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
+        name: "speaker",
+        label: "Speakers",
+        path: "content/speakers",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Speaker Name",
+            required: true,
+            description: "e.g. 'Dr. Charles Vance'",
+          },
+          {
+            type: "string",
+            name: "role",
+            label: "Role / Title",
+            description: "e.g. 'Professor of Systematic Theology' (optional)",
+          },
+          {
+            type: "string",
+            name: "bio",
+            label: "Short Bio",
+            ui: {
+              component: "textarea",
+            },
+          },
+          {
+            type: "image",
+            name: "avatar",
+            label: "Avatar Image",
           },
         ],
       },
@@ -1283,52 +1378,13 @@ export default defineConfig({
             type: "object",
             name: "featuredVideos",
             label: "Featured Bible Videos Section",
+            description:
+              "The videos in this section are chosen per video: open a video in 'Video Lectures', set 'Featured on Home Page' to Yes, and pick a position (1-3). This block only controls the section heading.",
             fields: [
               {
                 type: "string",
                 name: "sectionTitle",
                 label: "Section Title",
-              },
-              {
-                type: "object",
-                name: "items",
-                label: "Video Items",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "series",
-                    label: "Series Tag",
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    ui: {
-                      component: "textarea",
-                    },
-                  },
-                  {
-                    type: "string",
-                    name: "duration",
-                    label: "Duration",
-                  },
-                  {
-                    type: "image",
-                    name: "image",
-                    label: "Cover Image",
-                  },
-                  {
-                    type: "string",
-                    name: "link",
-                    label: "Link",
-                  },
-                ],
               },
             ],
           },

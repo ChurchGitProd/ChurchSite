@@ -8,6 +8,7 @@ import { ArrowLeft, User, BookOpen, Clock, Calendar, VideoOff } from 'lucide-rea
 import { getYouTubeEmbedUrl } from '@/lib/youtube';
 import { client } from '../../../../tina/__generated__/client';
 import { sanitizeImageUrl } from '@/lib/media';
+import { refTitle, formatRecordedDate } from '@/lib/featuredVideos';
 
 interface VideoPageProps {
   params: {
@@ -159,7 +160,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
           <div className="p-6 sm:p-8 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest px-2.5 py-1 bg-tertiary/10 rounded">
-                {video.series}
+                {refTitle(video.series)}
               </span>
               <span className="text-xs font-semibold text-primary px-2.5 py-0.5 border border-border rounded">
                 {video.scripture}
@@ -178,7 +179,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-tertiary" />
                 <span>
-                  Speaker: <strong className="text-primary">{video.speaker}</strong>
+                  Speaker: <strong className="text-primary">{refTitle(video.speaker)}</strong>
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -197,7 +198,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-tertiary" />
                   <span>
-                    Recorded: <strong className="text-primary">{video.recordedDate}</strong>
+                    Recorded: <strong className="text-primary">{formatRecordedDate(video.recordedDate)}</strong>
                   </span>
                 </div>
               )}

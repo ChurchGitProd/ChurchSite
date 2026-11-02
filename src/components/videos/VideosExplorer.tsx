@@ -10,20 +10,6 @@ interface VideosExplorerProps {
   lecturesTitle?: string | null;
 }
 
-const SPEAKERS = [
-  'All Speakers',
-  'Dr. Charles Vance',
-  'Prof. Julian Mercer',
-  'Dr. Thomas Keller',
-];
-
-const SERIES = [
-  'All Series',
-  'Hermeneutics Series',
-  'Archaeology Series',
-  'Covenant Series',
-];
-
 const ITEMS_PER_PAGE = 3;
 
 export default function VideosExplorer({
@@ -37,6 +23,23 @@ export default function VideosExplorer({
   const [currentPage, setCurrentPage] = useState(1);
 
   const displayLecturesTitle = lecturesTitle || 'All Lectures & Seminars';
+
+  // Filter options are derived from the videos themselves so new series and
+  // speakers added in the CMS appear here automatically.
+  const speakers = useMemo(
+    () => [
+      'All Speakers',
+      ...Array.from(new Set(videos.map((v) => v.speaker).filter(Boolean))).sort(),
+    ],
+    [videos]
+  );
+  const seriesOptions = useMemo(
+    () => [
+      'All Series',
+      ...Array.from(new Set(videos.map((v) => v.series).filter(Boolean))).sort(),
+    ],
+    [videos]
+  );
 
   // Filter videos based on search and dropdown selections
   const filteredVideos = useMemo(() => {
@@ -140,7 +143,7 @@ export default function VideosExplorer({
               onChange={handleSpeakerChange}
               className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
             >
-              {SPEAKERS.map((s) => (
+              {speakers.map((s) => (
                 <option key={s} value={s}>
                   {s}
                 </option>
@@ -153,7 +156,7 @@ export default function VideosExplorer({
               onChange={handleSeriesChange}
               className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
             >
-              {SERIES.map((ser) => (
+              {seriesOptions.map((ser) => (
                 <option key={ser} value={ser}>
                   {ser}
                 </option>

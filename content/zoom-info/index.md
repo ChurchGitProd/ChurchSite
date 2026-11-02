@@ -1,6 +1,6 @@
 ---
 announcementText: EXPLORING THE SACRED TEXTS WITH SCHOLARLY PRECISION & REVERENCE
-announcementSubtext: Join our next live Zoom Seminar this Thursday
+announcementSubtext: Join our next live Zoom Seminar this friday
 hero:
   badge: Live Online Sessions
   headline: Zoom Seminar Schedule
@@ -61,7 +61,7 @@ sessions:
       A comprehensive study of Jesus' parabolic teaching methods and their
       theological significance for understanding the Kingdom of God.
     speaker: Dr. Thomas Keller
-    timeOrActionText: Watch Recording →
+    timeOrActionText: '7:00 PM IST'
     actionUrl: /videos
     isDashed: false
   - date: 'June 20, 2024'

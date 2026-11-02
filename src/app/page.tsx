@@ -10,12 +10,13 @@ import GalleryPreviewSection from '@/components/home/GalleryPreviewSection';
 import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsSection';
 import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
 import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
+import { resolveFeaturedVideos } from '@/lib/featuredVideos';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [homeData, zoomInfoData] = await Promise.all([
+  const [homeData, zoomInfoData, videoConnectionData] = await Promise.all([
     client.queries.home(
       { relativePath: "index.md" },
       { fetchOptions: { cache: "no-store" } }
@@ -24,9 +25,16 @@ export default async function Home() {
       { relativePath: "index.md" },
       { fetchOptions: { cache: "no-store" } }
     ).catch(() => null),
+    client.queries.videoConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
   ]);
   const data = homeData.data.home;
   const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
+  const featuredVideos = resolveFeaturedVideos(
+    videoConnectionData?.data?.videoConnection?.edges?.map((edge) => edge?.node)
+  );
 
   return (
     <div
@@ -56,7 +64,10 @@ export default async function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full space-y-16">
         <FeaturedLessonsSection data={data.featuredLessons} />
         <LatestReferencesSection data={data.latestReferences} />
-        <FeaturedVideosSection data={data.featuredVideos} />
+        <FeaturedVideosSection
+          sectionTitle={data.featuredVideos?.sectionTitle}
+          videos={featuredVideos}
+        />
         <GalleryPreviewSection data={data.galleryPreview} />
         <FeaturedPublicationsSection data={data.featuredPublications} />
         <ZoomMeetingCard seminar={seminar} />
