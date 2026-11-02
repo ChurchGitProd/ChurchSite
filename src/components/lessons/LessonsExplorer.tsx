@@ -11,7 +11,7 @@ interface LessonsExplorerProps {
   divisions?: string[];
 }
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 6;
 
 export default function LessonsExplorer({
   lessons,
@@ -179,7 +179,7 @@ export default function LessonsExplorer({
 
       {/* Lesson Grid */}
       {paginatedLessons.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedLessons.map((lesson) => (
             <LessonCard key={lesson.slug} lesson={lesson} />
           ))}
@@ -203,7 +203,7 @@ export default function LessonsExplorer({
       )}
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
+      {filteredLessons.length > 0 && (
         <nav
           aria-label="Lessons pagination"
           className="flex items-center justify-between border-t border-border pt-6"

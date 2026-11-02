@@ -1,49 +1,18 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-
-interface ReferenceItem {
-  reference?: string | null;
-  category?: string | null;
-  title?: string | null;
-  description?: string | null;
-  tags?: (string | null)[] | null;
-  link?: string | null;
-}
-
-interface LatestReferencesData {
-  sectionTitle?: string | null;
-  items?: (ReferenceItem | null)[] | null;
-}
+import { LatestReferenceItem } from '@/lib/latestReferences';
 
 interface LatestReferencesSectionProps {
-  data?: LatestReferencesData | null;
+  sectionTitle?: string | null;
+  items?: LatestReferenceItem[];
 }
 
-export default function LatestReferencesSection({ data }: LatestReferencesSectionProps) {
-  const sectionTitle = data?.sectionTitle || 'Latest Bible References';
+export default function LatestReferencesSection({ sectionTitle, items }: LatestReferencesSectionProps) {
+  const list = items ?? [];
 
-  const defaultItems: ReferenceItem[] = [
-    {
-      reference: 'Isaiah 53:1-12',
-      category: 'Messianic Prophecy',
-      title: 'The Suffering Servant',
-      description:
-        'A comprehensive cross-reference guide connecting the prophetic lyrics of Isaiah with the Passion narratives in the Gospels of Matthew and John.',
-      tags: ['Prophecy', 'Atonement', 'Gospel Parallel'],
-      link: '/references',
-    },
-    {
-      reference: 'Hebrews 11:1-40',
-      category: 'Historical Narrative',
-      title: 'The Cloud of Witnesses',
-      description:
-        'Analyzing the historical context of Old Testament heroes of faith highlighted by the author of Hebrews to encourage first-century Jewish Christians.',
-      tags: ['Faith', 'Old Testament', 'Exhortation'],
-      link: '/references',
-    },
-  ];
-
-  const items = data?.items && data.items.length > 0 ? (data.items.filter(Boolean) as ReferenceItem[]) : defaultItems;
+  if (list.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -54,7 +23,7 @@ export default function LatestReferencesSection({ data }: LatestReferencesSectio
       <div className="flex items-center justify-between border-b border-border pb-3">
         <h2 className="text-2xl font-heading font-bold text-primary flex items-center gap-2">
           <span className="w-1.5 h-6 bg-tertiary rounded"></span>
-          {sectionTitle}
+          {sectionTitle || 'Latest Bible References'}
         </h2>
         <Link
           href="/references"
@@ -66,10 +35,10 @@ export default function LatestReferencesSection({ data }: LatestReferencesSectio
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {items.map((item, idx) => (
+        {list.map((item) => (
           <Link
-            key={idx}
-            href={item.link || '/references'}
+            key={item.slug}
+            href={item.link || `/references/${item.slug}`}
             className="block bg-card border border-border rounded-lg p-5 hover:border-tertiary transition-all group"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">

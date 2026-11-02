@@ -11,12 +11,15 @@ import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsS
 import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
 import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 import { resolveFeaturedVideos } from '@/lib/featuredVideos';
+import { resolveFeaturedLessons } from '@/lib/featuredLessons';
+import { resolveLatestReferences } from '@/lib/latestReferences';
+import { resolveLatestImages } from '@/lib/latestImages';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [homeData, zoomInfoData, videoConnectionData] = await Promise.all([
+  const [homeData, zoomInfoData, videoConnectionData, lessonConnectionData, bibleReferenceConnectionData, bibleImageConnectionData] = await Promise.all([
     client.queries.home(
       { relativePath: "index.md" },
       { fetchOptions: { cache: "no-store" } }
@@ -29,11 +32,32 @@ export default async function Home() {
       {},
       { fetchOptions: { cache: "no-store" } }
     ).catch(() => null),
+    client.queries.lessonConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
+    client.queries.bibleReferenceConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
+    client.queries.bibleImageConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
   ]);
   const data = homeData.data.home;
   const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
   const featuredVideos = resolveFeaturedVideos(
     videoConnectionData?.data?.videoConnection?.edges?.map((edge) => edge?.node)
+  );
+  const featuredLessons = resolveFeaturedLessons(
+    lessonConnectionData?.data?.lessonConnection?.edges?.map((edge) => edge?.node)
+  );
+  const latestReferences = resolveLatestReferences(
+    bibleReferenceConnectionData?.data?.bibleReferenceConnection?.edges?.map((edge) => edge?.node)
+  );
+  const galleryImages = resolveLatestImages(
+    bibleImageConnectionData?.data?.bibleImageConnection?.edges?.map((edge) => edge?.node)
   );
 
   return (
@@ -62,13 +86,22 @@ export default async function Home() {
 
       {/* Main Content Layout */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full space-y-16">
-        <FeaturedLessonsSection data={data.featuredLessons} />
-        <LatestReferencesSection data={data.latestReferences} />
+        <FeaturedLessonsSection
+          sectionTitle={data.featuredLessons?.sectionTitle}
+          lessons={featuredLessons}
+        />
+        <LatestReferencesSection
+          sectionTitle={data.latestReferences?.sectionTitle}
+          items={latestReferences}
+        />
         <FeaturedVideosSection
           sectionTitle={data.featuredVideos?.sectionTitle}
           videos={featuredVideos}
         />
-        <GalleryPreviewSection data={data.galleryPreview} />
+        <GalleryPreviewSection
+          sectionTitle={data.galleryPreview?.sectionTitle}
+          items={galleryImages}
+        />
         <FeaturedPublicationsSection data={data.featuredPublications} />
         <ZoomMeetingCard seminar={seminar} />
       </main>

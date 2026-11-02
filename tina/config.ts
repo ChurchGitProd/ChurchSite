@@ -144,6 +144,18 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "lesson").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "lesson";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -185,11 +197,13 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
+            type: "reference",
             name: "division",
             label: "Biblical Division",
-            options: ["Pentateuch", "Historical Books", "Gospels & Acts", "Epistles"],
+            collections: ["division"],
             required: true,
+            description:
+              "Pick the lesson's division. To add or remove options, open the 'Biblical Divisions' collection in the left sidebar and create or delete a division.",
           },
           {
             type: "string",
@@ -197,6 +211,38 @@ export default defineConfig({
             label: "Difficulty Level",
             options: ["beginner", "intermediate", "advanced"],
             required: true,
+          },
+          {
+            type: "string",
+            name: "readTime",
+            label: "Read Time",
+            description: "Shown on the home-page featured card, e.g. '45 mins read' (optional).",
+          },
+          {
+            type: "datetime",
+            name: "publishedDate",
+            label: "Published Date",
+            description:
+              "Used only for tie-breaking: when two featured lessons claim the same home-page position, the one with the newer Published Date wins.",
+            ui: {
+              dateFormat: "MMM DD, YYYY",
+            },
+          },
+          {
+            type: "string",
+            name: "featured",
+            label: "Featured on Home Page",
+            options: ["no", "yes"],
+            description:
+              "Set to 'Yes' to show this lesson in the 'Featured Bible Lessons' section on the home page.",
+          },
+          {
+            type: "string",
+            name: "featuredPosition",
+            label: "Home Page Position",
+            options: ["1", "2", "3"],
+            description:
+              "Only needed when 'Featured on Home Page' is Yes. 1 = left card, 2 = middle card, 3 = right card. The position-1 lesson also becomes the spotlight at the top of the Lessons page. If another featured lesson already uses this position, the one with the newer Published Date takes the slot — afterwards set the old lesson's 'Featured on Home Page' back to 'No' to keep things tidy.",
           },
           {
             type: "image",
@@ -211,6 +257,54 @@ export default defineConfig({
             description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
             ui: {
               validate: validatePdfField,
+            },
+          },
+        ],
+      },
+      {
+        name: "genre",
+        label: "Biblical Genres",
+        path: "content/bible-genres",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Genre Name",
+            required: true,
+            description:
+              "Shown on scripture reference cards and filters, e.g. 'Prophecy'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
+        name: "division",
+        label: "Biblical Divisions",
+        path: "content/bible-divisions",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Division Name",
+            required: true,
+            description:
+              "Shown as the category tag on lesson cards, e.g. 'Pentateuch'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
             },
           },
         ],
@@ -371,30 +465,46 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "reference").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "reference";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
             name: "title",
             label: "Title",
             required: true,
+            description: 'Short descriptive title, e.g. "The Shema and the Greatest Commandment".',
           },
           {
             type: "string",
             name: "scripture",
             label: "Scripture Reference",
             required: true,
+            description: 'Book and verse range, e.g. "Deuteronomy 6:4-9" or "Matthew 1:22-23".',
           },
           {
             type: "string",
             name: "category",
             label: "Category",
             required: true,
+            description: 'Theological grouping shown on the card, e.g. "Torah Law", "Prophecy Fulfillment", or "Messianic Prophecy".',
           },
           {
             type: "string",
             name: "description",
             label: "Description",
             required: true,
+            description: 'One or two sentences summarizing the reference, e.g. "Cross-references the Psalm\'s imagery of suffering with the crucifixion accounts in the Gospels."',
             ui: {
               component: "textarea",
             },
@@ -403,12 +513,14 @@ export default defineConfig({
             type: "image",
             name: "image",
             label: "Reference Image",
+            description: "Optional cover image shown on the reference detail page.",
           },
           {
             type: "string",
             name: "author",
             label: "Author / Scholar",
             required: true,
+            description: 'Who wrote the commentary, e.g. "Dr. Charles Vance".',
           },
           {
             type: "string",
@@ -416,25 +528,55 @@ export default defineConfig({
             label: "Testament",
             options: ["Old Testament", "New Testament"],
             required: true,
+            description: "Which testament the scripture comes from.",
+          },
+          {
+            type: "reference",
+            name: "genre",
+            label: "Biblical Genre",
+            collections: ["genre"],
+            required: true,
+            description:
+              "Pick the genre. To add or remove options, open the 'Biblical Genres' collection in the left sidebar and create or delete a genre.",
+          },
+          {
+            type: "datetime",
+            name: "addedDate",
+            label: "Date Added",
+            description:
+              "The two references with the newest Date Added are shown in 'Latest Bible References' on the home page.",
+            ui: {
+              dateFormat: "MMM DD, YYYY",
+            },
           },
           {
             type: "string",
-            name: "genre",
-            label: "Biblical Genre",
-            options: ["Prophecy", "Law", "Poetry & Wisdom", "Gospels", "Epistles"],
-            required: true,
+            name: "featured",
+            label: "Featured Scholarly Reference",
+            options: ["no", "yes"],
+            description:
+              "Set to 'Yes' to showcase this reference in the highlighted spotlight at the top of the Scripture References page. Only one should be 'Yes' — if several are marked, the one with the newest Date Added is used.",
           },
           {
             type: "string",
             name: "tags",
             label: "Tags",
             list: true,
+            description: 'Small labels shown as chips on the card, e.g. "Prophecy", "Atonement", "Gospel Parallel". Add as many as you like.',
+          },
+          {
+            type: "string",
+            name: "crossReferences",
+            label: "Cross References",
+            description:
+              'Optional list shown in the home-page featured spotlight, e.g. "Romans 4, Galatians 3, Hebrews 11".',
           },
           {
             type: "rich-text",
             name: "body",
             label: "Commentary Body",
             isBody: true,
+            description: "The full commentary text — headings, paragraphs, quotes and lists are all rendered on the reference detail page.",
           },
         ],
       },
@@ -620,6 +762,18 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "image").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "image";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -628,17 +782,20 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
+            type: "reference",
             name: "category",
             label: "Category / Classification",
-            options: ["Archaeology", "Manuscript", "Manuscripts", "Scribal Study", "Diagrams"],
+            collections: ["imageCategory"],
             required: true,
+            description:
+              "Pick the image's category. To add or remove options, open the 'Image Categories' collection in the left sidebar and create or delete a category.",
           },
           {
             type: "string",
             name: "scripture",
             label: "Scripture Reference",
             required: true,
+            description: 'The related verse shown in the spotlight, e.g. "Romans 1:16".',
           },
           {
             type: "string",
@@ -666,10 +823,52 @@ export default defineConfig({
             label: "Archival Citation & Attribution",
           },
           {
+            type: "datetime",
+            name: "dateAdded",
+            label: "Date Added",
+            description:
+              "The images with the newest Date Added fill the 'Bible Image Gallery Preview' on the home page.",
+            ui: {
+              dateFormat: "MMM DD, YYYY",
+            },
+          },
+          {
+            type: "string",
+            name: "featured",
+            label: "Featured Spotlight",
+            options: ["no", "yes"],
+            description:
+              "Set to 'Yes' to showcase this image in the spotlight at the top of the Bible Images page. Only one should be 'Yes' — if several are marked, the newest Date Added wins.",
+          },
+          {
             type: "rich-text",
             name: "body",
             label: "Commentary Body",
             isBody: true,
+          },
+        ],
+      },
+      {
+        name: "imageCategory",
+        label: "Image Categories",
+        path: "content/image-categories",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Category Name",
+            required: true,
+            description:
+              "Shown on image cards and in the gallery filter, e.g. 'Manuscript'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
           },
         ],
       },
@@ -1137,186 +1336,16 @@ export default defineConfig({
             ],
           },
           {
-            type: "object",
+                        type: "object",
             name: "featuredLessons",
             label: "Featured Lessons Section",
+            description:
+              "The lessons in this section are chosen per lesson: open a lesson in 'Bible Lessons', set 'Featured on Home Page' to Yes, and pick a position (1-3). This block only controls the section heading.",
             fields: [
               {
                 type: "string",
                 name: "sectionTitle",
                 label: "Section Title",
-                required: true,
-              },
-              {
-                type: "object",
-                name: "lesson1",
-                label: "Lesson 1",
-                fields: [
-                  {
-                    type: "string",
-                    name: "category",
-                    label: "Category",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "reference",
-                    label: "Scripture Reference",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "author",
-                    label: "Author",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "readTime",
-                    label: "Read Time",
-                    required: true,
-                  },
-                  {
-                    type: "image",
-                    name: "image",
-                    label: "Lesson Image",
-                  },
-                  {
-                    type: "image",
-                    name: "pdfFile",
-                    label: "Lesson PDF",
-                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
-                    ui: {
-                      validate: validatePdfField,
-                    },
-                  },
-                ],
-              },
-              {
-                type: "object",
-                name: "lesson2",
-                label: "Lesson 2",
-                fields: [
-                  {
-                    type: "string",
-                    name: "category",
-                    label: "Category",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "reference",
-                    label: "Scripture Reference",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "author",
-                    label: "Author",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "readTime",
-                    label: "Read Time",
-                    required: true,
-                  },
-                  {
-                    type: "image",
-                    name: "image",
-                    label: "Lesson Image",
-                  },
-                  {
-                    type: "image",
-                    name: "pdfFile",
-                    label: "Lesson PDF",
-                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
-                    ui: {
-                      validate: validatePdfField,
-                    },
-                  },
-                ],
-              },
-              {
-                type: "object",
-                name: "lesson3",
-                label: "Lesson 3",
-                fields: [
-                  {
-                    type: "string",
-                    name: "category",
-                    label: "Category",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "reference",
-                    label: "Scripture Reference",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "author",
-                    label: "Author",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "readTime",
-                    label: "Read Time",
-                    required: true,
-                  },
-                  {
-                    type: "image",
-                    name: "image",
-                    label: "Lesson Image",
-                  },
-                  {
-                    type: "image",
-                    name: "pdfFile",
-                    label: "Lesson PDF",
-                    description: "Upload or select the lesson PDF. The \"Read Lesson\" button opens it in a new browser tab.",
-                    ui: {
-                      validate: validatePdfField,
-                    },
-                  },
-                ],
               },
             ],
           },
@@ -1324,53 +1353,13 @@ export default defineConfig({
             type: "object",
             name: "latestReferences",
             label: "Latest Bible References Section",
+            description:
+              "This section automatically shows the 2 scripture references with the newest 'Date Added'. Set it on each document in 'Scripture References'. This block only controls the section heading.",
             fields: [
               {
                 type: "string",
                 name: "sectionTitle",
                 label: "Section Title",
-              },
-              {
-                type: "object",
-                name: "items",
-                label: "Reference Items",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "reference",
-                    label: "Scripture Reference",
-                  },
-                  {
-                    type: "string",
-                    name: "category",
-                    label: "Category",
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    ui: {
-                      component: "textarea",
-                    },
-                  },
-                  {
-                    type: "string",
-                    name: "tags",
-                    label: "Tags",
-                    list: true,
-                  },
-                  {
-                    type: "string",
-                    name: "link",
-                    label: "Link",
-                  },
-                ],
               },
             ],
           },
@@ -1389,42 +1378,21 @@ export default defineConfig({
             ],
           },
           {
-            type: "object",
+                        type: "object",
             name: "galleryPreview",
-            label: "Bible Image Gallery Preview Section",
+            label: "Gallery Preview Section",
+            description:
+              "This section automatically shows the newest images by 'Date Added'. Set it on each document in 'Sacred Images'. This block only controls the section heading.",
             fields: [
               {
                 type: "string",
                 name: "sectionTitle",
                 label: "Section Title",
               },
-              {
-                type: "object",
-                name: "items",
-                label: "Gallery Items",
-                list: true,
-                fields: [
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Image Title",
-                  },
-                  {
-                    type: "string",
-                    name: "category",
-                    label: "Category / Tag",
-                  },
-                  {
-                    type: "image",
-                    name: "image",
-                    label: "Image",
-                  },
-                ],
-              },
             ],
           },
           {
-            type: "object",
+type: "object",
             name: "featuredPublications",
             label: "Featured Books & Magazines Section",
             fields: [
@@ -2536,7 +2504,9 @@ export default defineConfig({
           {
             type: "object",
             name: "featuredLesson",
-            label: "Featured Lesson Block",
+            label: "Featured Lesson Spotlight",
+            description:
+              "The spotlight shows the lesson set to Featured position 1 on its document. This block only controls the badge and button text.",
             fields: [
               {
                 type: "string",
@@ -2546,65 +2516,11 @@ export default defineConfig({
               },
               {
                 type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "teacher",
-                label: "Teacher",
-                required: true,
-              },
-              {
-                type: "string",
                 name: "linkText",
                 label: "Link Text",
                 required: true,
               },
-              {
-                type: "image",
-                name: "image",
-                label: "Featured Spotlight Cover Image (Optional)",
-                description: "Upload or choose an image for this featured lesson spotlight.",
-              },
             ],
-          },
-          {
-            type: "string",
-            name: "progressTitle",
-            label: "Progress Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "progressCourse",
-            label: "Progress Course Name",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "progressPercentage",
-            label: "Progress Percentage",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "progressDescription",
-            label: "Progress Description",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "progressButtonText",
-            label: "Progress Button Text",
-            required: true,
           },
           {
             type: "string",
@@ -2949,6 +2865,8 @@ export default defineConfig({
             type: "object",
             name: "featuredReference",
             label: "Featured Reference Block",
+            description:
+              "The spotlight shows the scripture reference with the newest 'Date Added'. This block only controls the badge and button text.",
             fields: [
               {
                 type: "string",
@@ -2958,71 +2876,11 @@ export default defineConfig({
               },
               {
                 type: "string",
-                name: "tag",
-                label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "crossReferences",
-                label: "Cross References",
-                required: true,
-              },
-              {
-                type: "string",
                 name: "linkText",
                 label: "Link Text",
                 required: true,
               },
             ],
-          },
-          {
-            type: "string",
-            name: "topicsTitle",
-            label: "Topics Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "relatedLessonTitle",
-            label: "Related Lesson Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "relatedLessonCourse",
-            label: "Related Lesson Course Name",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "relatedLessonDescription",
-            label: "Related Lesson Description",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "relatedLessonButtonText",
-            label: "Related Lesson Button Text",
-            required: true,
-          },
-          {
-            type: "image",
-            name: "relatedLessonImage",
-            label: "Related Lesson Course Thumbnail (Optional)",
-            description: "Upload or select an image for the Related Lesson Course widget in the sidebar",
           },
         ],
       },
@@ -3202,9 +3060,11 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "object",
+                        type: "object",
             name: "featuredImage",
             label: "Featured Image Spotlight",
+            description:
+              "The spotlight shows the image marked 'Featured Spotlight = Yes' on its document. This block only controls labels and button text.",
             fields: [
               {
                 type: "string",
@@ -3214,55 +3074,23 @@ export default defineConfig({
               },
               {
                 type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
                 name: "scriptureLabel",
                 label: "Scripture Label",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "scriptureQuote",
-                label: "Scripture Quote",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "scriptureReference",
-                label: "Scripture Reference",
-                required: true,
               },
               {
                 type: "string",
                 name: "downloadButtonText",
                 label: "Download Button Text",
-                required: true,
               },
               {
                 type: "string",
                 name: "citationButtonText",
                 label: "Citation Button Text",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "image",
-                label: "Featured Image",
               },
             ],
           },
           {
-            type: "string",
+type: "string",
             name: "archiveTitle",
             label: "Archive Section Title",
             required: true,

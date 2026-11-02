@@ -8,14 +8,6 @@ hero:
 searchPlaceholder: "Search lessons..."
 featuredLesson:
   badge: "Featured Lesson"
-  title: "Genesis 1-11 — The Theology of Creation"
-  description: "Dr. Charles Vance analyzes the primeval history of Genesis, focusing on the structural parallels of creation narratives and the covenant of grace."
-  teacher: "Dr. Vance"
   linkText: "Start Lesson"
-progressTitle: "Your Course Progress"
-progressCourse: "Principles of Hermeneutics"
-progressPercentage: "40%"
-progressDescription: "You have completed 2 out of 5 foundational lessons in this series. Resume to earn your certificate."
-progressButtonText: "Resume Course"
 seminarTitle: "Upcoming Q&A Seminars"
 ---

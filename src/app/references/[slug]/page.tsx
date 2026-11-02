@@ -3,11 +3,10 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import BrowseTopicsCard from '@/components/references/BrowseTopicsCard';
-import RelatedLessonCard from '@/components/references/RelatedLessonCard';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, BookOpen } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
+import { refTitle } from '@/lib/featured';
 
 interface ReferencePageProps {
   params: {
@@ -91,8 +90,8 @@ export default async function ReferenceDetailPage({ params }: ReferencePageProps
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Main Expository Content (8 cols) */}
-          <article className="lg:col-span-8 space-y-8">
+          {/* Main Expository Content — full width */}
+          <article className="lg:col-span-12 space-y-8">
             {/* Back Navigation Link */}
             <Link
               href="/references"
@@ -138,7 +137,7 @@ export default async function ReferenceDetailPage({ params }: ReferencePageProps
                   <span>
                     Classification:{' '}
                     <strong className="text-primary">
-                      {reference.testament} • {reference.genre}
+                      {reference.testament} • {refTitle(reference.genre)}
                     </strong>
                   </span>
                 </div>
@@ -170,17 +169,7 @@ export default async function ReferenceDetailPage({ params }: ReferencePageProps
             </div>
           </article>
 
-          {/* Sidebar Widgets (4 cols) */}
-          <aside className="lg:col-span-4 space-y-8">
-            <BrowseTopicsCard title={pageData?.topicsTitle} />
-            <RelatedLessonCard
-              title={pageData?.relatedLessonTitle}
-              course={pageData?.relatedLessonCourse}
-              description={pageData?.relatedLessonDescription}
-              buttonText={pageData?.relatedLessonButtonText}
-              image={(pageData as any)?.relatedLessonImage}
-            />
-          </aside>
+          {/* Sidebar widgets removed — content spans full width */}
 
         </div>
       </main>

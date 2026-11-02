@@ -5,6 +5,8 @@ import AnnouncementBar from '@/components/home/AnnouncementBar';
 import FeaturedImageSpotlight from '@/components/images/FeaturedImageSpotlight';
 import ImagesExplorer from '@/components/images/ImagesExplorer';
 import { ImageCardData } from '@/components/images/ImageCard';
+import { refTitle } from '@/lib/featured';
+import { resolveFeaturedImage } from '@/lib/latestImages';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
@@ -24,7 +26,7 @@ export default async function Images() {
     .map((node) => ({
       slug: node._sys.filename,
       title: node.title,
-      category: node.category,
+      category: refTitle(node.category),
       scripture: node.scripture,
       description: node.description,
       image: node.image,
@@ -100,8 +102,14 @@ export default async function Images() {
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-        {/* Featured Image Spotlight */}
-        <FeaturedImageSpotlight data={data.featuredImage} />
+        {/* Featured Image Spotlight — the doc marked 'Featured Spotlight = Yes' */}
+        <FeaturedImageSpotlight
+          badge={data.featuredImage?.badge}
+          scriptureLabel={data.featuredImage?.scriptureLabel}
+          downloadButtonText={data.featuredImage?.downloadButtonText}
+          citationButtonText={data.featuredImage?.citationButtonText}
+          item={resolveFeaturedImage(rawEdges.map((e) => e?.node))}
+        />
 
         {/* Search & Category Explorer */}
         <ImagesExplorer

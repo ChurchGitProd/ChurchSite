@@ -8,13 +8,8 @@ hero:
 searchPlaceholder: "Search gallery..."
 featuredImage:
   badge: "Featured Spotlight"
-  title: "Codex Sinaiticus Fragment Scan"
-  description: "A meticulous high-resolution scan of the 4th-century Greek uncial manuscript of the Bible, showcasing the elegant script and structural formatting of the Pauline Epistles."
   scriptureLabel: "Related Scripture:"
-  scriptureQuote: '"For I am not ashamed of the gospel, for it is the power of God for salvation to everyone who believes..."'
-  scriptureReference: "— Romans 1:16"
   downloadButtonText: "Download High-Res"
   citationButtonText: "View Citation Details"
-  image: "https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png"
 archiveTitle: "Image Archive"
 ---

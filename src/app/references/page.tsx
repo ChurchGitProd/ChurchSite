@@ -3,9 +3,10 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
 import FeaturedReferenceSpotlight from '@/components/references/FeaturedReferenceSpotlight';
-import RelatedLessonCard from '@/components/references/RelatedLessonCard';
 import ReferencesExplorer from '@/components/references/ReferencesExplorer';
 import { ReferenceCardData } from '@/components/references/ReferenceCard';
+import { refTitle } from '@/lib/featured';
+import { resolveFeaturedReference } from '@/lib/latestReferences';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
@@ -31,7 +32,7 @@ export default async function References() {
       description: node.description,
       author: node.author,
       testament: node.testament,
-      genre: node.genre,
+      genre: refTitle(node.genre),
       tags: node.tags,
     }));
 
@@ -41,6 +42,8 @@ export default async function References() {
     'psalm-22-1-31',
     'deuteronomy-6-4-9',
   ];
+  const featuredItem = resolveFeaturedReference(rawEdges.map((e) => e?.node));
+
   allReferences.sort((a, b) => {
     const idxA = canonicalOrder.indexOf(a.slug);
     const idxB = canonicalOrder.indexOf(b.slug);
@@ -103,17 +106,13 @@ export default async function References() {
 
       {/* Interactive References Explorer (Toolbar + Grid + Sidebar) */}
       <ReferencesExplorer
-        references={allReferences}
+        references={allReferences.filter((r) => r.slug !== featuredItem?.slug)}
         searchPlaceholder={data.searchPlaceholder}
-        featuredSlot={<FeaturedReferenceSpotlight data={data.featuredReference} />}
-        topicsTitle={data.topicsTitle}
-        relatedLessonSlot={
-          <RelatedLessonCard
-            title={data.relatedLessonTitle}
-            course={data.relatedLessonCourse}
-            description={data.relatedLessonDescription}
-            buttonText={data.relatedLessonButtonText}
-            image={(data as any).relatedLessonImage}
+        featuredSlot={
+          <FeaturedReferenceSpotlight
+            badge={data.featuredReference?.badge}
+            linkText={data.featuredReference?.linkText}
+            item={featuredItem}
           />
         }
       />

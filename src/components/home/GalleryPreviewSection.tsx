@@ -1,65 +1,19 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { sanitizeImageUrl } from '@/lib/media';
-
-interface GalleryItem {
-  title?: string | null;
-  category?: string | null;
-  image?: string | null;
-}
-
-interface GalleryPreviewData {
-  sectionTitle?: string | null;
-  items?: (GalleryItem | null)[] | null;
-}
+import { GalleryImageItem } from '@/lib/latestImages';
 
 interface GalleryPreviewSectionProps {
-  data?: GalleryPreviewData | null;
+  sectionTitle?: string | null;
+  items?: GalleryImageItem[];
 }
 
-export default function GalleryPreviewSection({ data }: GalleryPreviewSectionProps) {
-  const sectionTitle = data?.sectionTitle || 'Bible Image Gallery Preview';
+export default function GalleryPreviewSection({ sectionTitle, items }: GalleryPreviewSectionProps) {
+  const list = items ?? [];
 
-  const defaultItems: GalleryItem[] = [
-    {
-      title: 'Ancient Pentateuch Manuscript',
-      category: 'Historical Artifact',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png',
-    },
-    {
-      title: 'Classic Leather-Bound Archives',
-      category: 'Library Collection',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
-    },
-    {
-      title: 'Greek Scripture Annotations',
-      category: 'Scholarly Study',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
-    },
-    {
-      title: 'The Southern Steps of Jerusalem',
-      category: 'Archaeology',
-      image: '/uploads/The Southern Steps of Jerusalem.jpg',
-    },
-    {
-      title: 'The Great Isaiah Scroll Replica',
-      category: 'Manuscript',
-      image: '/uploads/The Great Isaiah Scroll Replica.png',
-    },
-    {
-      title: 'Greek Codex Transcription Annotations',
-      category: 'Scribal Study',
-      image: '/uploads/Greek Codex Transcription Annotations.jpg',
-    },
-  ];
-
-  const items =
-    data?.items && data.items.length > 0
-      ? (data.items.filter(Boolean) as GalleryItem[])
-      : defaultItems;
+  if (list.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -70,7 +24,7 @@ export default function GalleryPreviewSection({ data }: GalleryPreviewSectionPro
       <div className="flex items-center justify-between border-b border-border pb-3">
         <h2 className="text-2xl font-heading font-bold text-primary flex items-center gap-2">
           <span className="w-1.5 h-6 bg-tertiary rounded"></span>
-          {sectionTitle}
+          {sectionTitle || 'Bible Image Gallery Preview'}
         </h2>
         <Link
           href="/images"
@@ -82,14 +36,14 @@ export default function GalleryPreviewSection({ data }: GalleryPreviewSectionPro
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {items.map((item, idx) => (
+        {list.map((item) => (
           <Link
-            key={idx}
-            href="/images"
+            key={item.slug}
+            href={`/images/${item.slug}`}
             className="group relative rounded-lg overflow-hidden border border-border bg-card shadow-sm aspect-square block"
           >
             <img
-              src={sanitizeImageUrl(item.image || defaultItems[idx]?.image || '')}
+              src={sanitizeImageUrl(item.image || '')}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               alt={item.title || 'Gallery preview'}
             />

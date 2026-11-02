@@ -8,6 +8,7 @@ import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, BookOpen, Download, Calendar, FileText } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
 import { sanitizeImageUrl } from '@/lib/media';
+import { refTitle } from '@/lib/featured';
 
 interface ImagePageProps {
   params: {
@@ -118,7 +119,7 @@ export default async function ImageDetailPage({ params }: ImagePageProps) {
           <div className="p-6 sm:p-8 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest px-2.5 py-1 bg-tertiary/10 rounded">
-                {image.category}
+                {refTitle(image.category)}
               </span>
               <span className="text-xs font-semibold text-primary px-2.5 py-0.5 border border-border rounded">
                 {image.scripture}

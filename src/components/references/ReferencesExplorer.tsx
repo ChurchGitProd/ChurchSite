@@ -3,40 +3,35 @@
 import React, { useState, useMemo } from 'react';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import ReferenceCard, { ReferenceCardData } from './ReferenceCard';
-import BrowseTopicsCard from './BrowseTopicsCard';
 
 interface ReferencesExplorerProps {
   references: ReferenceCardData[];
   searchPlaceholder?: string | null;
   featuredSlot?: React.ReactNode;
-  topicsTitle?: string | null;
-  relatedLessonSlot?: React.ReactNode;
 }
 
 const TESTAMENTS = ['All Testaments', 'Old Testament', 'New Testament'];
-const GENRES = [
-  'All Genres',
-  'Prophecy',
-  'Law',
-  'Poetry & Wisdom',
-  'Gospels',
-  'Epistles',
-];
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function ReferencesExplorer({
   references,
   searchPlaceholder,
   featuredSlot,
-  topicsTitle,
-  relatedLessonSlot,
 }: ReferencesExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTestament, setSelectedTestament] = useState('All Testaments');
   const [selectedGenre, setSelectedGenre] = useState('All Genres');
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Genres come from the references data so new CMS-managed genres appear automatically
+  const allGenres = useMemo(() => {
+    const set = new Set<string>();
+    references.forEach((r) => {
+      if (r.genre) set.add(r.genre);
+    });
+    return Array.from(set).sort();
+  }, [references]);
 
   // Filter references based on current search and filter criteria
   const filteredReferences = useMemo(() => {
@@ -78,23 +73,9 @@ export default function ReferencesExplorer({
         }
       }
 
-      // 4. Topic filter
-      if (selectedTopic) {
-        const top = selectedTopic.toLowerCase();
-        const inTags =
-          item.tags?.some((tag) => tag && tag.toLowerCase().includes(top)) ?? false;
-        const inCategory = item.category.toLowerCase().includes(top);
-        const inTitle = item.title.toLowerCase().includes(top);
-        const inDescription = item.description.toLowerCase().includes(top);
-
-        if (!inTags && !inCategory && !inTitle && !inDescription) {
-          return false;
-        }
-      }
-
       return true;
     });
-  }, [references, searchQuery, selectedTestament, selectedGenre, selectedTopic]);
+  }, [references, searchQuery, selectedTestament, selectedGenre]);
 
   // Reset page when filters change
   const totalPages = Math.max(1, Math.ceil(filteredReferences.length / ITEMS_PER_PAGE));
@@ -122,24 +103,17 @@ export default function ReferencesExplorer({
     setCurrentPage(1);
   };
 
-  const handleTopicSelect = (topic: string | null) => {
-    setSelectedTopic(topic);
-    setCurrentPage(1);
-  };
-
   const resetAllFilters = () => {
     setSearchQuery('');
     setSelectedTestament('All Testaments');
     setSelectedGenre('All Genres');
-    setSelectedTopic(null);
     setCurrentPage(1);
   };
 
   const hasActiveFilters =
     Boolean(searchQuery.trim()) ||
     selectedTestament !== 'All Testaments' ||
-    selectedGenre !== 'All Genres' ||
-    Boolean(selectedTopic);
+    selectedGenre !== 'All Genres';
 
   return (
     <>
@@ -174,13 +148,14 @@ export default function ReferencesExplorer({
               ))}
             </select>
 
-            {/* Genre Dropdown */}
+            {/* Genre Dropdown — derived from the references data */}
             <select
               value={selectedGenre}
               onChange={handleGenreChange}
               className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
             >
-              {GENRES.map((g) => (
+              <option value="All Genres">All Genres</option>
+              {allGenres.map((g) => (
                 <option key={g} value={g}>
                   {g}
                 </option>
@@ -208,146 +183,128 @@ export default function ReferencesExplorer({
         </div>
       </section>
 
-      {/* Main Content Layout */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Column: References Listing & Pagination */}
-          <div className="lg:col-span-8 space-y-8">
-            
-            {/* Featured Reference Block */}
-            {featuredSlot}
+      {/* Main Content Layout — full width */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
 
-            {/* Bible References Listing */}
-            <div className="space-y-6">
-              {paginatedReferences.length > 0 ? (
-                paginatedReferences.map((ref) => (
-                  <ReferenceCard key={ref.slug} reference={ref} />
-                ))
-              ) : (
-                <div className="bg-card border border-border rounded-xl p-10 text-center space-y-3">
-                  <p className="text-sm font-semibold text-primary">
-                    No references match your criteria.
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Try adjusting your search terms or clearing selected filters.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={resetAllFilters}
-                    className="inline-block px-4 py-2 text-xs font-bold text-primary-foreground bg-primary rounded hover:bg-primary/90 transition-all"
-                  >
-                    Reset Filters
-                  </button>
-                </div>
-              )}
+        {/* Featured Reference Block */}
+        {featuredSlot}
+
+        {/* Bible References Listing */}
+        {paginatedReferences.length > 0 ? (
+          <div className="space-y-6">
+            {paginatedReferences.map((ref) => (
+              <ReferenceCard key={ref.slug} reference={ref} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-card border border-border rounded-xl p-10 text-center space-y-3">
+            <p className="text-sm font-semibold text-primary">
+              No references match your criteria.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Try adjusting your search terms or clearing selected filters.
+            </p>
+            <button
+              type="button"
+              onClick={resetAllFilters}
+              className="inline-block px-4 py-2 text-xs font-bold text-primary-foreground bg-primary rounded hover:bg-primary/90 transition-all"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {filteredReferences.length > 0 && (
+          <nav
+            aria-label="Pagination"
+            className="flex items-center justify-between border-t border-border pt-6"
+          >
+            {/* Mobile View */}
+            <div className="flex-1 flex justify-between sm:hidden">
+              <button
+                type="button"
+                disabled={safeCurrentPage <= 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card hover:bg-muted text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                disabled={safeCurrentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card hover:bg-muted text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
             </div>
 
-            {/* Pagination Controls */}
-            {filteredReferences.length > 0 && (
-              <nav
-                aria-label="Pagination"
-                className="flex items-center justify-between border-t border-border pt-6"
-              >
-                {/* Mobile View */}
-                <div className="flex-1 flex justify-between sm:hidden">
+            {/* Desktop View */}
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">
+                  Showing{' '}
+                  <span className="font-medium text-primary">
+                    {filteredReferences.length === 0 ? 0 : startIndex + 1}
+                  </span>{' '}
+                  to{' '}
+                  <span className="font-medium text-primary">
+                    {Math.min(startIndex + ITEMS_PER_PAGE, filteredReferences.length)}
+                  </span>{' '}
+                  of{' '}
+                  <span className="font-medium">{filteredReferences.length}</span>{' '}
+                  entries
+                </p>
+              </div>
+
+              <div>
+                <span className="relative z-0 inline-flex rounded shadow-sm -space-x-px">
+                  {/* Left Arrow Button */}
                   <button
                     type="button"
+                    aria-label="Previous Page"
                     disabled={safeCurrentPage <= 1}
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card hover:bg-muted text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="relative inline-flex items-center px-2.5 py-1.5 rounded-l-md border border-border bg-card text-xs font-medium text-muted-foreground hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
-                    Previous
+                    <ChevronLeft className="w-3.5 h-3.5" />
                   </button>
+
+                  {/* Numeric Page Buttons */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    const isActive = page === safeCurrentPage;
+                    return (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => setCurrentPage(page)}
+                        className={`relative inline-flex items-center px-3 py-1.5 border text-xs font-medium transition-colors ${
+                          isActive
+                            ? 'border-primary bg-primary text-primary-foreground font-bold z-10'
+                            : 'border-border bg-card text-muted-foreground hover:bg-muted'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                  {/* Right Arrow Button */}
                   <button
                     type="button"
+                    aria-label="Next Page"
                     disabled={safeCurrentPage >= totalPages}
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card hover:bg-muted text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="relative inline-flex items-center px-2.5 py-1.5 rounded-r-md border border-border bg-card text-xs font-medium text-muted-foreground hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
-                    Next
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </button>
-                </div>
-
-                {/* Desktop View */}
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Showing{' '}
-                      <span className="font-medium text-primary">
-                        {filteredReferences.length === 0 ? 0 : startIndex + 1}
-                      </span>{' '}
-                      to{' '}
-                      <span className="font-medium text-primary">
-                        {Math.min(startIndex + ITEMS_PER_PAGE, filteredReferences.length)}
-                      </span>{' '}
-                      of{' '}
-                      <span className="font-medium">{filteredReferences.length}</span>{' '}
-                      entries
-                    </p>
-                  </div>
-
-                  <div>
-                    <span className="relative z-0 inline-flex rounded shadow-sm -space-x-px">
-                      {/* Left Arrow Button */}
-                      <button
-                        type="button"
-                        aria-label="Previous Page"
-                        disabled={safeCurrentPage <= 1}
-                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                        className="relative inline-flex items-center px-2.5 py-1.5 rounded-l-md border border-border bg-card text-xs font-medium text-muted-foreground hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <ChevronLeft className="w-3.5 h-3.5" />
-                      </button>
-
-                      {/* Numeric Page Buttons */}
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                        const isActive = page === safeCurrentPage;
-                        return (
-                          <button
-                            key={page}
-                            type="button"
-                            onClick={() => setCurrentPage(page)}
-                            className={`relative inline-flex items-center px-3 py-1.5 border text-xs font-medium transition-colors ${
-                              isActive
-                                ? 'border-primary bg-primary text-primary-foreground font-bold z-10'
-                                : 'border-border bg-card text-muted-foreground hover:bg-muted'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        );
-                      })}
-
-                      {/* Right Arrow Button */}
-                      <button
-                        type="button"
-                        aria-label="Next Page"
-                        disabled={safeCurrentPage >= totalPages}
-                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                        className="relative inline-flex items-center px-2.5 py-1.5 rounded-r-md border border-border bg-card text-xs font-medium text-muted-foreground hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </span>
-                  </div>
-                </div>
-              </nav>
-            )}
-
-          </div>
-
-          {/* Right Column: Sidebar Widgets */}
-          <aside className="lg:col-span-4 space-y-8">
-            <BrowseTopicsCard
-              title={topicsTitle}
-              selectedTopic={selectedTopic}
-              onSelectTopic={handleTopicSelect}
-            />
-            {relatedLessonSlot}
-          </aside>
-
-        </div>
+                </span>
+              </div>
+            </div>
+          </nav>
+        )}
       </main>
     </>
   );

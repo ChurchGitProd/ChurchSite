@@ -10,15 +10,7 @@ interface ImagesExplorerProps {
   archiveTitle?: string | null;
 }
 
-const CATEGORIES = [
-  'All Images',
-  'Manuscripts',
-  'Archaeology',
-  'Scribal Study',
-  'Diagrams',
-];
-
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function ImagesExplorer({
   images,
@@ -30,6 +22,15 @@ export default function ImagesExplorer({
   const [currentPage, setCurrentPage] = useState(1);
 
   const displayArchiveTitle = archiveTitle || 'Image Archive';
+
+  // Categories come from the images data so CMS-managed categories appear automatically
+  const allCategories = useMemo(() => {
+    const set = new Set<string>();
+    images.forEach((img) => {
+      if (img.category) set.add(img.category);
+    });
+    return Array.from(set).sort();
+  }, [images]);
 
   // Filter images based on search query and category selection
   const filteredImages = useMemo(() => {
@@ -49,15 +50,7 @@ export default function ImagesExplorer({
 
       // 2. Category Filter
       if (selectedCategory !== 'All Images') {
-        const sel = selectedCategory.toLowerCase();
-        const itemCat = item.category.toLowerCase();
-
-        // Handle Manuscripts vs Manuscript seamlessly
-        if (sel === 'manuscripts' || sel === 'manuscript') {
-          if (itemCat !== 'manuscripts' && itemCat !== 'manuscript') {
-            return false;
-          }
-        } else if (itemCat !== sel) {
+        if (item.category !== selectedCategory) {
           return false;
         }
       }
@@ -102,7 +95,7 @@ export default function ImagesExplorer({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Category Pill Buttons */}
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-            {CATEGORIES.map((cat) => {
+            {['All Images', ...allCategories].map((cat) => {
               const isActive = selectedCategory === cat;
               return (
                 <button

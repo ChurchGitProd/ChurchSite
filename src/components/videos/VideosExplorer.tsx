@@ -10,7 +10,7 @@ interface VideosExplorerProps {
   lecturesTitle?: string | null;
 }
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function VideosExplorer({
   videos,

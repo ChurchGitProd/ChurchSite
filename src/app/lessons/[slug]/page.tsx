@@ -3,12 +3,13 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
-import CourseProgressCard from '@/components/lessons/CourseProgressCard';
-import UpcomingSeminarsCard from '@/components/lessons/UpcomingSeminarsCard';
+import UpcomingSeminarsCard, { SeminarItem } from '@/components/lessons/UpcomingSeminarsCard';
 import LessonCompletionButton from '@/components/lessons/LessonCompletionButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, Award } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
+import { refTitle } from '@/lib/featured';
+import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 
 interface LessonPageProps {
   params: {
@@ -33,12 +34,26 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
   let lessonRes;
   let pageRes;
   let lessonConnectionRes;
+  let zoomInfoRes;
 
   try {
-    [lessonRes, pageRes, lessonConnectionRes] = await Promise.all([
-      client.queries.lesson({ relativePath: `${params.slug}.mdx` }),
-      client.queries.lessons({ relativePath: 'index.md' }),
-      client.queries.lessonConnection(),
+    [lessonRes, pageRes, lessonConnectionRes, zoomInfoRes] = await Promise.all([
+      client.queries.lesson(
+        { relativePath: `${params.slug}.mdx` },
+        { fetchOptions: { cache: 'no-store' } }
+      ),
+      client.queries.lessons(
+        { relativePath: 'index.md' },
+        { fetchOptions: { cache: 'no-store' } }
+      ),
+      client.queries.lessonConnection(
+        {},
+        { fetchOptions: { cache: 'no-store' } }
+      ),
+      client.queries.zoomInfo(
+        { relativePath: 'index.md' },
+        { fetchOptions: { cache: 'no-store' } }
+      ).catch(() => null),
     ]);
   } catch {
     notFound();
@@ -47,10 +62,18 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
   const lesson = lessonRes?.data?.lesson;
   const pageData = pageRes?.data?.lessons;
   const rawEdges = lessonConnectionRes?.data?.lessonConnection?.edges || [];
-  const allLessonSlugs = rawEdges
-    .map((e) => e?.node?._sys.filename)
-    .filter((s): s is string => Boolean(s));
-  const totalLessons = allLessonSlugs.length || 5;
+
+  const seminar = resolveUpcomingZoomSeminar(zoomInfoRes?.data?.zoomInfo);
+  const seminarItems: SeminarItem[] = seminar?.title
+    ? [
+        {
+          title: seminar.title,
+          schedule: [seminar.dateStr, seminar.timeStr].filter(Boolean).join(' | '),
+          link: '/zoom-info',
+          isLive: seminar.isLive,
+        },
+      ]
+    : [];
 
   if (!lesson) {
     notFound();
@@ -110,7 +133,7 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
             <div className="bg-card border border-border rounded-xl p-6 sm:p-8 space-y-4 shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest px-2.5 py-1 bg-tertiary/10 rounded">
-                  {lesson.division}
+                  {refTitle(lesson.division)}
                 </span>
                 <span className="text-xs font-semibold text-primary px-2.5 py-0.5 border border-border rounded">
                   {lesson.book} {lesson.chapters}
@@ -157,14 +180,11 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
           </article>
 
           {/* Right Column: Sidebar Widgets (4 cols) */}
-          <aside className="lg:col-span-4 space-y-8">
-            <CourseProgressCard
-              data={pageData}
-              totalLessons={totalLessons}
-              allLessonSlugs={allLessonSlugs}
-            />
-            <UpcomingSeminarsCard title={pageData?.seminarTitle} />
-          </aside>
+          {seminarItems.length > 0 && (
+            <aside className="lg:col-span-4 space-y-8">
+              <UpcomingSeminarsCard title={pageData?.seminarTitle} seminars={seminarItems} />
+            </aside>
+          )}
         </div>
       </main>
 

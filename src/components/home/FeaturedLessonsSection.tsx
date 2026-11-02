@@ -1,81 +1,30 @@
 import Link from 'next/link';
 import { Clock, ArrowRight } from 'lucide-react';
 import { sanitizeImageUrl } from '@/lib/media';
+import { FeaturedLessonItem } from '@/lib/featuredLessons';
 import ReadPdfLink from '@/components/common/ReadPdfLink';
 
-interface LessonItem {
-  category?: string | null;
-  reference?: string | null;
-  author?: string | null;
-  title?: string | null;
-  description?: string | null;
-  readTime?: string | null;
-  image?: string | null;
-  pdfFile?: string | null;
-}
-
-interface FeaturedLessonsData {
-  sectionTitle?: string | null;
-  lesson1?: LessonItem | null;
-  lesson2?: LessonItem | null;
-  lesson3?: LessonItem | null;
-}
-
 interface FeaturedLessonsSectionProps {
-  data?: FeaturedLessonsData | null;
+  sectionTitle?: string | null;
+  lessons?: FeaturedLessonItem[];
 }
 
-export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionProps) {
-  const sectionTitle = data?.sectionTitle || 'Featured Bible Lessons';
+const FALLBACK_IMAGE =
+  'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png';
 
-  const defaultLessons: LessonItem[] = [
-    {
-      category: 'Pentateuch',
-      reference: 'Genesis 1-11',
-      author: 'Dr. Charles Vance',
-      title: 'The Theology of Creation & Covenant',
-      description:
-        'An in-depth scholarly analysis of the primeval history, exploring the structural parallels of creation narratives and the foundational covenants.',
-      readTime: '45 mins read',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/study_scene-1782719380163-v1e6si6wd9.png',
-    },
-    {
-      category: 'Epistles',
-      reference: 'Romans 5-8',
-      author: 'Prof. Eleanor Sterling',
-      title: 'Grace, Justification, and the New Life',
-      description:
-        "Tracing Paul's masterpiece argument from legal justification to the intimate reality of life in the Holy Spirit.",
-      readTime: '50 mins read',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png',
-    },
-    {
-      category: 'Epistles',
-      reference: 'Hebrews 8-10',
-      author: 'Prof. Julian Mercer',
-      title: 'The Better Covenant & Sanctuary',
-      description:
-        "Investigating the author of Hebrews' comparison between the Levitical priesthood and Christ's eternal high priesthood.",
-      readTime: '40 mins read',
-      image:
-        'https://uxmagic.blob.core.windows.net/public/agent-images/hero_bible-1782719363350-90sctq9ygv4.png',
-    },
-  ];
+export default function FeaturedLessonsSection({ sectionTitle, lessons }: FeaturedLessonsSectionProps) {
+  const items = lessons ?? [];
 
-  const lessons: LessonItem[] = [
-    data?.lesson1 || defaultLessons[0],
-    data?.lesson2 || defaultLessons[1],
-    data?.lesson3 || defaultLessons[2],
-  ].filter(Boolean) as LessonItem[];
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section id="lessons" className="space-y-6">
       <div className="flex items-center justify-between border-b border-border pb-3">
         <h2 className="text-2xl font-heading font-bold text-primary flex items-center gap-2">
           <span className="w-1.5 h-6 bg-tertiary rounded"></span>
-          {sectionTitle}
+          {sectionTitle || 'Featured Bible Lessons'}
         </h2>
         <Link
           href="/lessons"
@@ -87,20 +36,20 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {lessons.map((lesson, idx) => (
+        {items.map((lesson) => (
           <div
-            key={idx}
+            key={lesson.slug}
             className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl transition-all flex flex-col group"
           >
             <div className="h-48 overflow-hidden relative">
               <img
-                src={sanitizeImageUrl(lesson.image || defaultLessons[idx]?.image || '')}
+                src={sanitizeImageUrl(lesson.image || FALLBACK_IMAGE)}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 alt={lesson.title || 'Lesson thumbnail'}
               />
-              {lesson.category && (
+              {lesson.division && (
                 <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded">
-                  {lesson.category}
+                  {lesson.division}
                 </span>
               )}
             </div>
@@ -108,10 +57,12 @@ export default function FeaturedLessonsSection({ data }: FeaturedLessonsSectionP
               <div className="space-y-2">
                 <p className="text-xs text-tertiary font-semibold">
                   {lesson.reference}
-                  {lesson.author ? ` | ${lesson.author}` : ''}
+                  {lesson.teacher ? ` | ${lesson.teacher}` : ''}
                 </p>
                 <h3 className="text-lg font-heading font-bold text-primary group-hover:text-tertiary transition-colors">
-                  {lesson.title}
+                  <Link href={`/lessons/${lesson.slug}`} className="hover:text-tertiary transition-colors">
+                    {lesson.title}
+                  </Link>
                 </h3>
                 <p className="text-xs text-muted-foreground line-clamp-3">
                   {lesson.description}

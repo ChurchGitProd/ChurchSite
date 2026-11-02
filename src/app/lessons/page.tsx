@@ -3,18 +3,21 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
 import FeaturedLessonSpotlight from '@/components/lessons/FeaturedLessonSpotlight';
-import CourseProgressCard from '@/components/lessons/CourseProgressCard';
-import UpcomingSeminarsCard from '@/components/lessons/UpcomingSeminarsCard';
+import UpcomingSeminarsCard, { SeminarItem } from '@/components/lessons/UpcomingSeminarsCard';
 import LessonsExplorer from '@/components/lessons/LessonsExplorer';
 import { LessonCardData } from '@/components/lessons/LessonCard';
+import { refTitle } from '@/lib/featured';
+import { resolveFeaturedLessons } from '@/lib/featuredLessons';
+import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Lessons() {
-  const [lessonsPageData, lessonConnectionData] = await Promise.all([
+  const [lessonsPageData, lessonConnectionData, zoomInfoData] = await Promise.all([
     client.queries.lessons({ relativePath: 'index.md' }, { fetchOptions: { cache: 'no-store' } }),
     client.queries.lessonConnection({}, { fetchOptions: { cache: 'no-store' } }),
+    client.queries.zoomInfo({ relativePath: 'index.md' }, { fetchOptions: { cache: 'no-store' } }).catch(() => null),
   ]);
 
   const data = lessonsPageData.data.lessons;
@@ -27,15 +30,28 @@ export default async function Lessons() {
       slug: node._sys.filename,
       title: node.title,
       reference: `${node.book} ${node.chapters}`,
-      division: node.division,
+      division: refTitle(node.division),
       teacher: node.teacher,
       description: node.description,
       pdfFile: node.pdfFile || null,
     }));
 
-  // Preserve Genesis 1-11 as the top featured spotlight, display remaining in grid
-  const featuredSlug = 'genesis-1-11-the-theology-of-creation';
-  const gridLessons = allLessons.filter((l) => l.slug !== featuredSlug);
+  // Spotlight shows the lesson holding featured position 1 on its document
+  const featured = resolveFeaturedLessons(rawEdges.map((e) => e?.node));
+  const spotlight = featured[0] ?? null;
+  const gridLessons = allLessons.filter((l) => l.slug !== spotlight?.slug);
+
+  const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
+  const seminarItems: SeminarItem[] = seminar?.title
+    ? [
+        {
+          title: seminar.title,
+          schedule: [seminar.dateStr, seminar.timeStr].filter(Boolean).join(' | '),
+          link: '/zoom-info',
+          isLive: seminar.isLive,
+        },
+      ]
+    : [];
 
   return (
     <div
@@ -88,34 +104,29 @@ export default async function Lessons() {
       {/* Main Content Layout */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Featured Spotlight & Dynamic Lessons Explorer */}
-          <div className="lg:col-span-8 space-y-8">
-            {/* Featured Lesson Block */}
+          {/* Featured Lesson Spotlight (narrower when the seminars card sits beside it) */}
+          <div className={seminarItems.length > 0 ? 'lg:col-span-8' : 'lg:col-span-12'}>
             <FeaturedLessonSpotlight
-              data={data.featuredLesson}
-              slug={featuredSlug}
-              pdfFile={allLessons.find((l) => l.slug === featuredSlug)?.pdfFile}
+              badge={data.featuredLesson?.badge}
+              linkText={data.featuredLesson?.linkText}
+              lesson={spotlight}
             />
+          </div>
 
-            {/* Interactive Lesson Explorer (Search, Filter, Counter, Grid, Pagination) */}
+          {/* Seminars widget beside the spotlight */}
+          {seminarItems.length > 0 && (
+            <aside className="lg:col-span-4 space-y-8">
+              <UpcomingSeminarsCard title={data.seminarTitle} seminars={seminarItems} />
+            </aside>
+          )}
+
+          {/* Interactive Lesson Explorer (Search, Filter, Counter, Grid, Pagination) — full width */}
+          <div className="lg:col-span-12">
             <LessonsExplorer
               lessons={gridLessons.length > 0 ? gridLessons : allLessons}
               searchPlaceholder={data.searchPlaceholder || 'Search lessons...'}
             />
           </div>
-
-          {/* Right Column: Sidebar Widgets */}
-          <aside className="lg:col-span-4 space-y-8">
-            {/* Course Progress Widget */}
-            <CourseProgressCard
-              data={data}
-              totalLessons={allLessons.length}
-              allLessonSlugs={allLessons.map((l) => l.slug)}
-            />
-
-            {/* Seminar Schedule Widget */}
-            <UpcomingSeminarsCard title={data.seminarTitle} />
-          </aside>
         </div>
       </main>
 
