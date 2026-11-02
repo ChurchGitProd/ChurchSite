@@ -31,8 +31,7 @@ officeHours:
   sundayHours: Closed
   note: Holiday hours may vary. Check our announcements for any schedule changes.
 mapLocation:
-  imageUrl: >-
-    https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&h=675&fit=crop
+  address: "123 Theology Lane, Scholar's Quarter, ST 40012"
   addressText: '123 Theology Lane, Scholar''s Quarter, ST 40012'
 additionalInfo:
   title: Additional Information

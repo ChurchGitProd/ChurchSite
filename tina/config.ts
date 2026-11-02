@@ -1563,14 +1563,22 @@ export default defineConfig({
             label: "Map Location Section",
             fields: [
               {
-                type: "image",
-                name: "imageUrl",
-                label: "Map Image URL",
+                type: "string",
+                name: "address",
+                label: "Google Maps Address",
+                required: true,
+                description:
+                  "Type the address or place name to show on the map, e.g. \"123 Church St, Springfield\" or \"St. Peter's Basilica\". A live Google Map appears automatically — no API key needed.",
+                ui: {
+                  component: "textarea",
+                },
               },
               {
                 type: "string",
                 name: "addressText",
-                label: "Map Address Overlay Text",
+                label: "Map Caption Text",
+                description:
+                  "Optional caption shown below the map, e.g. the formatted address.",
               },
             ],
           },

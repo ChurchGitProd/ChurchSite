@@ -1,8 +1,6 @@
-import { sanitizeImageUrl } from '@/lib/media';
-
 interface OfficeLocationMapProps {
   mapLocation?: {
-    imageUrl?: string | null;
+    address?: string | null;
     addressText?: string | null;
   } | null;
 }
@@ -10,30 +8,35 @@ interface OfficeLocationMapProps {
 export default function OfficeLocationMap({
   mapLocation,
 }: OfficeLocationMapProps) {
-  const imageUrl =
-    mapLocation?.imageUrl ||
-    'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&h=675&fit=crop';
-  const addressText =
-    mapLocation?.addressText ||
-    "123 Theology Lane, Scholar's Quarter, ST 40012";
+  const address = mapLocation?.address?.trim() || '';
+  const caption = mapLocation?.addressText || '';
+
+  if (!address) {
+    return null;
+  }
+
+  const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
       <div className="aspect-video bg-muted relative">
-        <img
-          src={sanitizeImageUrl(imageUrl)}
-          alt="Map location"
-          className="w-full h-full object-cover"
+        <iframe
+          src={embedUrl}
+          title={`Map showing ${address}`}
+          className="absolute inset-0 w-full h-full border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
-          <div className="text-center space-y-3">
-            <span className="text-4xl text-white mx-auto block">📍</span>
-            <p className="text-sm text-white font-medium max-w-md mx-auto">
-              {addressText}
-            </p>
-          </div>
-        </div>
       </div>
+      {caption && (
+        <div className="px-4 py-3 border-t border-border">
+          <p className="text-xs text-muted-foreground flex items-center gap-2">
+            <span aria-hidden="true">📍</span>
+            {caption}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
