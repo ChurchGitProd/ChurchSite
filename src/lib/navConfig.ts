@@ -61,25 +61,20 @@ export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
       label: 'Knowledge Hub',
       items: [
         { id: 'books', label: 'Books', href: '/books' },
-        { id: 'library', label: 'Library', href: '/library' },
         { id: 'magazines', label: 'Magazines', href: '/magazines' },
-        { id: 'newsletter', label: 'Daily Letter', href: '/newsletter' },
-        { id: 'resources', label: 'Resources', href: '/resources' },
-        { id: 'archives', label: 'Archives', href: '/archives' },
       ],
     },
     {
       id: 'connect',
       label: 'Connect Portal',
       items: [
-        { id: 'quick-links', label: 'Quick Links', href: '/quick-links' },
         { id: 'zoom-info', label: 'Zoom Info', href: '/zoom-info' },
       ],
     },
   ],
   footerQuickLinksTitle: 'Quick Links',
   footerQuickLinks: [
-    { label: 'Digital Library', href: '/library' },
+    { label: 'Digital Library', href: '/books' },
     { label: 'Bible Lessons', href: '/lessons' },
     { label: 'Books Collection', href: '/books' },
     { label: 'Magazines', href: '/magazines' },
@@ -89,13 +84,11 @@ export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
     { label: 'Bible References', href: '/references' },
     { label: 'Bible Images', href: '/images' },
     { label: 'Video Archives', href: '/videos' },
-    { label: 'Study Tools', href: '/resources' },
   ],
   footerConnectTitle: 'Connect',
   footerConnect: [
     { label: 'Contact Office', href: '/contact' },
     { label: 'Zoom Meetings', href: '/zoom-info' },
-    { label: 'Daily Newsletter', href: '/newsletter' },
     { label: 'About Us', href: '/about' },
   ],
 };

@@ -61,6 +61,18 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "book").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "book";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -117,6 +129,16 @@ export default defineConfig({
             name: "featured",
             label: "Featured",
             options: ["yes", "no"],
+            description:
+              "Set to 'yes' to show this book in 'Featured Books & Magazines' on the home page.",
+          },
+          {
+            type: "string",
+            name: "featuredPosition",
+            label: "Home Page Position",
+            options: ["1", "2"],
+            description:
+              "Only needed when Featured is 'yes'. 1 = left card, 2 = right card. Position 1 also becomes the spotlight at the top of the Books page. If two featured books claim one position, the first alphabetically wins.",
           },
           {
             type: "image",
@@ -318,6 +340,18 @@ export default defineConfig({
           include: "*",
           exclude: "index",
         },
+        ui: {
+          filename: {
+            slugify: (values: any) => {
+              const base = String(values?.title || "magazine").toLowerCase();
+              const slug = base
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 80);
+              return slug || "magazine";
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -389,6 +423,22 @@ export default defineConfig({
             label: "Badge / Tag",
           },
           {
+            type: "string",
+            name: "featured",
+            label: "Featured on Home Page",
+            options: ["no", "yes"],
+            description:
+              "Set to 'Yes' to show this issue in 'Featured Books & Magazines' on the home page.",
+          },
+          {
+            type: "string",
+            name: "featuredPosition",
+            label: "Home Page Position",
+            options: ["1", "2"],
+            description:
+              "Only needed when Featured is 'Yes'. 1 = left card, 2 = right card. Position 1 also becomes the hero at the top of the Magazines page. If two featured issues claim one position, the one with the newer Publish Date wins.",
+          },
+          {
             type: "image",
             name: "pdfFile",
             label: "Magazine Issue PDF",
@@ -405,57 +455,7 @@ export default defineConfig({
           },
         ],
       },
-      {
-        name: "dailyLetter",
-        label: "Daily Newsletter",
-        path: "content/newsletter",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "date",
-            label: "Date",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "scripture",
-            label: "Scripture Reference",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "author",
-            label: "Contributing Scholar / Author",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Summary",
-            required: true,
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Devotional Reflection",
-            isBody: true,
-          },
-        ],
-      },
+
       {
         name: "bibleReference",
         label: "Scripture References",
@@ -872,313 +872,9 @@ export default defineConfig({
           },
         ],
       },
-      {
-        name: "libraryResource",
-        label: "Digital Library",
-        path: "content/library",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "category",
-            label: "Category",
-            options: [
-              "Commentaries",
-              "Lexicons",
-              "Historical Documents",
-              "Theological Treatises",
-              "Research Papers",
-            ],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "era",
-            label: "Historical Era",
-            options: [
-              "Patristic Era",
-              "Reformation",
-              "Modern Scholarship",
-              "Contemporary",
-            ],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "badge",
-            label: "Badge / Classification",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            required: true,
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
-            type: "string",
-            name: "author",
-            label: "Author / Scholar",
-          },
-          {
-            type: "string",
-            name: "primaryDetail",
-            label: "Primary Metadata",
-          },
-          {
-            type: "string",
-            name: "detailIcon",
-            label: "Detail Icon",
-            options: ["calendar", "languages", "user", "scroll", "graduation-cap"],
-          },
-          {
-            type: "string",
-            name: "tags",
-            label: "Metadata Tags",
-            list: true,
-          },
-          {
-            type: "image",
-            name: "pdfFile",
-            label: "Research Document PDF",
-            description: "Upload or select a research paper or treatise PDF file for digital consultation",
-            ui: {
-              validate: validatePdfField,
-            },
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Resource Overview / Content Outline",
-            isBody: true,
-          },
-        ],
-      },
-      {
-        name: "archiveDocument",
-        label: "Historical Archives",
-        path: "content/archives",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "category",
-            label: "Category",
-            options: [
-              "Historical Commentary",
-              "Seminar Transcript",
-              "Manuscript Documentation",
-            ],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "catalogRef",
-            label: "Catalog Reference",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "dateLabel",
-            label: "Date / Published Label",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "attributionRole",
-            label: "Attribution Role",
-          },
-          {
-            type: "string",
-            name: "attributionName",
-            label: "Attribution Name",
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            required: true,
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
-            type: "string",
-            name: "actionLabel",
-            label: "Action Button Label",
-          },
-          {
-            type: "string",
-            name: "actionType",
-            label: "Action Type",
-            options: ["download", "link"],
-          },
-          {
-            type: "image",
-            name: "pdfFile",
-            label: "Archival Document / Transcript PDF",
-            description: "Upload or select an archival facsimile or transcript PDF file",
-            ui: {
-              validate: validatePdfField,
-            },
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Document Content / Overview",
-            isBody: true,
-          },
-        ],
-      },
-      {
-        name: "usefulResource",
-        label: "Web Resources",
-        path: "content/resources",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "category",
-            label: "Category",
-            options: [
-              "Bible Software",
-              "Commentaries",
-              "Lexicons & Dictionaries",
-              "Academic Journals",
-              "Church History",
-              "Original Languages",
-            ],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "pricingType",
-            label: "Pricing Type",
-            options: [
-              "Free",
-              "Paid",
-              "Open Access",
-            ],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "rating",
-            label: "Rating",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            required: true,
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
-            type: "image",
-            name: "thumbnail",
-            label: "Thumbnail Image",
-          },
-          {
-            type: "string",
-            name: "externalUrl",
-            label: "External Website URL",
-          },
-          {
-            type: "string",
-            name: "actionLabel",
-            label: "Action Button Label",
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Overview / Notes",
-            isBody: true,
-          },
-        ],
-      },
-      {
-        name: "quickLink",
-        label: "Quick Links",
-        path: "content/quick-links",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "subtitle",
-            label: "Subtitle / Metric",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "targetUrl",
-            label: "Target URL",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "icon",
-            label: "Icon",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Quick Guide / Overview",
-            isBody: true,
-          },
-        ],
-      },
+
+
+
       {
         name: "home",
         label: "Home",
@@ -1392,102 +1088,16 @@ export default defineConfig({
             ],
           },
           {
-type: "object",
+            type: "object",
             name: "featuredPublications",
-            label: "Featured Books & Magazines Section",
+            label: "Featured Publications Section",
+            description:
+              "Books and magazines are chosen per document: set Featured to Yes and pick a position (1-2). This block only controls the section heading.",
             fields: [
               {
                 type: "string",
                 name: "sectionTitle",
                 label: "Section Title",
-              },
-              {
-                type: "object",
-                name: "books",
-                label: "Featured Books",
-                list: true,
-                ui: {
-                  itemProps: (item: any) => ({ label: item?.title || "New Book" }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    name: "badge",
-                    label: "Badge",
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                  },
-                  {
-                    type: "string",
-                    name: "author",
-                    label: "Author",
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    ui: {
-                      component: "textarea",
-                    },
-                  },
-                  {
-                    type: "image",
-                    name: "coverImage",
-                    label: "Cover Image",
-                  },
-                  {
-                    type: "string",
-                    name: "downloadLink",
-                    label: "Download Link",
-                  },
-                ],
-              },
-              {
-                type: "object",
-                name: "magazines",
-                label: "Featured Magazines",
-                list: true,
-                ui: {
-                  itemProps: (item: any) => ({ label: item?.title || "New Magazine" }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    name: "badge",
-                    label: "Badge",
-                  },
-                  {
-                    type: "string",
-                    name: "title",
-                    label: "Title",
-                  },
-                  {
-                    type: "string",
-                    name: "issue",
-                    label: "Issue / Number",
-                  },
-                  {
-                    type: "string",
-                    name: "description",
-                    label: "Description",
-                    ui: {
-                      component: "textarea",
-                    },
-                  },
-                  {
-                    type: "image",
-                    name: "coverImage",
-                    label: "Cover Image",
-                  },
-                  {
-                    type: "string",
-                    name: "readLink",
-                    label: "Read Link",
-                  },
-                ],
               },
             ],
           },
@@ -2378,74 +1988,32 @@ type: "object",
             required: true,
           },
           {
-            type: "object",
+                        type: "object",
             name: "featuredBook",
             label: "Featured Book Spotlight",
+            description:
+              "The spotlight shows the book set to Featured position 1 on its document. This block only controls the badge and button text.",
             fields: [
               {
                 type: "string",
                 name: "badge",
                 label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "coverImage",
-                label: "Cover Image",
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
               },
               {
                 type: "string",
                 name: "downloadButtonText",
                 label: "Download Button Text",
-                required: true,
               },
               {
                 type: "string",
                 name: "abstractButtonText",
                 label: "Abstract Button Text",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "pdfFile",
-                label: "Featured Book PDF",
-                description: "Upload or select a PDF file for this featured spotlight monograph",
-                ui: {
-                  validate: validatePdfField,
-                },
               },
             ],
           },
-          {
-            type: "string",
-            name: "submissionsTitle",
-            label: "Submissions Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "submissionsDescription",
-            label: "Submissions Widget Description",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "submissionsButtonText",
-            label: "Submissions Button Text",
-            required: true,
-          },
+          
+          
+          
         ],
       },
       {
@@ -2578,71 +2146,31 @@ type: "object",
             ],
           },
           {
-            type: "object",
+                        type: "object",
             name: "featuredIssue",
             label: "Featured Issue Hero",
+            description:
+              "The hero shows the magazine set to Featured position 1 on its document. This block only controls the badge, tag and button text.",
             fields: [
               {
                 type: "string",
                 name: "badge",
                 label: "Badge Text",
-                required: true,
               },
               {
                 type: "string",
                 name: "tag",
                 label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "date",
-                label: "Date",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "details",
-                label: "Details",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "coverImage",
-                label: "Cover Image",
               },
               {
                 type: "string",
                 name: "readButtonText",
                 label: "Read Button Text",
-                required: true,
               },
               {
                 type: "string",
                 name: "downloadButtonText",
                 label: "Download Button Text",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "pdfFile",
-                label: "Magazine Issue PDF",
-                description: "Upload or select a PDF for digital magazine download",
-                ui: {
-                  validate: validatePdfField,
-                },
               },
             ],
           },
@@ -2660,154 +2188,7 @@ type: "object",
           },
         ],
       },
-      {
-        name: "newsletter",
-        label: "Newsletter Directory",
-        path: "content/newsletter",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "featuredDevotional",
-            label: "Featured Devotional",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "tag",
-                label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "scripture",
-                label: "Scripture Quote",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "content",
-                label: "Content",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "date",
-                label: "Date",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "coverImage",
-                label: "Devotional Background Cover Image (Optional)",
-                description: "Upload or select a subtle background cover image for the featured devotional card",
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "signupCTA",
-            label: "Signup CTA Section",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "buttonText",
-                label: "Button Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "privacyNote",
-                label: "Privacy Note",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "scriptureQuote",
-            label: "Scripture Quote Banner",
-            fields: [
-              {
-                type: "string",
-                name: "quote",
-                label: "Quote",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "reference",
-                label: "Reference",
-                required: true,
-              },
-            ],
-          },
-        ],
-      },
+
       {
         name: "references",
         label: "References Directory",
@@ -3097,516 +2478,7 @@ type: "string",
           },
         ],
       },
-      {
-        name: "library",
-        label: "Library Directory",
-        path: "content/library",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "searchPlaceholder",
-            label: "Search Placeholder",
-            required: true,
-          },
-          {
-            type: "object",
-            name: "featuredResource",
-            label: "Featured Resource Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "tag",
-                label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "details",
-                label: "Details",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "linkText",
-                label: "Link Text",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "categoriesTitle",
-            label: "Categories Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "popularTitle",
-            label: "Popular Resources Widget Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "recentTitle",
-            label: "Recent Additions Widget Title",
-            required: true,
-          },
-        ],
-      },
-      {
-        name: "archives",
-        label: "Archives Directory",
-        path: "content/archives",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "catalogInfo",
-            label: "Catalog Info Text",
-            required: true,
-          },
-          {
-            type: "object",
-            name: "featuredArchive",
-            label: "Featured Archive Block",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "catalogRef",
-                label: "Catalog Reference",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "category",
-                label: "Category",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "linkText",
-                label: "Link Text",
-                required: true,
-              },
-              {
-                type: "image",
-                name: "pdfFile",
-                label: "Featured Document PDF",
-                description: "Upload or select a PDF file for this featured archival document (optional)",
-                ui: {
-                  validate: validatePdfField,
-                },
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "classificationsTitle",
-            label: "Classifications Widget Title",
-            required: true,
-          },
-          {
-            type: "object",
-            name: "accessPolicy",
-            label: "Access Policy Section",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "resources",
-        label: "Resources Directory",
-        path: "content/resources",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "featuredResource",
-            label: "Featured Resource Banner",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "tag",
-                label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "rating",
-                label: "Rating",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "linkText",
-                label: "Link Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "linkUrl",
-                label: "Link URL",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "searchPlaceholder",
-            label: "Search Placeholder",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "popularResourcesTitle",
-            label: "Popular Resources Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "recentAdditionsTitle",
-            label: "Recent Additions Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "categoryTagsTitle",
-            label: "Category Tags Title",
-            required: true,
-          },
-        ],
-      },
-      {
-        name: "quickLinks",
-        label: "Quick Links Directory",
-        path: "content/quick-links",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "featuredBanner",
-            label: "Featured Access Banner",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "tag",
-                label: "Tag",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button1Text",
-                label: "Button 1 Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button1Link",
-                label: "Button 1 Link",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button2Text",
-                label: "Button 2 Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button2Link",
-                label: "Button 2 Link",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button3Text",
-                label: "Button 3 Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "button3Link",
-                label: "Button 3 Link",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "categorySectionTitle",
-            label: "Category Section Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "searchSectionTitle",
-            label: "Search Section Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "searchPlaceholder",
-            label: "Search Placeholder",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "shortcutsSectionTitle",
-            label: "Shortcuts Section Title",
-            required: true,
-          },
-        ],
-      },
+
       {
         name: "page",
         label: "Standard Pages",

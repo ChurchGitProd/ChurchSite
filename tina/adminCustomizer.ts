@@ -1002,7 +1002,6 @@ export function setupAdminEnhancements() {
               <a href="#/collections/new/book" class="scriptura-quick-btn gold" title="Create a new Book document" aria-label="Create a new Book">+ New Book</a>
               <a href="#/collections/new/lesson" class="scriptura-quick-btn gold" title="Create a new Bible Lesson document" aria-label="Create a new Bible Lesson">+ New Lesson</a>
               <a href="#/collections/new/magazine" class="scriptura-quick-btn gold" title="Create a new Magazine document" aria-label="Create a new Magazine">+ New Magazine</a>
-              <a href="#/collections/new/dailyLetter" class="scriptura-quick-btn gold" title="Create a new Daily Letter document" aria-label="Create a new Daily Letter">+ New Daily Letter</a>
               <a href="#/collections/edit/home/index" class="scriptura-quick-btn primary" title="Open Home page editor" aria-label="Open Home page editor">✏ Edit Home Page</a>
               <a href="/" target="_blank" rel="noopener noreferrer" class="scriptura-quick-btn" title="Open live public website" aria-label="Open live public website">↗ Open Live Site</a>
             </div>
@@ -1129,14 +1128,10 @@ export function setupAdminEnhancements() {
               <div class="scriptura-card-top">
                 <div class="scriptura-card-icon">✉️</div>
                 <div>
-                  <div class="scriptura-card-name">Daily Newsletter</div>
+                  
                   <p class="scriptura-card-desc">Pastoral reflections and daily devotional letters.</p>
                 </div>
-              </div>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/dailyLetter/~" class="scriptura-card-link">View Newsletter &rarr;</a>
-                <a href="#/collections/new/dailyLetter" class="scriptura-card-action-btn">+ Add Letter</a>
-              </div>
+              </div> 
             </div>
 
             <!-- Scripture References -->
@@ -1189,14 +1184,10 @@ export function setupAdminEnhancements() {
               <div class="scriptura-card-top">
                 <div class="scriptura-card-icon">🏛️</div>
                 <div>
-                  <div class="scriptura-card-name">Digital Library</div>
+                  
                   <p class="scriptura-card-desc">Theological treatises, commentaries and references.</p>
                 </div>
-              </div>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/libraryResource/~" class="scriptura-card-link">View Library &rarr;</a>
-                <a href="#/collections/new/libraryResource" class="scriptura-card-action-btn">+ Add Volume</a>
-              </div>
+              </div> 
             </div>
 
             <!-- Historical Archives -->
@@ -1204,14 +1195,10 @@ export function setupAdminEnhancements() {
               <div class="scriptura-card-top">
                 <div class="scriptura-card-icon">🗄️</div>
                 <div>
-                  <div class="scriptura-card-name">Historical Archives</div>
+                  
                   <p class="scriptura-card-desc">Archival records, historical papers and documentation.</p>
                 </div>
-              </div>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/archiveDocument/~" class="scriptura-card-link">View Archives &rarr;</a>
-                <a href="#/collections/new/archiveDocument" class="scriptura-card-action-btn">+ Add Document</a>
-              </div>
+              </div> 
             </div>
 
             <!-- Web Resources -->
@@ -1219,14 +1206,10 @@ export function setupAdminEnhancements() {
               <div class="scriptura-card-top">
                 <div class="scriptura-card-icon">🌐</div>
                 <div>
-                  <div class="scriptura-card-name">Web Resources</div>
+                  
                   <p class="scriptura-card-desc">External scholarly databases, tools and research portals.</p>
                 </div>
-              </div>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/usefulResource/~" class="scriptura-card-link">View Resources &rarr;</a>
-                <a href="#/collections/new/usefulResource" class="scriptura-card-action-btn">+ Add Resource</a>
-              </div>
+              </div> 
             </div>
 
             <!-- Quick Links -->
@@ -1234,14 +1217,10 @@ export function setupAdminEnhancements() {
               <div class="scriptura-card-top">
                 <div class="scriptura-card-icon">🔗</div>
                 <div>
-                  <div class="scriptura-card-name">Quick Links</div>
+                  
                   <p class="scriptura-card-desc">Curated shortcuts and high-priority resource links.</p>
                 </div>
-              </div>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/quickLink/~" class="scriptura-card-link">View Links &rarr;</a>
-                <a href="#/collections/new/quickLink" class="scriptura-card-action-btn">+ Add Link</a>
-              </div>
+              </div> 
             </div>
           </div>
 
@@ -1281,12 +1260,8 @@ export function setupAdminEnhancements() {
             </div>
 
             <div class="scriptura-card">
-              <div class="scriptura-card-name">Newsletter Directory</div>
-              <p class="scriptura-card-desc">Subscription notes and lead copy on /newsletter.</p>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/edit/newsletter/index" class="scriptura-card-link">Edit Settings &rarr;</a>
-                <a href="/newsletter" target="_blank" rel="noopener noreferrer" class="scriptura-card-action-btn">View Live</a>
-              </div>
+              
+              <p class="scriptura-card-desc">Subscription notes and lead copy on /newsletter.</p> 
             </div>
 
             <div class="scriptura-card">
@@ -1317,39 +1292,23 @@ export function setupAdminEnhancements() {
             </div>
 
             <div class="scriptura-card">
-              <div class="scriptura-card-name">Library Directory</div>
-              <p class="scriptura-card-desc">Repository catalog header and copy on /library.</p>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/edit/library/index" class="scriptura-card-link">Edit Settings &rarr;</a>
-                <a href="/library" target="_blank" rel="noopener noreferrer" class="scriptura-card-action-btn">View Live</a>
-              </div>
+              
+              <p class="scriptura-card-desc">Repository catalog header and copy on /library.</p> 
             </div>
 
             <div class="scriptura-card">
-              <div class="scriptura-card-name">Archives Directory</div>
-              <p class="scriptura-card-desc">Historical archive introduction on /archives.</p>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/edit/archives/index" class="scriptura-card-link">Edit Settings &rarr;</a>
-                <a href="/archives" target="_blank" rel="noopener noreferrer" class="scriptura-card-action-btn">View Live</a>
-              </div>
+              
+              <p class="scriptura-card-desc">Historical archive introduction on /archives.</p> 
             </div>
 
             <div class="scriptura-card">
-              <div class="scriptura-card-name">Resources Directory</div>
-              <p class="scriptura-card-desc">Web directory header and copy on /resources.</p>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/edit/resources/index" class="scriptura-card-link">Edit Settings &rarr;</a>
-                <a href="/resources" target="_blank" rel="noopener noreferrer" class="scriptura-card-action-btn">View Live</a>
-              </div>
+              
+              <p class="scriptura-card-desc">Web directory header and copy on /resources.</p> 
             </div>
 
             <div class="scriptura-card">
-              <div class="scriptura-card-name">Quick Links Directory</div>
-              <p class="scriptura-card-desc">Navigation matrix banner and copy on /quick-links.</p>
-              <div class="scriptura-card-footer">
-                <a href="#/collections/edit/quickLinks/index" class="scriptura-card-link">Edit Settings &rarr;</a>
-                <a href="/quick-links" target="_blank" rel="noopener noreferrer" class="scriptura-card-action-btn">View Live</a>
-              </div>
+              
+              <p class="scriptura-card-desc">Navigation matrix banner and copy on /quick-links.</p> 
             </div>
           </div>
 

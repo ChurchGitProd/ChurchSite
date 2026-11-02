@@ -6,6 +6,8 @@ import FeaturedBookSpotlight from '@/components/books/FeaturedBookSpotlight';
 import BooksExplorer from '@/components/books/BooksExplorer';
 import BooksSidebar from '@/components/books/BooksSidebar';
 import { BookCardData } from '@/components/books/BookCard';
+import { resolveFeaturedBooks } from '@/lib/featuredPublications';
+import { refTitle } from '@/lib/featured';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
@@ -24,6 +26,7 @@ export default async function Books() {
 
   const data = booksPageData.data.books;
   const rawEdges = bookConnectionData.data.bookConnection.edges || [];
+  const featuredBook = resolveFeaturedBooks(rawEdges.map((e) => e?.node), 1)[0] ?? null;
 
   const allBooks: BookCardData[] = rawEdges
     .map((edge) => edge?.node)
@@ -32,8 +35,8 @@ export default async function Books() {
       slug: node._sys.filename,
       title: node.title,
       author: node.author,
-      format: node.format,
-      subject: node.subject,
+      format: refTitle(node.format),
+      subject: refTitle(node.subject),
       description: node.description,
       coverImage: node.coverImage,
       abstract: (node as any).abstract || null,
@@ -108,32 +111,29 @@ export default async function Books() {
       {/* Main Content Layout */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Spotlight + Books Explorer */}
-          <div className="lg:col-span-8 space-y-12">
-            {/* Featured Book Spotlight */}
+          {/* Top Row: Spotlight (8) + Sidebar Widgets (4) */}
+          <div className="lg:col-span-8">
+            {/* Featured Book Spotlight — the doc set to Featured position 1 */}
             <FeaturedBookSpotlight
               badge={data.featuredBook?.badge}
-              title={data.featuredBook?.title}
-              coverImage={data.featuredBook?.coverImage}
-              description={data.featuredBook?.description}
+              title={featuredBook?.title as string}
+              coverImage={featuredBook?.coverImage as string}
+              description={featuredBook?.description as string}
               downloadButtonText={data.featuredBook?.downloadButtonText}
               abstractButtonText={data.featuredBook?.abstractButtonText}
-              pdfFile={data.featuredBook?.pdfFile}
+              pdfFile={featuredBook?.pdfFile as string}
             />
+          </div>
 
-            {/* Interactive Books Explorer (Search, Filter, Truthful Pagination) */}
+          <BooksSidebar />
+
+          {/* Bottom Row: Full-Width Books Explorer */}
+          <div className="lg:col-span-12">
             <BooksExplorer
               books={allBooks}
               searchPlaceholder={data.searchPlaceholder}
             />
           </div>
-
-          {/* Right Column: Sidebar Widgets */}
-          <BooksSidebar
-            submissionsTitle={data.submissionsTitle}
-            submissionsDescription={data.submissionsDescription}
-            submissionsButtonText={data.submissionsButtonText}
-          />
         </div>
       </main>
 

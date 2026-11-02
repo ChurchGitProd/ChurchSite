@@ -98,7 +98,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
     data?.subheadline?.trim() ||
     'A meticulous, beautifully curated editorial platform dedicated purely to the preservation, study, and teaching of biblical texts. Explore ancient manuscripts, modern commentaries, comprehensive lessons, and scholarly resources in an environment designed for deep contemplation.';
   const ctaText = data?.ctaText?.trim() || 'Explore Digital Library';
-  const ctaLink = data?.ctaLink?.trim() || '/library';
+  const ctaLink = data?.ctaLink?.trim() || '/books';
   const secondaryCtaText = data?.secondaryCtaText?.trim() || 'Browse Lessons';
   const secondaryCtaLink = data?.secondaryCtaLink?.trim() || '/lessons';
   const heroImage = data?.heroImage?.trim() || '/uploads/hero-image.webp';

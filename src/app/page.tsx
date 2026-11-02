@@ -14,12 +14,13 @@ import { resolveFeaturedVideos } from '@/lib/featuredVideos';
 import { resolveFeaturedLessons } from '@/lib/featuredLessons';
 import { resolveLatestReferences } from '@/lib/latestReferences';
 import { resolveLatestImages } from '@/lib/latestImages';
+import { resolveFeaturedBooks, resolveFeaturedMagazines } from '@/lib/featuredPublications';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [homeData, zoomInfoData, videoConnectionData, lessonConnectionData, bibleReferenceConnectionData, bibleImageConnectionData] = await Promise.all([
+  const [homeData, zoomInfoData, videoConnectionData, lessonConnectionData, bibleReferenceConnectionData, bibleImageConnectionData, bookConnectionData, magazineConnectionData] = await Promise.all([
     client.queries.home(
       { relativePath: "index.md" },
       { fetchOptions: { cache: "no-store" } }
@@ -44,6 +45,14 @@ export default async function Home() {
       {},
       { fetchOptions: { cache: "no-store" } }
     ).catch(() => null),
+    client.queries.bookConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
+    client.queries.magazineConnection(
+      {},
+      { fetchOptions: { cache: "no-store" } }
+    ).catch(() => null),
   ]);
   const data = homeData.data.home;
   const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
@@ -59,6 +68,26 @@ export default async function Home() {
   const galleryImages = resolveLatestImages(
     bibleImageConnectionData?.data?.bibleImageConnection?.edges?.map((edge) => edge?.node)
   );
+  const featuredBooks = resolveFeaturedBooks(
+    bookConnectionData?.data?.bookConnection?.edges?.map((edge) => edge?.node)
+  ).map((b) => ({
+    badge: 'Book Highlight',
+    title: b.title,
+    author: b.author as string,
+    description: b.description as string,
+    coverImage: b.coverImage as string,
+    downloadLink: (b.pdfFile as string) || `/books/${b._sys?.filename}`,
+  }));
+  const featuredMags = resolveFeaturedMagazines(
+    magazineConnectionData?.data?.magazineConnection?.edges?.map((edge) => edge?.node)
+  ).map((m) => ({
+    badge: (m.badge as string) || 'Quarterly Issue',
+    title: m.title,
+    issue: m.issue as string,
+    description: m.description as string,
+    coverImage: m.coverImage as string,
+    readLink: `/magazines/${m._sys?.filename}`,
+  }));
 
   return (
     <div
@@ -102,7 +131,9 @@ export default async function Home() {
           sectionTitle={data.galleryPreview?.sectionTitle}
           items={galleryImages}
         />
-        <FeaturedPublicationsSection data={data.featuredPublications} />
+        <FeaturedPublicationsSection
+          data={{ ...data.featuredPublications, books: featuredBooks, magazines: featuredMags }}
+        />
         <ZoomMeetingCard seminar={seminar} />
       </main>
 

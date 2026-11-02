@@ -6,6 +6,7 @@ import FeaturedMagazineHero from '@/components/magazines/FeaturedMagazineHero';
 import MagazineSpotlight from '@/components/magazines/MagazineSpotlight';
 import MagazinesExplorer from '@/components/magazines/MagazinesExplorer';
 import { MagazineCardData } from '@/components/magazines/MagazineCard';
+import { resolveFeaturedMagazines, resolveLatestMagazine } from '@/lib/featuredPublications';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
@@ -60,12 +61,12 @@ export default async function Magazines() {
     return a.title.localeCompare(b.title);
   });
 
-  // Spotlight issue is Fall 2024
-  const spotlightIssue =
-    allMagazines.find(
-      (mag) =>
-        mag.slug === 'fall-2024-eschatology-and-hope' || mag.badge === 'Previous Issue'
-    ) || allMagazines[0];
+  // Hero = featured flag; Spotlight = newest by Publish Date (excluding the hero)
+  const featuredMag = resolveFeaturedMagazines(rawEdges.map((e) => e?.node), 1)[0] ?? null;
+  const spotlightIssue = (() => {
+    const latest = resolveLatestMagazine(rawEdges.map((e) => e?.node), featuredMag?._sys?.filename ?? undefined);
+    return latest ? allMagazines.find((m) => m.slug === latest._sys?.filename) ?? null : null;
+  })();
 
   return (
     <div
@@ -119,20 +120,23 @@ export default async function Magazines() {
       <MagazinesExplorer
         initialMagazines={allMagazines}
         archiveTitle={data.archiveTitle}
-        featuredHero={
+        featuredHero={featuredMag ? (
           <FeaturedMagazineHero
             badge={data.featuredIssue?.badge}
             tag={data.featuredIssue?.tag}
-            title={data.featuredIssue?.title || 'Winter 2024 — The Doctrine of Scripture'}
-            description={data.featuredIssue?.description || ''}
-            date={data.featuredIssue?.date}
-            details={data.featuredIssue?.details}
-            coverImage={data.featuredIssue?.coverImage}
+            title={featuredMag.title as string}
+            description={featuredMag.description as string}
+            date={featuredMag.publishDate as string}
+            details={[
+              featuredMag.articlesCount ? `${featuredMag.articlesCount} Articles` : null,
+              featuredMag.pagesCount ? `${featuredMag.pagesCount} Pages` : null,
+            ].filter(Boolean).join(' | ')}
+            coverImage={featuredMag.coverImage as string}
             readButtonText={data.featuredIssue?.readButtonText}
             downloadButtonText={data.featuredIssue?.downloadButtonText}
-            pdfFile={(data.featuredIssue as any)?.pdfFile}
+            pdfFile={featuredMag.pdfFile as string}
           />
-        }
+        ) : undefined}
         spotlight={
           spotlightIssue ? (
             <MagazineSpotlight

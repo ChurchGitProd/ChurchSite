@@ -12,7 +12,7 @@ hero:
     manuscripts, modern commentaries, comprehensive lessons, and scholarly
     resources in an environment designed for deep contemplation.
   ctaText: Explore Digital Library
-  ctaLink: /library
+  ctaLink: /books
   secondaryCtaText: Browse Lessons
   secondaryCtaLink: /lessons
   heroImage: /uploads/hero-image.webp
@@ -56,43 +56,5 @@ galleryPreview:
   sectionTitle: Bible Image Gallery Preview
 featuredPublications:
   sectionTitle: Featured Books & Magazines
-  books:
-    - badge: Book Highlight
-      title: The Abrahamic Promise
-      author: Dr. Vance
-      description: >-
-        A deep dive into the legal, historical, and spiritual ramifications of
-        the covenant made in Genesis 15.
-      coverImage: >-
-        https://images.unsplash.com/photo-1532012197267-da84d127e765?w=200&h=267&fit=crop
-      downloadLink: /uploads/Abraham Promise.pdf
-    - badge: Book Highlight
-      title: Hermeneutics Handbook
-      author: Prof. Mercer
-      description: >-
-        The grammatical-historical method outlined with practical textual
-        analysis exercises.
-      coverImage: >-
-        https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop
-      downloadLink: /uploads/hermeneutics.pdf
-  magazines:
-    - badge: Quarterly Issue
-      title: Biblical Archaeology Review
-      issue: Issue
-      description: >-
-        Exploring the latest excavations in Jerusalem and their correlation with
-        Old Testament chronicles.
-      coverImage: >-
-        https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=267&fit=crop
-      readLink: /magazines
-    - badge: Quarterly Issue
-      title: Eschatology & Hope
-      issue: Fall 2024
-      description: >-
-        Exploring biblical eschatology, resurrection hope, and the consummation
-        of all things.
-      coverImage: >-
-        https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop
-      readLink: /magazines/fall-2024-eschatology-and-hope
 ---
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import BookCard, { BookCardData } from './BookCard';
 
 interface BooksExplorerProps {
@@ -8,12 +9,7 @@ interface BooksExplorerProps {
   searchPlaceholder?: string | null;
 }
 
-const SUBJECT_OPTIONS = [
-  'All Subjects',
-  'Hermeneutics',
-  'Biblical Archaeology',
-  'Covenant Theology',
-];
+const ITEMS_PER_PAGE = 6;
 
 export default function BooksExplorer({
   books,
@@ -21,6 +17,16 @@ export default function BooksExplorer({
 }: BooksExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All Subjects');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Subjects come from the book data so any new subject appears automatically
+  const subjectOptions = useMemo(() => {
+    const set = new Set<string>();
+    books.forEach((b) => {
+      if (b.subject) set.add(b.subject);
+    });
+    return ['All Subjects', ...Array.from(set).sort()];
+  }, [books]);
 
   // Filter books based on search text and subject dropdown
   const filteredBooks = useMemo(() => {
@@ -58,11 +64,25 @@ export default function BooksExplorer({
 
   const totalFiltered = filteredBooks.length;
   const totalBooks = books.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / ITEMS_PER_PAGE));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedBooks = useMemo(() => {
+    const start = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+    return filteredBooks.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredBooks, validCurrentPage]);
+
+  const startEntry = totalFiltered === 0 ? 0 : (validCurrentPage - 1) * ITEMS_PER_PAGE + 1;
+  const endEntry = Math.min(validCurrentPage * ITEMS_PER_PAGE, totalFiltered);
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedSubject('All Subjects');
+    setCurrentPage(1);
   };
+
+  const goToPage = (p: number) =>
+    setCurrentPage(Math.min(Math.max(1, p), totalPages));
 
   return (
     <div className="space-y-8">
@@ -75,7 +95,10 @@ export default function BooksExplorer({
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
                 placeholder={searchPlaceholder || 'Search books...'}
                 aria-label="Search books"
                 className="w-full sm:w-72 pl-9 pr-4 py-2 text-xs rounded border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
@@ -86,7 +109,10 @@ export default function BooksExplorer({
               {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setCurrentPage(1);
+                  }}
                   aria-label="Clear search input"
                   className="absolute right-2.5 top-2 text-xs text-muted-foreground hover:text-foreground"
                 >
@@ -98,11 +124,14 @@ export default function BooksExplorer({
             {/* Subject Select Dropdown */}
             <select
               value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
+              onChange={(e) => {
+                setSelectedSubject(e.target.value);
+                setCurrentPage(1);
+              }}
               aria-label="Filter by subject"
               className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             >
-              {SUBJECT_OPTIONS.map((subj) => (
+              {subjectOptions.map((subj) => (
                 <option key={subj} value={subj}>
                   {subj}
                 </option>
@@ -124,14 +153,9 @@ export default function BooksExplorer({
           {/* Truthful Dynamic Dataset Counter */}
           <div className="text-xs text-muted-foreground self-start md:self-auto">
             Showing{' '}
-            <span className="font-bold text-primary">
-              {totalFiltered === 0 ? 0 : 1}
-            </span>{' '}
-            to{' '}
-            <span className="font-bold text-primary">
-              {totalFiltered}
-            </span>{' '}
-            of <span className="font-bold">{totalFiltered}</span> books
+            <span className="font-bold text-primary">{startEntry}</span> to{' '}
+            <span className="font-bold text-primary">{endEntry}</span> of{' '}
+            <span className="font-bold">{totalFiltered}</span> books
             {totalFiltered !== totalBooks && (
               <span className="text-[11px] text-muted-foreground/70 ml-1">
                 (filtered from {totalBooks})
@@ -141,10 +165,10 @@ export default function BooksExplorer({
         </div>
       </section>
 
-      {/* Book Grid or Empty State */}
+      {/* Book Grid or Empty State — 2 columns x 3 rows, 6 per page */}
       {totalFiltered > 0 ? (
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredBooks.map((book) => (
+          {paginatedBooks.map((book) => (
             <BookCard key={book.slug} book={book} />
           ))}
         </section>
@@ -169,74 +193,79 @@ export default function BooksExplorer({
         </div>
       )}
 
-      {/* Truthful Pagination (Zero Dead '#' Links) */}
-      <nav aria-label="Pagination" className="flex items-center justify-between border-t border-border pt-6">
-        {/* Mobile controls */}
-        <div className="flex-1 flex justify-between sm:hidden">
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card text-muted-foreground opacity-50 cursor-not-allowed"
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card text-muted-foreground opacity-50 cursor-not-allowed"
-          >
-            Next
-          </button>
-        </div>
+      {/* Functional Pagination */}
+      {totalFiltered > 0 && (
+        <nav aria-label="Pagination" className="flex items-center justify-between border-t border-border pt-6">
+          {/* Mobile controls */}
+          <div className="flex-1 flex justify-between sm:hidden">
+            <button
+              type="button"
+              disabled={validCurrentPage === 1}
+              onClick={() => goToPage(validCurrentPage - 1)}
+              className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              disabled={validCurrentPage === totalPages}
+              onClick={() => goToPage(validCurrentPage + 1)}
+              className="px-4 py-2 border border-border text-xs font-semibold rounded bg-card text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+            >
+              Next
+            </button>
+          </div>
 
-        {/* Desktop controls */}
-        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">
-              Showing{' '}
-              <span className="font-medium text-primary">
-                {totalFiltered === 0 ? 0 : 1}
-              </span>{' '}
-              to{' '}
-              <span className="font-medium text-primary">
-                {totalFiltered}
-              </span>{' '}
-              of <span className="font-medium">{totalFiltered}</span> books
-            </p>
+          {/* Desktop controls */}
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">
+                Showing{' '}
+                <span className="font-medium text-primary">{startEntry}</span> to{' '}
+                <span className="font-medium text-primary">{endEntry}</span> of{' '}
+                <span className="font-medium">{totalFiltered}</span> books
+              </p>
+            </div>
+            <div>
+              <span className="relative z-0 inline-flex rounded shadow-sm -space-x-px">
+                <button
+                  type="button"
+                  disabled={validCurrentPage === 1}
+                  onClick={() => goToPage(validCurrentPage - 1)}
+                  aria-label="Previous page"
+                  className="relative inline-flex items-center px-2.5 py-1.5 rounded-l-md border border-border bg-card text-xs font-medium text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => goToPage(p)}
+                    aria-current={p === validCurrentPage ? 'page' : undefined}
+                    className={
+                      p === validCurrentPage
+                        ? 'relative inline-flex items-center px-3 py-1.5 border border-primary bg-primary text-primary-foreground text-xs font-medium'
+                        : 'relative inline-flex items-center px-3 py-1.5 border border-border bg-card text-xs font-medium text-muted-foreground hover:bg-muted transition-colors'
+                    }
+                  >
+                    {p}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  disabled={validCurrentPage === totalPages}
+                  onClick={() => goToPage(validCurrentPage + 1)}
+                  aria-label="Next page"
+                  className="relative inline-flex items-center px-2.5 py-1.5 rounded-r-md border border-border bg-card text-xs font-medium text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </span>
+            </div>
           </div>
-          <div>
-            <span className="relative z-0 inline-flex rounded shadow-sm -space-x-px">
-              <button
-                type="button"
-                disabled
-                aria-disabled="true"
-                aria-label="Previous page"
-                className="relative inline-flex items-center px-2.5 py-1.5 rounded-l-md border border-border bg-card text-xs font-medium text-muted-foreground opacity-50 cursor-not-allowed"
-              >
-                <span>←</span>
-              </button>
-              <button
-                type="button"
-                aria-current="page"
-                className="relative inline-flex items-center px-3 py-1.5 border border-primary bg-primary text-primary-foreground text-xs font-medium"
-              >
-                1
-              </button>
-              <button
-                type="button"
-                disabled
-                aria-disabled="true"
-                aria-label="Next page"
-                className="relative inline-flex items-center px-2.5 py-1.5 rounded-r-md border border-border bg-card text-xs font-medium text-muted-foreground opacity-50 cursor-not-allowed"
-              >
-                <span>→</span>
-              </button>
-            </span>
-          </div>
-        </div>
-      </nav>
+        </nav>
+      )}
     </div>
   );
 }

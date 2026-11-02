@@ -7,6 +7,7 @@ import AnnouncementBar from '@/components/home/AnnouncementBar';
 import DownloadButton from '@/components/common/DownloadButton';
 import BookDetailActions from '@/components/books/BookDetailActions';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
+import { refTitle } from '@/lib/featured';
 import { client } from '../../../../tina/__generated__/client';
 
 interface BookPageProps {
@@ -134,10 +135,10 @@ export default async function BookDetailPage({ params }: BookPageProps) {
               {/* Badges / Meta */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="px-2.5 py-1 text-xs font-bold text-tertiary uppercase tracking-wider bg-muted rounded">
-                  {book.format}
+                  {refTitle(book.format)}
                 </span>
                 <span className="px-2.5 py-1 text-xs font-medium text-primary bg-accent/40 rounded border border-border">
-                  Subject: {book.subject}
+                  Subject: {refTitle(book.subject)}
                 </span>
               </div>
 
@@ -171,7 +172,7 @@ export default async function BookDetailPage({ params }: BookPageProps) {
               {/* Actions & Abstract Drawer */}
               <BookDetailActions
                 abstract={(book as any).abstract}
-                subject={book.subject}
+                subject={refTitle(book.subject)}
                 slug={params.slug}
                 pdfFile={book.pdfFile}
               />
