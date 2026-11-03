@@ -8,6 +8,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # TINA_TOKEN is a read-only Tina Cloud token intentionally embedded in the
+  # Tina admin SPA at build time; don't fail the deploy on its detection.
+  SECRETS_SCAN_OMIT_KEYS = "TINA_TOKEN"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
