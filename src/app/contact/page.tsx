@@ -4,7 +4,6 @@ import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
 import ContactHero from '@/components/contact/ContactHero';
 import ContactInfoCards from '@/components/contact/ContactInfoCards';
-import ContactForm from '@/components/contact/ContactForm';
 import OfficeLocationMap from '@/components/contact/OfficeLocationMap';
 import OfficeHoursAndInfo from '@/components/contact/OfficeHoursAndInfo';
 import { client } from '../../../tina/__generated__/client';
@@ -63,9 +62,6 @@ export default async function Contact() {
             phoneCard={data.phoneCard}
             locationCard={data.locationCard}
           />
-
-          {/* Contact Form with Demo Preview Mode */}
-          <ContactForm formConfig={data.contactForm} />
 
           {/* Map Location Section */}
           <OfficeLocationMap mapLocation={data.mapLocation} />

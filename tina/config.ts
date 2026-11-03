@@ -1594,31 +1594,6 @@ export default defineConfig({
           },
           {
             type: "object",
-            name: "contactForm",
-            label: "Contact Form Section",
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Form Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "description",
-                label: "Form Description",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "submitButtonText",
-                label: "Submit Button Text",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
             name: "officeHours",
             label: "Office Hours Section",
             fields: [
@@ -1661,11 +1636,20 @@ export default defineConfig({
             fields: [
               {
                 type: "string",
-                name: "address",
-                label: "Google Maps Address",
-                required: true,
+                name: "embedCode",
+                label: "Google Maps Embed Code (Exact Pinpoint)",
                 description:
-                  "Type the address or place name to show on the map, e.g. \"123 Church St, Springfield\" or \"St. Peter's Basilica\". A live Google Map appears automatically — no API key needed.",
+                  "In Google Maps open the location, tap Share → Embed a map → Copy HTML, and paste it here — the full <iframe ...> snippet or just its src URL both work. Shows an exact pin and takes priority over the Address field below.",
+                ui: {
+                  component: "textarea",
+                },
+              },
+              {
+                type: "string",
+                name: "address",
+                label: "Google Maps Address (Fallback)",
+                description:
+                  "Used only when no Share Link is set. Type the address or place name to show on the map, e.g. \"123 Church St, Springfield\" — a live Google Map appears automatically, no API key needed.",
                 ui: {
                   component: "textarea",
                 },
