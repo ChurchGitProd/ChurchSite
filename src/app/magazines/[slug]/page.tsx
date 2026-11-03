@@ -7,6 +7,7 @@ import DownloadButton from '@/components/common/DownloadButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { client } from '../../../../tina/__generated__/client';
 import { sanitizeImageUrl, sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
+import { refTitle } from '@/lib/featured';
 
 interface MagazineDetailPageProps {
   params: {
@@ -120,7 +121,7 @@ export default async function MagazineDetailPage({
                   )}
                   {magazine.topic && (
                     <span className="px-2.5 py-0.5 bg-secondary/15 text-secondary text-[10px] font-semibold rounded">
-                      {magazine.topic}
+                      {refTitle(magazine.topic)}
                     </span>
                   )}
                 </div>

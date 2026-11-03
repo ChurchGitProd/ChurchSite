@@ -31,7 +31,7 @@ officeHours:
   sundayHours: Closed
   note: Holiday hours may vary. Check our announcements for any schedule changes.
 mapLocation:
-  address: "123 Theology Lane, Scholar's Quarter, ST 40012"
+  address: '45 , subramaninagar , chinnavedampatti , coimbatore - 641049'
   addressText: '123 Theology Lane, Scholar''s Quarter, ST 40012'
 additionalInfo:
   title: Additional Information

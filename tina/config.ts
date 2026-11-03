@@ -79,18 +79,21 @@ export default defineConfig({
             name: "title",
             label: "Title",
             required: true,
+            description: 'Full title of the book, e.g. "The Abrahamic Promise".',
           },
           {
             type: "string",
             name: "author",
             label: "Author",
             required: true,
+            description: 'Who wrote the book, e.g. "Prof. Mercer" or "Dr. Charles Vance".',
           },
           {
             type: "string",
             name: "description",
             label: "Description",
             required: true,
+            description: 'One or two sentences shown on the book card, e.g. "The grammatical-historical method outlined with practical textual analysis exercises."',
             ui: {
               component: "textarea",
             },
@@ -99,30 +102,36 @@ export default defineConfig({
             type: "string",
             name: "abstract",
             label: "Scholarly Abstract",
-            description: "Scholarly abstract or comprehensive summary for this monograph",
+            description: 'Scholarly abstract or comprehensive summary shown in the "Abstract" drawer on the book page, e.g. "A critical survey of Byzantine text families and their transmission history."',
             ui: {
               component: "textarea",
             },
           },
           {
-            type: "string",
+            type: "reference",
             name: "format",
             label: "Format / Badge",
-            options: ["Monograph", "Manual"],
+            collections: ["format"],
             required: true,
+            description:
+              "Pick the book's format, e.g. 'Monograph'. To add or remove options, open the 'Book Formats' collection in the left sidebar and create or delete a format.",
           },
           {
-            type: "string",
+            type: "reference",
             name: "subject",
             label: "Subject",
-            options: ["Hermeneutics", "Biblical Archaeology", "Covenant Theology"],
+            collections: ["subject"],
             required: true,
+            description:
+              "Pick the book's subject, e.g. 'Hermeneutics'. To add or remove options, open the 'Book Subjects' collection in the left sidebar and create or delete a subject.",
           },
           {
             type: "image",
             name: "coverImage",
             label: "Cover Image",
             required: true,
+            description:
+              "Front cover shown on book cards and the detail page — upload a portrait (3:4) image or paste an image URL, e.g. '/uploads/abrahamic-promise-cover.jpg'.",
           },
           {
             type: "string",
@@ -138,13 +147,13 @@ export default defineConfig({
             label: "Home Page Position",
             options: ["1", "2"],
             description:
-              "Only needed when Featured is 'yes'. 1 = left card, 2 = right card. Position 1 also becomes the spotlight at the top of the Books page. If two featured books claim one position, the first alphabetically wins.",
+              "Only needed when Featured is 'yes', e.g. '1'. 1 = left card, 2 = right card. Position 1 also becomes the spotlight at the top of the Books page. If two featured books claim one position, the first alphabetically wins.",
           },
           {
             type: "image",
             name: "pdfFile",
             label: "Book Monograph PDF",
-            description: "Upload or select a PDF monograph file for digital download",
+            description: "Upload or select a PDF monograph file for digital download, e.g. '/uploads/hermeneutics.pdf'.",
             ui: {
               validate: validatePdfField,
             },
@@ -153,7 +162,57 @@ export default defineConfig({
             type: "rich-text",
             name: "body",
             label: "Book Overview / Abstract",
+            description:
+              "The full overview text — headings, paragraphs and quotes are rendered on the book detail page, e.g. a chapter-by-chapter synopsis.",
             isBody: true,
+          },
+        ],
+      },
+      {
+        name: "format",
+        label: "Book Formats",
+        path: "content/book-formats",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Format Name",
+            required: true,
+            description:
+              "Shown as the badge on book cards, e.g. 'Monograph'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
+        name: "subject",
+        label: "Book Subjects",
+        path: "content/book-subjects",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Subject Name",
+            required: true,
+            description:
+              "Shown on book cards and in the subject filter, e.g. 'Hermeneutics'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
           },
         ],
       },
@@ -358,36 +417,43 @@ export default defineConfig({
             name: "title",
             label: "Title",
             required: true,
+            description: 'The issue theme shown on the card and detail page, e.g. "Ecclesiology".',
           },
           {
             type: "string",
             name: "issue",
             label: "Issue",
             required: true,
+            description: 'The display label for this issue, e.g. "Summer 2024".',
           },
           {
             type: "string",
             name: "season",
             label: "Season / Issue",
             options: ["Spring", "Summer", "Fall", "Winter"],
+            description: "Pick the season — powers the 'All Issues' filter on the Magazines page.",
           },
           {
             type: "string",
             name: "year",
             label: "Year",
-            options: ["2024", "2023", "2022", "2021"],
+            description:
+              "Type the publication year, e.g. '2024'. Whatever you enter automatically appears in the website's Year filter.",
           },
           {
-            type: "string",
+            type: "reference",
             name: "topic",
             label: "Topic",
-            options: ["Biblical Studies", "Systematic Theology", "Church History", "Ethics"],
+            collections: ["topic"],
+            description:
+              "Pick the magazine topic. To add or remove options, open the 'Magazine Topics' collection in the left sidebar and create or delete a topic.",
           },
           {
             type: "string",
             name: "description",
             label: "Description",
             required: true,
+            description: 'Short summary shown on the magazine card, e.g. "The nature and mission of the church".',
             ui: {
               component: "textarea",
             },
@@ -396,31 +462,37 @@ export default defineConfig({
             type: "image",
             name: "coverImage",
             label: "Cover Image",
+            description: "Cover shown on cards and the detail page — portrait images (e.g. 3:4) work best.",
           },
           {
             type: "string",
             name: "publishDate",
             label: "Publish Date",
+            description: 'e.g. "June 2024". When two featured issues claim the same home-page position, the one with the newer Publish Date wins.',
           },
           {
             type: "number",
             name: "articlesCount",
             label: "Articles Count",
+            description: "Number of articles in this issue, e.g. 8 — shown in the issue stats.",
           },
           {
             type: "number",
             name: "contributorsCount",
             label: "Contributors Count",
+            description: "Number of contributors, e.g. 5 — shown in the issue stats.",
           },
           {
             type: "number",
             name: "pagesCount",
             label: "Pages Count",
+            description: "Total page count, e.g. 64 — shown in the issue stats.",
           },
           {
             type: "string",
             name: "badge",
             label: "Badge / Tag",
+            description: 'Optional tag on the card, e.g. "Latest Issue". Issues marked "Previous Issue" are hidden from the archive grid — use it for the featured hero issue.',
           },
           {
             type: "string",
@@ -452,10 +524,35 @@ export default defineConfig({
             name: "body",
             label: "Issue Content / Overview",
             isBody: true,
+            description: "The editorial overview rendered on the issue detail page — headings, paragraphs, quotes and lists all display.",
           },
         ],
       },
 
+      {
+        name: "topic",
+        label: "Magazine Topics",
+        path: "content/magazine-topics",
+        format: "md",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Topic Name",
+            required: true,
+            description:
+              "Shown on magazine cards and in the Topic filter, e.g. 'Systematic Theology'.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
       {
         name: "bibleReference",
         label: "Scripture References",

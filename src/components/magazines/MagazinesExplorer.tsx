@@ -24,15 +24,28 @@ export default function MagazinesExplorer({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Available filter options preserving original HTML choices
-  const yearOptions = ['All Years', '2024', '2023', '2022', '2021'];
+  // Filter options are derived from the magazine data so new values
+  // entered in the CMS (e.g. a new Year or Topic) appear automatically.
+  const yearOptions = [
+    'All Years',
+    ...Array.from(
+      new Set(
+        initialMagazines
+          .map((m) => m.year)
+          .filter((y): y is string => Boolean(y))
+      )
+    ).sort((a, b) => b.localeCompare(a, undefined, { numeric: true })),
+  ];
   const seasonOptions = ['All Issues', 'Spring', 'Summer', 'Fall', 'Winter'];
   const topicOptions = [
     'All Topics',
-    'Biblical Studies',
-    'Systematic Theology',
-    'Church History',
-    'Ethics',
+    ...Array.from(
+      new Set(
+        initialMagazines
+          .map((m) => m.topic)
+          .filter((t): t is string => Boolean(t))
+      )
+    ).sort((a, b) => a.localeCompare(b)),
   ];
 
   // The 8 canonical archive issues are Summer 2024 down to Fall 2022

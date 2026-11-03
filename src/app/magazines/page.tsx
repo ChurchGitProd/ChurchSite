@@ -7,6 +7,7 @@ import MagazineSpotlight from '@/components/magazines/MagazineSpotlight';
 import MagazinesExplorer from '@/components/magazines/MagazinesExplorer';
 import { MagazineCardData } from '@/components/magazines/MagazineCard';
 import { resolveFeaturedMagazines, resolveLatestMagazine } from '@/lib/featuredPublications';
+import { refTitle } from '@/lib/featured';
 import { client } from '../../../tina/__generated__/client';
 
 export const dynamic = 'force-dynamic';
@@ -29,7 +30,7 @@ export default async function Magazines() {
       issue: node.issue,
       season: node.season,
       year: node.year,
-      topic: node.topic,
+      topic: refTitle(node.topic),
       description: node.description,
       coverImage: node.coverImage,
       badge: node.badge,
