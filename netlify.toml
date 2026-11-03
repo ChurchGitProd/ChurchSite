@@ -1,6 +1,10 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # Skip the build when a commit only changes CMS content — pages are
+  # force-dynamic and read from Tina at request time, so content edits
+  # go live without a rebuild.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- content/"
 
 [build.environment]
   NODE_VERSION = "20"
