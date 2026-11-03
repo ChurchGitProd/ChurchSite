@@ -10,6 +10,11 @@ import AcademicOfficeWidget from '@/components/about/AcademicOfficeWidget';
 import QuoteWidget from '@/components/about/QuoteWidget';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'About',
+  description: 'About SCRIPTURA Digital Library — our mission to preserve, study, and teach biblical texts with scholarly precision.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function About() {

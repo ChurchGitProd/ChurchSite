@@ -6,6 +6,7 @@ import AnnouncementBar from '@/components/home/AnnouncementBar';
 import DownloadButton from '@/components/common/DownloadButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { sanitizeImageUrl, sanitizeDocumentUrl, isValidPdfUrl } from '@/lib/media';
 import { refTitle } from '@/lib/featured';
 
@@ -25,6 +26,26 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.magazine({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.magazine;
+    return {
+        title: d?.title,
+        description: d?.description,
+        openGraph: d?.coverImage ? { images: [d.coverImage] } : undefined,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -67,6 +88,19 @@ export default async function MagazineDetailPage({
         subtext={pageData?.announcementSubtext}
       />
 
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'PublicationIssue',
+          name: magazine.title,
+          description: magazine.description || undefined,
+          url: `${SITE_URL}/magazines/${params.slug}`,
+          image: absUrl(magazine.coverImage),
+          issueNumber: magazine.issue || undefined,
+          datePublished: magazine.publishDate || undefined,
+          isPartOf: { '@type': 'Periodical', name: 'SCRIPTURA Magazine' },
+        }}
+      />
       <Header activePage="magazines" />
 
       {/* Breadcrumb */}

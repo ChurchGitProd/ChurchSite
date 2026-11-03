@@ -9,6 +9,11 @@ import { refTitle } from '@/lib/featured';
 import { resolveFeaturedReference } from '@/lib/latestReferences';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Scripture References',
+  description: 'Scholarly commentary, cross-references, and genre-tagged studies on key passages of Scripture.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function References() {

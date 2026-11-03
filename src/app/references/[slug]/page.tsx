@@ -6,6 +6,7 @@ import AnnouncementBar from '@/components/home/AnnouncementBar';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, BookOpen } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { refTitle } from '@/lib/featured';
 
 interface ReferencePageProps {
@@ -24,6 +25,26 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.bibleReference({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.bibleReference;
+    return {
+        title: d?.title,
+        description: d?.description,
+        openGraph: d?.image ? { images: [d.image] } : undefined,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -62,6 +83,20 @@ export default async function ReferenceDetailPage({ params }: ReferencePageProps
       />
 
       {/* Universal Header with active nav */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: reference.title,
+          description: reference.description || undefined,
+          url: `${SITE_URL}/references/${params.slug}`,
+          image: absUrl(reference.image),
+          about: reference.scripture || undefined,
+          author: reference.author
+            ? { '@type': 'Person', name: reference.author }
+            : undefined,
+        }}
+      />
       <Header activePage="references" />
 
       {/* Breadcrumb Bar */}

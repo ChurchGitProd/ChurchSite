@@ -8,6 +8,7 @@ import LessonCompletionButton from '@/components/lessons/LessonCompletionButton'
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, Award } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { refTitle } from '@/lib/featured';
 import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 
@@ -27,6 +28,25 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.lesson({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.lesson;
+    return {
+        title: d?.title,
+        description: d?.description,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -94,6 +114,18 @@ export default async function LessonDetailPage({ params }: LessonPageProps) {
       />
 
       {/* Universal Header with active nav */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'LearningResource',
+          name: lesson.title,
+          description: lesson.description || undefined,
+          url: `${SITE_URL}/lessons/${params.slug}`,
+          learningResourceType: 'Lesson',
+          teaches: 'Biblical Studies',
+          isPartOf: { '@type': 'Course', name: 'SCRIPTURA Bible Lessons' },
+        }}
+      />
       <Header activePage="lessons" />
 
       {/* Breadcrumb Bar */}

@@ -9,6 +9,7 @@ import BookDetailActions from '@/components/books/BookDetailActions';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { refTitle } from '@/lib/featured';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 
 interface BookPageProps {
   params: {
@@ -26,6 +27,26 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.book({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.book;
+    return {
+        title: d?.title,
+        description: d?.description,
+        openGraph: d?.coverImage ? { images: [d.coverImage] } : undefined,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -70,6 +91,20 @@ export default async function BookDetailPage({ params }: BookPageProps) {
       />
 
       {/* Universal Header with active nav */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Book',
+          name: book.title,
+          description: book.description || undefined,
+          url: `${SITE_URL}/books/${params.slug}`,
+          image: absUrl(book.coverImage),
+          author: book.author
+            ? { '@type': 'Person', name: book.author }
+            : undefined,
+          bookFormat: 'EBook',
+        }}
+      />
       <Header activePage="books" />
 
       {/* Breadcrumb Bar */}

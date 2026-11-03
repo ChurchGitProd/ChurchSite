@@ -7,6 +7,7 @@ import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, BookOpen, Clock, Calendar, VideoOff } from 'lucide-react';
 import { getYouTubeEmbedUrl } from '@/lib/youtube';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { sanitizeImageUrl } from '@/lib/media';
 import { refTitle, formatRecordedDate } from '@/lib/featuredVideos';
 
@@ -26,6 +27,26 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.video({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.video;
+    return {
+        title: d?.title,
+        description: d?.description,
+        openGraph: d?.thumbnail ? { images: [d.thumbnail] } : undefined,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -73,6 +94,20 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
       />
 
       {/* Universal Header with active nav */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'VideoObject',
+          name: video.title,
+          description: video.description || undefined,
+          url: `${SITE_URL}/videos/${params.slug}`,
+          thumbnailUrl: absUrl(video.thumbnail)
+            ? [absUrl(video.thumbnail)]
+            : undefined,
+          uploadDate: video.recordedDate || undefined,
+          embedUrl: video.videoUrl || undefined,
+        }}
+      />
       <Header activePage="videos" />
 
       {/* Breadcrumb Bar */}

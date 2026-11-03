@@ -10,6 +10,11 @@ import { resolveFeaturedBooks } from '@/lib/featuredPublications';
 import { refTitle } from '@/lib/featured';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Books',
+  description: 'Browse the SCRIPTURA scholarly book collection — monographs and manuals on biblical theology, hermeneutics, and archaeology.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function Books() {

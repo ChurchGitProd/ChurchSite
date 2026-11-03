@@ -11,6 +11,11 @@ import { resolveFeaturedLessons } from '@/lib/featuredLessons';
 import { resolveUpcomingZoomSeminar } from '@/lib/zoom';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Bible Lessons',
+  description: 'Structured Bible lessons by division — Pentateuch, Historical Books, Gospels, and Epistles.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function Lessons() {

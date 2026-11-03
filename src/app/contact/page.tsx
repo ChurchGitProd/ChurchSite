@@ -8,6 +8,11 @@ import OfficeLocationMap from '@/components/contact/OfficeLocationMap';
 import OfficeHoursAndInfo from '@/components/contact/OfficeHoursAndInfo';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Contact Office',
+  description: 'Get in touch with the SCRIPTURA office — email, phone, office hours, and location on the map.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function Contact() {

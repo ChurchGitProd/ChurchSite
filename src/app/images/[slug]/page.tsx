@@ -7,6 +7,7 @@ import DownloadButton from '@/components/common/DownloadButton';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, BookOpen, Download, Calendar, FileText } from 'lucide-react';
 import { client } from '../../../../tina/__generated__/client';
+import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { sanitizeImageUrl } from '@/lib/media';
 import { refTitle } from '@/lib/featured';
 
@@ -26,6 +27,26 @@ export async function generateStaticParams() {
       .map((slug) => ({ slug }));
   } catch {
     return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const res = await client.queries.bibleImage({
+      relativePath: `${params.slug}.mdx`,
+    });
+    const d = res.data.bibleImage;
+    return {
+        title: d?.title,
+        description: d?.description,
+        openGraph: d?.image ? { images: [d.image] } : undefined,
+      };
+  } catch {
+    return {};
   }
 }
 
@@ -69,6 +90,17 @@ export default async function ImageDetailPage({ params }: ImagePageProps) {
       />
 
       {/* Universal Header with active nav */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ImageObject',
+          name: image.title,
+          caption: image.description || undefined,
+          url: `${SITE_URL}/images/${params.slug}`,
+          contentUrl: absUrl(image.image),
+          creditText: image.citation || undefined,
+        }}
+      />
       <Header activePage="images" />
 
       {/* Breadcrumb Bar */}

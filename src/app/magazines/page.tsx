@@ -10,6 +10,11 @@ import { resolveFeaturedMagazines, resolveLatestMagazine } from '@/lib/featuredP
 import { refTitle } from '@/lib/featured';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Magazines',
+  description: 'Quarterly SCRIPTURA magazine issues — seasonal theology, biblical studies, church history, and ethics.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function Magazines() {

@@ -9,6 +9,11 @@ import { refTitle } from '@/lib/featured';
 import { resolveFeaturedImage } from '@/lib/latestImages';
 import { client } from '../../../tina/__generated__/client';
 
+export const metadata = {
+  title: 'Bible Images',
+  description: 'Curated biblical imagery — manuscripts, archaeology, and scribal artifacts with scholarly commentary.',
+};
+
 export const dynamic = 'force-dynamic';
 
 export default async function Images() {
