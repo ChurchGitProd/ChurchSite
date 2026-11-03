@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
-import fs from 'fs';
 
 // Explicit allowlist of external hosts permitted for proxied download
 const ALLOWED_EXTERNAL_HOSTS = new Set([
@@ -109,6 +108,8 @@ export async function GET(request: NextRequest) {
   }
 
   // Case 2: Local document path in public/documents/ or public/uploads/
+  // Served by fetching the static asset from this deployment's own origin —
+  // serverless hosts don't give functions filesystem access to public/.
   if (localFile) {
     let decodedLocal = localFile;
     try {
@@ -121,66 +122,56 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid path' }, { status: 400 });
     }
 
-    const publicDir = path.resolve(process.cwd(), 'public');
-    const documentsDir = path.resolve(publicDir, 'documents');
-    const uploadsDir = path.resolve(publicDir, 'uploads');
-
     // Strip leading slashes and normalize separators
     const normalizedLocal = decodedLocal.replace(/^[/\\]+/, '').replace(/\\/g, '/');
 
-    let resolvedPath: string;
-    if (normalizedLocal.startsWith('uploads/') || normalizedLocal.startsWith('documents/')) {
-      resolvedPath = path.resolve(publicDir, normalizedLocal);
-    } else {
-      const inDocs = path.resolve(documentsDir, normalizedLocal);
-      const inUploads = path.resolve(uploadsDir, normalizedLocal);
-      resolvedPath = fs.existsSync(inDocs) ? inDocs : inUploads;
-    }
+    // Bare filenames try documents/ first, then uploads/
+    const candidates =
+      normalizedLocal.startsWith('uploads/') || normalizedLocal.startsWith('documents/')
+        ? [normalizedLocal]
+        : [`documents/${normalizedLocal}`, `uploads/${normalizedLocal}`];
 
-    // Prevent directory traversal attacks: must reside strictly within documentsDir or uploadsDir
-    const isInsideDocs = resolvedPath.startsWith(documentsDir + path.sep);
-    const isInsideUploads = resolvedPath.startsWith(uploadsDir + path.sep);
-
-    if (!isInsideDocs && !isInsideUploads) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
-    }
-
-    const ext = path.extname(resolvedPath).toLowerCase();
+    const ext = path.extname(normalizedLocal).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       return NextResponse.json({ error: 'File type not permitted' }, { status: 403 });
     }
 
-    if (!fs.existsSync(resolvedPath)) {
+    const origin = new URL(request.url).origin;
+    let upstream: Response | null = null;
+    let servedPath = '';
+    for (const rel of candidates) {
+      try {
+        const res = await fetch(`${origin}/${rel}`);
+        if (res.ok) {
+          upstream = res;
+          servedPath = rel;
+          break;
+        }
+      } catch {
+        // Try the next candidate
+      }
+    }
+
+    if (!upstream) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
     }
 
-    const stat = fs.statSync(resolvedPath);
-    if (!stat.isFile()) {
-      return NextResponse.json({ error: 'Not a file' }, { status: 400 });
-    }
-
-    const rawName = customFilename ? cleanFilename : sanitizeFilename(path.basename(resolvedPath));
+    const rawName = customFilename ? cleanFilename : sanitizeFilename(path.basename(servedPath));
     let downloadFilename = rawName;
     if (ext && !downloadFilename.toLowerCase().endsWith(ext)) {
       downloadFilename = `${downloadFilename}${ext}`;
     }
 
-    const stream = fs.createReadStream(resolvedPath);
-    const readable = new ReadableStream({
-      start(controller) {
-        stream.on('data', (chunk) => controller.enqueue(chunk));
-        stream.on('end', () => controller.close());
-        stream.on('error', (err) => controller.error(err));
-      },
-    });
-
     const headers = new Headers();
     headers.set('Content-Disposition', `${dispositionType}; filename="${downloadFilename}"`);
-    headers.set('Content-Type', MIME_TYPES[ext] || 'application/octet-stream');
-    headers.set('Content-Length', stat.size.toString());
+    headers.set('Content-Type', upstream.headers.get('content-type') || MIME_TYPES[ext] || 'application/octet-stream');
+    const contentLength = upstream.headers.get('content-length');
+    if (contentLength) {
+      headers.set('Content-Length', contentLength);
+    }
     headers.set('Cache-Control', isInline ? 'public, max-age=3600, stale-while-revalidate=86400' : 'no-cache');
 
-    return new Response(readable, {
+    return new Response(upstream.body, {
       status: 200,
       headers,
     });

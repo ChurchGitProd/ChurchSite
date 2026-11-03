@@ -3,8 +3,8 @@
   publish = ".next"
   # Skip the build when a commit only changes CMS content — pages are
   # force-dynamic and read from Tina at request time, so content edits
-  # go live without a rebuild.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- content/"
+  # go live without a rebuild. Mixed code+content commits still build.
+  ignore = "bash scripts/ignore-build-check.sh"
 
 [build.environment]
   NODE_VERSION = "20"
