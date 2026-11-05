@@ -47,6 +47,13 @@ export function sanitizeImageUrl(url?: string | null): string {
     return encodeURI(trimmed);
   }
 
+  // 5. Root-relative asset path missing its leading slash (e.g. "uploads/x.png").
+  // Left as-is it resolves against the current page URL — /uploads/x.png works
+  // on the homepage but 404s everywhere else.
+  if (/^(?:uploads|documents|images)\//i.test(trimmed)) {
+    return encodeURI(`/${trimmed}`);
+  }
+
   return trimmed;
 }
 
