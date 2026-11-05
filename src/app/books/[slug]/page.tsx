@@ -8,6 +8,7 @@ import DownloadButton from '@/components/common/DownloadButton';
 import BookDetailActions from '@/components/books/BookDetailActions';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { refTitle } from '@/lib/featured';
+import { sanitizeImageUrl } from '@/lib/media';
 import { client } from '../../../../tina/__generated__/client';
 import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 
@@ -43,7 +44,7 @@ export async function generateMetadata({
     return {
         title: d?.title,
         description: d?.description,
-        openGraph: d?.coverImage ? { images: [d.coverImage] } : undefined,
+        openGraph: d?.coverImage ? { images: [absUrl(d.coverImage) as string] } : undefined,
       };
   } catch {
     return {};
@@ -150,7 +151,7 @@ export default async function BookDetailPage({ params }: BookPageProps) {
               <div className="border border-border rounded-xl shadow-md overflow-hidden aspect-[3/4] relative bg-muted">
                 {book.coverImage ? (
                   <Image
-                    src={book.coverImage}
+                    src={sanitizeImageUrl(book.coverImage)}
                     alt={`${book.title} cover`}
                     fill
                     sizes="(max-width: 768px) 100vw, 300px"

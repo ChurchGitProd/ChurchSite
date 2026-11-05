@@ -42,7 +42,7 @@ export async function generateMetadata({
     return {
         title: d?.title,
         description: d?.description,
-        openGraph: d?.coverImage ? { images: [d.coverImage] } : undefined,
+        openGraph: d?.coverImage ? { images: [absUrl(d.coverImage) as string] } : undefined,
       };
   } catch {
     return {};

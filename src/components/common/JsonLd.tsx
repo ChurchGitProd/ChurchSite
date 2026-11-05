@@ -1,10 +1,12 @@
+import { sanitizeImageUrl } from '@/lib/media';
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   'https://scripturadigitallibrary.netlify.app';
 
 // Resolve a CMS image value (external URL or /uploads path) to absolute
 export function absUrl(src?: string | null): string | undefined {
-  const s = src?.trim();
+  const s = sanitizeImageUrl(src);
   if (!s) return undefined;
   return s.startsWith('http://') || s.startsWith('https://')
     ? s

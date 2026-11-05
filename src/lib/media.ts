@@ -1,3 +1,25 @@
+// Must match media.tina.mediaRoot in tina/config.ts
+const MEDIA_ROOT = '/uploads';
+
+function decodeURIComponentSafe(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+// Encodes a local path exactly once, whether or not it was already encoded
+// (Tina stores some values as "/uploads/My%20File.pdf", others with raw spaces).
+function encodeLocalPath(value: string): string {
+  return encodeURI(decodeURIComponentSafe(value));
+}
+
+// Same idea for absolute URLs, which must not have %2F/%3F-style escapes decoded.
+function encodeAbsoluteUrl(value: string): string {
+  return /%[0-9a-f]{2}/i.test(value) ? value.replace(/ /g, '%20') : encodeURI(value);
+}
+
 /**
  * Utility to sanitize and normalize image URLs.
  *
@@ -28,30 +50,32 @@ export function sanitizeImageUrl(url?: string | null): string {
   // e.g. "https://assets.tina.io/8806b500-960f-4f66-b582-b1fe3d6c3111/hero image.webp"
   // or "https://assets.tina.io/8806b500-960f-4f66-b582-b1fe3d6c3111/uploads/Qumran Caves.jpg"
   const localMatch = trimmed.match(
-    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+(\/(?:hero|uploads|documents|images)[^?#]*)/i
+    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+(\/(?:hero[^\/?#]*|(?:uploads|documents|images)\/[^?#]*))/i
   );
   if (localMatch && localMatch[1]) {
-    return encodeURI(localMatch[1]);
+    return encodeURI(decodeURIComponentSafe(localMatch[1]));
   }
 
-  // 3. Fallback for any Tina Cloud URL pointing to static media files that exist in the local public folder
+  // 3. Tina Cloud drops the media root from asset URLs, e.g. a file stored at
+  // /uploads/Bible.jpg comes back as https://assets.tina.io/<id>/Bible.jpg.
+  // Re-attach the media root so it resolves to the file deployed from public/uploads.
   const localRootMatch = trimmed.match(
-    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+(\/[^\/]+\.(?:webp|png|jpg|jpeg|gif|svg|ico))/i
+    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+\/([^\/?#]+\.(?:webp|png|jpg|jpeg|gif|svg|ico|avif))/i
   );
   if (localRootMatch && localRootMatch[1]) {
-    return encodeURI(localRootMatch[1]);
+    return encodeURI(`${MEDIA_ROOT}/${decodeURIComponentSafe(localRootMatch[1])}`);
   }
 
   // 4. Standalone relative path (e.g. "/hero image.webp")
   if (trimmed.startsWith('/')) {
-    return encodeURI(trimmed);
+    return encodeLocalPath(trimmed);
   }
 
   // 5. Root-relative asset path missing its leading slash (e.g. "uploads/x.png").
   // Left as-is it resolves against the current page URL — /uploads/x.png works
   // on the homepage but 404s everywhere else.
   if (/^(?:uploads|documents|images)\//i.test(trimmed)) {
-    return encodeURI(`/${trimmed}`);
+    return encodeLocalPath(`/${trimmed}`);
   }
 
   return trimmed;
@@ -83,31 +107,37 @@ export function sanitizeDocumentUrl(url?: string | null): string {
     /(?:https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+[\/]?)?(?:\/?uploads[\/]?)?(https?:\/\/.+)$/i
   );
   if (nestedHttpMatch && nestedHttpMatch[1] && trimmed !== nestedHttpMatch[1]) {
-    return encodeURI(nestedHttpMatch[1]);
+    return encodeAbsoluteUrl(nestedHttpMatch[1]);
   }
 
   // 2. TinaCloud domain prepended to a local repo asset (e.g. uploads/ or documents/)
   const localMatch = trimmed.match(
-    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+(\/(?:uploads|documents)[^?#]*)/i
+    /^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+(\/(?:uploads|documents)\/[^?#]*)/i
   );
   if (localMatch && localMatch[1]) {
-    return encodeURI(localMatch[1]);
+    return encodeURI(decodeURIComponentSafe(localMatch[1]));
+  }
+
+  // 2b. TinaCloud drops the media root: /uploads/x.pdf comes back as assets.tina.io/<id>/x.pdf
+  const rootFileMatch = trimmed.match(/^https?:\/\/[^\/]*assets\.tina\.io\/[^\/]+\/([^\/?#]+\.[a-z0-9]+)$/i);
+  if (rootFileMatch && rootFileMatch[1]) {
+    return encodeURI(`${MEDIA_ROOT}/${decodeURIComponentSafe(rootFileMatch[1])}`);
   }
 
   // 3. Relative path starting without leading slash (e.g. "uploads/sample.pdf" -> "/uploads/sample.pdf")
   if (trimmed.startsWith('uploads/') || trimmed.startsWith('documents/')) {
-    return encodeURI(`/${trimmed}`);
+    return encodeLocalPath(`/${trimmed}`);
   }
 
   // 4. Already has a leading slash
   if (trimmed.startsWith('/')) {
-    return encodeURI(trimmed);
+    return encodeLocalPath(trimmed);
   }
 
   // 5. External HTTP(S) URL
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    return encodeURI(trimmed);
+    return encodeAbsoluteUrl(trimmed);
   }
 
-  return encodeURI(`/${trimmed}`);
+  return encodeLocalPath(`/${trimmed}`);
 }
