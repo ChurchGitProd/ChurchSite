@@ -4,13 +4,9 @@ announcementSubtext: Join our next live Zoom Seminar this Thursday
 hero:
   badgeText: PREMIUM DIGITAL BIBLE LIBRARY & SCHOLARLY ARCHIVE
   headingLine1: Unveiling the Depth of
-  headingLine2: Holy Scripture
+  headingLine2: Holy Scripture's
   headline: ''
-  subheadline: >-
-    A meticulous, beautifully curated editorial platform dedicated purely to the
-    preservation, study, and teaching of biblical texts. Explore ancient
-    manuscripts, modern commentaries, comprehensive lessons, and scholarly
-    resources in an environment designed for deep contemplation.
+  subheadline: 'A meticulous, beautifully curated editorial platform dedicated purely to the preservation, study, and teaching of biblical texts. Explore ancient manuscripts, modern commentaries, comprehensive lessons, and scholarly resources in an environment designed for deep contemplation.'
   ctaText: Explore Digital Library
   ctaLink: /books
   secondaryCtaText: Browse Lessons
@@ -19,30 +15,19 @@ hero:
 scriptureOfTheDay:
   dailyVerses:
     - day: 1
-      verse: >-
-        “And I also say to you that you are Peter, and on this rock I will build
-        My church, and the gates of Hades shall not prevail against it.”
+      verse: '“And I also say to you that you are Peter, and on this rock I will build My church, and the gates of Hades shall not prevail against it.”'
       reference: 'Matthew 16:18'
     - day: 2
-      verse: >-
-        “And they continued steadfastly in the apostles’ doctrine and
-        fellowship, in the breaking of bread, and in prayers.” 
+      verse: '“And they continued steadfastly in the apostles’ doctrine and fellowship, in the breaking of bread, and in prayers.” '
       reference: 'Acts 2:42'
     - day: 3
-      verse: >-
-        “And He put all things under His feet, and gave Him to be head over all
-        things to the church, which is His body, the fullness of Him who fills
-        all in all.”
+      verse: '“And He put all things under His feet, and gave Him to be head over all things to the church, which is His body, the fullness of Him who fills all in all.”'
       reference: 'Ephesians 1:22-23'
     - day: 4
-      verse: >-
-        If any of you lacks wisdom, you should ask God, who gives generously to
-        all without finding fault, and it will be given to you.
+      verse: 'If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.'
       reference: 'James 1:5  '
     - day: 5
-      verse: >-
-        For I know the plans I have for you, declares the Lord, plans to prosper
-        you and not to harm you, plans to give you hope and a future.
+      verse: 'For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.'
       reference: 'Jeremiah 29:11'
   verse: The Lord is my Shephard
   reference: 'Psalm 23 : 1'
