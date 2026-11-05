@@ -2,6 +2,9 @@
   "name": "church-website-tina",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
     "build": "tinacms build --skip-cloud-checks && next build",
