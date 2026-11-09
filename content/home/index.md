@@ -4,7 +4,7 @@ announcementSubtext: Join our next live Zoom Seminar this Thursday
 hero:
   badgeText: PREMIUM DIGITAL BIBLE LIBRARY & SCHOLARLY ARCHIVE
   headingLine1: Unveiling the Depth of
-  headingLine2: Holy Scripture's
+  headingLine2: Holy Scripture
   headline: ''
   subheadline: 'A meticulous, beautifully curated editorial platform dedicated purely to the preservation, study, and teaching of biblical texts. Explore ancient manuscripts, modern commentaries, comprehensive lessons, and scholarly resources in an environment designed for deep contemplation.'
   ctaText: Explore Digital Library
