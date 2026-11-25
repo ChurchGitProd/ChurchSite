@@ -6,6 +6,7 @@ import ScriptureOfTheDay from '@/components/home/ScriptureOfTheDay';
 import FeaturedLessonsSection from '@/components/home/FeaturedLessonsSection';
 import LatestReferencesSection from '@/components/home/LatestReferencesSection';
 import FeaturedVideosSection from '@/components/home/FeaturedVideosSection';
+import ESwordSection from '@/components/home/ESwordSection';
 import GalleryPreviewSection from '@/components/home/GalleryPreviewSection';
 import FeaturedPublicationsSection from '@/components/home/FeaturedPublicationsSection';
 import ZoomMeetingCard from '@/components/home/ZoomMeetingCard';
@@ -127,6 +128,7 @@ export default async function Home() {
           sectionTitle={data.featuredVideos?.sectionTitle}
           videos={featuredVideos}
         />
+        <ESwordSection />
         <GalleryPreviewSection
           sectionTitle={data.galleryPreview?.sectionTitle}
           items={galleryImages}

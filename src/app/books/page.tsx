@@ -12,7 +12,7 @@ import { client } from '../../../tina/__generated__/client';
 
 export const metadata = {
   title: 'Books',
-  description: 'Browse the SCRIPTURA scholarly book collection — monographs and manuals on biblical theology, hermeneutics, and archaeology.',
+  description: 'Browse the Jesus Loves Ministry book collection — monographs and manuals on biblical theology, hermeneutics, and archaeology.',
 };
 
 export const dynamic = 'force-dynamic';
@@ -107,7 +107,7 @@ export default async function Books() {
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {data.hero?.subheadline ||
-                'Explore our collection of peer-reviewed monographs, historical commentaries, and study manuals published by the Scriptura Research Institute.'}
+                'Explore our collection of peer-reviewed monographs, historical commentaries, and study manuals published by Jesus Loves Ministry.'}
             </p>
           </div>
         </div>

@@ -33,12 +33,22 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-md">
-                <span className="text-xl text-tertiary">{globalSettings.logoIcon || '📚'}</span>
-              </div>
+              {globalSettings.logoImage ? (
+                <div className="relative flex items-center">
+                  <img
+                    src={globalSettings.logoImage}
+                    alt={`${globalSettings.siteName || 'Jesus Loves Ministry'} Logo`}
+                    className="h-11 w-auto max-w-[140px] object-contain rounded-md bg-white/10 p-1"
+                  />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-md">
+                  <span className="text-xl text-tertiary">{globalSettings.logoIcon || '📚'}</span>
+                </div>
+              )}
               <div>
                 <span className="block font-heading text-xl font-bold tracking-tight text-primary-foreground">
-                  {globalSettings.siteName || 'SCRIPTURA'}
+                  {globalSettings.siteName || 'Jesus Loves Ministry'}
                 </span>
                 <span className="block text-[10px] tracking-widest text-secondary-foreground/80 uppercase font-sans -mt-1">
                   {globalSettings.siteTagline || 'Digital Library'}

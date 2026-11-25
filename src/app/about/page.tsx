@@ -12,7 +12,7 @@ import { client } from '../../../tina/__generated__/client';
 
 export const metadata = {
   title: 'About',
-  description: 'About SCRIPTURA Digital Library — our mission to preserve, study, and teach biblical texts with scholarly precision.',
+  description: 'About Jesus Loves Ministry — our mission to preserve, study, and teach biblical texts with scholarly precision.',
 };
 
 export const dynamic = 'force-dynamic';

@@ -9,7 +9,7 @@ import { refTitle } from '@/lib/featuredVideos';
 import { client } from '../../../tina/__generated__/client';
 export const metadata = {
   title: 'Bible Videos',
-  description: 'Video lectures on biblical theology, hermeneutics, and archaeology from the SCRIPTURA video series.',
+  description: 'Video lectures on biblical theology, hermeneutics, and archaeology from the Jesus Loves Ministry video series.',
 };
 
 export const dynamic = 'force-dynamic';

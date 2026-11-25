@@ -12,7 +12,7 @@ import { client } from '../../../tina/__generated__/client';
 
 export const metadata = {
   title: 'Magazines',
-  description: 'Quarterly SCRIPTURA magazine issues — seasonal theology, biblical studies, church history, and ethics.',
+  description: 'Quarterly Jesus Loves Ministry magazine issues — seasonal theology, biblical studies, church history, and ethics.',
 };
 
 export const dynamic = 'force-dynamic';
@@ -112,7 +112,7 @@ export default async function Magazines() {
               {data.hero?.badge || 'Quarterly Publications'}
             </span>
             <h1 className="text-3xl font-heading font-bold text-primary">
-              {data.hero?.headline || 'Scriptura Magazine'}
+              {data.hero?.headline || 'Jesus Loves Ministry Magazine'}
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {data.hero?.subheadline ||

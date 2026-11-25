@@ -21,6 +21,7 @@ export interface GlobalSettings {
   siteName: string;
   siteTagline: string;
   logoIcon: string;
+  logoImage?: string;
   footerDescription: string;
   copyrightText: string;
   topNavLinks: NavItem[];
@@ -34,9 +35,10 @@ export interface GlobalSettings {
 }
 
 export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
-  siteName: 'SCRIPTURA',
+  siteName: 'Jesus Loves Ministry',
   siteTagline: 'Digital Library',
   logoIcon: '📚',
+  logoImage: '/Logo.png',
   footerDescription:
     'A meticulous, beautifully curated editorial platform dedicated purely to the preservation, study, and teaching of biblical texts.',
   copyrightText: 'All rights reserved.',
@@ -135,6 +137,10 @@ export function normalizeGlobalSettings(raw: unknown): GlobalSettings {
     ? data.logoIcon.trim()
     : DEFAULT_GLOBAL_SETTINGS.logoIcon;
 
+  const logoImage = isNonEmptyString(data.logoImage)
+    ? data.logoImage.trim()
+    : DEFAULT_GLOBAL_SETTINGS.logoImage;
+
   const footerDescription = isNonEmptyString(data.footerDescription)
     ? data.footerDescription.trim()
     : DEFAULT_GLOBAL_SETTINGS.footerDescription;
@@ -227,6 +233,7 @@ export function normalizeGlobalSettings(raw: unknown): GlobalSettings {
     siteName,
     siteTagline,
     logoIcon,
+    logoImage,
     footerDescription,
     copyrightText,
     topNavLinks,

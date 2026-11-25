@@ -3,7 +3,7 @@ announcementText: "EXPLORING THE SACRED TEXTS WITH SCHOLARLY PRECISION & REVEREN
 announcementSubtext: "Join our next live Zoom Seminar this Thursday"
 hero:
   badge: "Quarterly Publications"
-  headline: "Scriptura Magazine"
+  headline: "Jesus Loves Ministry Magazine"
   subheadline: "Our quarterly theological journal featuring scholarly articles, book reviews, biblical expositions, and contemporary theological discussions from leading scholars and pastors."
 featuredIssue:
   badge: "FEATURED ISSUE"

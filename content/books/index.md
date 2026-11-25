@@ -4,7 +4,7 @@ announcementSubtext: "Join our next live Zoom Seminar this Thursday"
 hero:
   badge: "Scholarly Monographs"
   headline: "Theological Books & Publications"
-  subheadline: "Explore our collection of peer-reviewed monographs, historical commentaries, and study manuals published by the Scriptura Research Institute."
+  subheadline: "Explore our collection of peer-reviewed monographs, historical commentaries, and study manuals published by Jesus Loves Ministry."
 searchPlaceholder: "Search books..."
 featuredBook:
   badge: "Featured Publication"

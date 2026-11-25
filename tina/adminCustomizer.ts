@@ -827,9 +827,9 @@ export function setupAdminEnhancements() {
       brandBanner.className = "scriptura-sidebar-header";
       brandBanner.innerHTML = `
         <div class="scriptura-sidebar-logo-row">
-          <div class="scriptura-sidebar-icon">📖</div>
+          <img src="/favicon.png" alt="Logo" class="scriptura-sidebar-icon" style="object-fit: contain; padding: 2px; background: rgba(255,255,255,0.1);" />
           <div style="flex: 1;">
-            <div class="scriptura-sidebar-title">SCRIPTURA</div>
+            <div class="scriptura-sidebar-title">JESUS LOVES MINISTRY</div>
           </div>
           <button type="button" class="scriptura-sidebar-close-btn" id="scriptura-close-drawer-btn" aria-label="Close sidebar">✕</button>
         </div>
@@ -879,7 +879,7 @@ export function setupAdminEnhancements() {
           <div class="scriptura-mobile-bar-left">
             <button type="button" id="scriptura-hamburger-btn" class="scriptura-mobile-hamburger" aria-label="Open navigation drawer">☰</button>
             <div>
-              <div class="scriptura-mobile-bar-title">SCRIPTURA</div>
+              <div class="scriptura-mobile-bar-title">JESUS LOVES MINISTRY</div>
               <span class="scriptura-mobile-bar-badge">Digital Library CMS</span>
             </div>
           </div>
@@ -988,7 +988,7 @@ export function setupAdminEnhancements() {
               <span class="scriptura-hero-badge-dot"></span>
               CMS Connected
             </div>
-            <h1 class="scriptura-hero-title">SCRIPTURA Digital Library</h1>
+            <h1 class="scriptura-hero-title">Jesus Loves Ministry</h1>
             <div class="scriptura-hero-subtitle">Editorial Control Center</div>
             <p class="scriptura-hero-desc">
               Manage theological publications, study materials, digital resources and site content from one place.

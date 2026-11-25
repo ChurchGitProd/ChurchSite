@@ -10,7 +10,7 @@ import { client } from '../../../tina/__generated__/client';
 
 export const metadata = {
   title: 'Contact Office',
-  description: 'Get in touch with the SCRIPTURA office — email, phone, office hours, and location on the map.',
+  description: 'Get in touch with the Jesus Loves Ministry office — email, phone, office hours, and location on the map.',
 };
 
 export const dynamic = 'force-dynamic';

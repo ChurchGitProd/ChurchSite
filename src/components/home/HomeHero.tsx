@@ -122,10 +122,7 @@ export default function HomeHero({ data }: HomeHeroProps) {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary leading-tight flex flex-col gap-2 sm:gap-3">
               <span className="block font-bold text-primary tracking-tight">{line1}</span>
               {line2 && (
-                <span
-                  className="block text-tertiary font-normal text-5xl sm:text-6xl lg:text-7xl"
-                  style={{ fontFamily: "'Sacramento', cursive" }}
-                >
+                <span className="block font-bold text-tertiary tracking-tight">
                   {line2}
                 </span>
               )}

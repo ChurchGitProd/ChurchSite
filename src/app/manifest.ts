@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'SCRIPTURA Digital Library',
-    short_name: 'SCRIPTURA',
+    name: 'Jesus Loves Ministry Digital Library',
+    short_name: 'Jesus Loves Ministry',
     description:
       'Exploring the Sacred Texts with Scholarly Precision & Reverence — lessons, books, magazines, images, and video lectures.',
     start_url: '/',
@@ -11,6 +11,12 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     background_color: '#FDFBF7',
     theme_color: '#163B6C',
-    icons: [],
+    icons: [
+      {
+        src: '/favicon.png',
+        sizes: '523x477',
+        type: 'image/png',
+      },
+    ],
   };
 }

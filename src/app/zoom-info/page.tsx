@@ -10,7 +10,7 @@ import RelatedScriptureSection from '@/components/zoom-info/RelatedScriptureSect
 import { client } from '../../../tina/__generated__/client';
 
 export const metadata = {
-  title: 'Zoom Seminar Schedule | SCRIPTURA Digital Library',
+  title: 'Zoom Seminar Schedule | Jesus Loves Ministry',
   description:
     'Join our live theological seminars, Bible study sessions, and scholarly discussions via Zoom. Connect with our faculty and fellow believers from around the world.',
 };

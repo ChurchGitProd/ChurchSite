@@ -135,7 +135,7 @@ export default function FeaturedVideoHero({ data }: FeaturedVideoHeroProps) {
                 <span>Video Recording Pending Digital Archiving</span>
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed pl-6">
-                The high-definition video master for this lecture is scheduled for upload. Full theological transcriptions and related codex study notes are available in the Scriptura Library.
+                The high-definition video master for this lecture is scheduled for upload. Full theological transcriptions and related codex study notes are available in the Jesus Loves Ministry Library.
               </p>
               <div className="pl-6 pt-1">
                 <button

@@ -57,11 +57,21 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
         <div className="flex items-center justify-between h-20">
           {/* Logo & Brand */}
           <Link href="/" className="flex items-center gap-3 group" onClick={closeMenu}>
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-md transition-transform group-hover:scale-105">
-              <span className="text-xl text-tertiary">{globalSettings.logoIcon || '📚'}</span>
-            </div>
+            {globalSettings.logoImage ? (
+              <div className="relative flex items-center transition-transform group-hover:scale-105">
+                <img
+                  src={globalSettings.logoImage}
+                  alt={`${globalSettings.siteName || 'Jesus Loves Ministry'} Logo`}
+                  className="h-11 w-auto max-w-[140px] object-contain rounded-md"
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-md transition-transform group-hover:scale-105">
+                <span className="text-xl text-tertiary">{globalSettings.logoIcon || '📚'}</span>
+              </div>
+            )}
             <div>
-              <span className="block font-heading text-xl font-bold tracking-tight text-primary">{globalSettings.siteName || 'SCRIPTURA'}</span>
+              <span className="block font-heading text-xl font-bold tracking-tight text-primary">{globalSettings.siteName || 'Jesus Loves Ministry'}</span>
               <span className="block text-[10px] tracking-widest text-muted-foreground uppercase font-sans -mt-1">{globalSettings.siteTagline || 'Digital Library'}</span>
             </div>
           </Link>
@@ -177,11 +187,21 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
         {/* Drawer Header with Title and Close X Button */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-card">
           <Link href="/" className="flex items-center gap-2.5" onClick={closeMenu}>
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-              <span className="text-base text-tertiary">{globalSettings.logoIcon || '📚'}</span>
-            </div>
+            {globalSettings.logoImage ? (
+              <div className="relative flex items-center">
+                <img
+                  src={globalSettings.logoImage}
+                  alt={`${globalSettings.siteName || 'Jesus Loves Ministry'} Logo`}
+                  className="h-9 w-auto max-w-[110px] object-contain rounded-md"
+                />
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
+                <span className="text-base text-tertiary">{globalSettings.logoIcon || '📚'}</span>
+              </div>
+            )}
             <div>
-              <span className="block font-heading text-lg font-bold tracking-tight text-primary">{globalSettings.siteName || 'SCRIPTURA'}</span>
+              <span className="block font-heading text-lg font-bold tracking-tight text-primary">{globalSettings.siteName || 'Jesus Loves Ministry'}</span>
               <span className="block text-[9px] tracking-widest text-muted-foreground uppercase font-sans -mt-0.5">{globalSettings.siteTagline || 'Digital Library'}</span>
             </div>
           </Link>

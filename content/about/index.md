@@ -4,9 +4,9 @@ announcementSubtext: "Join our next live Zoom Seminar this Thursday"
 hero:
   badge: "Our Mandate"
   headline: "Scholarly Devotion to the Sacred Texts"
-  subheadline: "Discover the foundational vision, academic rigor, and profound faith that drives the Scriptura Research Institute."
+  subheadline: "Discover the foundational vision, academic rigor, and profound faith that drives Jesus Loves Ministry."
 introTitle: "Introduction"
-introParagraph1: "Scriptura Research Institute was established as an independent theological library and teaching platform. Unlike generic church websites, our focus is strictly theological, academic, and textual. We believe that the depth of Holy Scripture is best explored when coupled with historical context, linguistic analysis, and a commitment to pure, uncompromised teaching."
+introParagraph1: "Jesus Loves Ministry was established as an independent theological library and teaching platform. Unlike generic church websites, our focus is strictly theological, academic, and textual. We believe that the depth of Holy Scripture is best explored when coupled with historical context, linguistic analysis, and a commitment to pure, uncompromised teaching."
 introParagraph2: "Through our digital archives, quarterly journals, interactive seminars, and curated lessons, we serve a global community of students, scholars, pastors, and serious readers of the Bible."
 mission:
   title: "Our Mission"

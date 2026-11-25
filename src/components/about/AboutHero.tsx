@@ -7,7 +7,7 @@ interface AboutHeroProps {
 export default function AboutHero({
   badge = 'Our Mandate',
   headline = 'Scholarly Devotion to the Sacred Texts',
-  subheadline = 'Discover the foundational vision, academic rigor, and profound faith that drives the Scriptura Research Institute.',
+  subheadline = 'Discover the foundational vision, academic rigor, and profound faith that drives Jesus Loves Ministry.',
 }: AboutHeroProps) {
   return (
     <section className="relative py-16 bg-gradient-to-b from-muted/30 to-background border-b border-border">

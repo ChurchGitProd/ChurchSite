@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
   variable: "--font-heading",
 });
 
-const siteFullName = `${globalSettings.siteName || 'Scriptura'} ${globalSettings.siteTagline || 'Digital Library'}`;
+const siteFullName = `${globalSettings.siteName || 'Jesus Loves Ministry'} ${globalSettings.siteTagline || 'Digital Library'}`;
 const siteDescription = globalSettings.footerDescription || "Exploring the Sacred Texts with Scholarly Precision & Reverence";
 
 export const metadata: Metadata = {
@@ -36,6 +36,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteFullName,
     description: siteDescription,
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 };
 
