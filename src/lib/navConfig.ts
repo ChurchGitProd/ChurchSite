@@ -53,17 +53,10 @@ export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
       label: 'Bible',
       items: [
         { id: 'lessons', label: 'Lessons', href: '/lessons' },
+        { id: 'books', label: 'Books', href: '/books' },
         { id: 'references', label: 'Scripture References', href: '/references' },
         { id: 'images', label: 'Bible Images', href: '/images' },
         { id: 'videos', label: 'Bible Videos', href: '/videos' },
-      ],
-    },
-    {
-      id: 'hub',
-      label: 'Knowledge Hub',
-      items: [
-        { id: 'books', label: 'Books', href: '/books' },
-        { id: 'magazines', label: 'Magazines', href: '/magazines' },
       ],
     },
     {
@@ -78,8 +71,8 @@ export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
   footerQuickLinks: [
     { label: 'Digital Library', href: '/books' },
     { label: 'Bible Lessons', href: '/lessons' },
-    { label: 'Books Collection', href: '/books' },
-    { label: 'Magazines', href: '/magazines' },
+    { label: 'Scripture References', href: '/references' },
+    { label: 'Bible Videos', href: '/videos' },
   ],
   footerResourcesTitle: 'Resources',
   footerResources: [

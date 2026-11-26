@@ -12,19 +12,9 @@ interface BookItem {
   downloadLink?: string | null;
 }
 
-interface MagazineItem {
-  badge?: string | null;
-  title?: string | null;
-  issue?: string | null;
-  description?: string | null;
-  coverImage?: string | null;
-  readLink?: string | null;
-}
-
 interface FeaturedPublicationsData {
   sectionTitle?: string | null;
   books?: (BookItem | null)[] | null;
-  magazines?: (MagazineItem | null)[] | null;
 }
 
 interface FeaturedPublicationsSectionProps {
@@ -52,42 +42,17 @@ const DEFAULT_BOOKS: BookItem[] = [
   },
 ];
 
-const DEFAULT_MAGAZINES: MagazineItem[] = [
-  {
-    badge: 'Quarterly Issue',
-    title: 'Biblical Archaeology Review',
-    issue: 'Issue #48',
-    description:
-      'Exploring the latest excavations in Jerusalem and their correlation with Old Testament chronicles.',
-    coverImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=267&fit=crop',
-    readLink: '/magazines',
-  },
-  {
-    badge: 'Quarterly Issue',
-    title: 'Eschatology & Hope',
-    issue: 'Fall 2024',
-    description:
-      'Exploring biblical eschatology, resurrection hope, and the consummation of all things.',
-    coverImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=267&fit=crop',
-    readLink: '/magazines',
-  },
-];
-
 function slugify(value?: string | null) {
   return (value || 'download').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'download';
 }
 
 export default function FeaturedPublicationsSection({ data }: FeaturedPublicationsSectionProps) {
-  const sectionTitle = data?.sectionTitle || 'Featured Books & Magazines';
+  const sectionTitle = data?.sectionTitle || 'Featured Books';
 
   const books =
     data?.books && data.books.length > 0
       ? (data.books.filter(Boolean) as BookItem[])
       : DEFAULT_BOOKS;
-  const magazines =
-    data?.magazines && data.magazines.length > 0
-      ? (data.magazines.filter(Boolean) as MagazineItem[])
-      : DEFAULT_MAGAZINES;
 
   return (
     <section id="books" className="space-y-6">
@@ -100,7 +65,7 @@ export default function FeaturedPublicationsSection({ data }: FeaturedPublicatio
           href="/books"
           className="text-xs font-semibold text-tertiary hover:text-primary transition-colors uppercase tracking-wider flex items-center gap-1 group"
         >
-          <span>Browse Catalog</span>
+          <span>Browse Books</span>
           <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
@@ -143,45 +108,6 @@ export default function FeaturedPublicationsSection({ data }: FeaturedPublicatio
                 >
                   {book.downloadLink ? 'Download PDF' : 'Download PDF (Unavailable)'}
                 </DownloadButton>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {magazines.map((magazine, idx) => (
-          <div
-            key={`magazine-${idx}`}
-            className="bg-card border border-border rounded-xl p-5 flex gap-4 hover:shadow-lg transition-all"
-          >
-            <div className="w-24 h-32 flex-shrink-0 border border-border rounded shadow-md overflow-hidden bg-muted">
-              <img
-                src={sanitizeImageUrl(magazine.coverImage || '')}
-                alt={`${magazine.title} cover`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 flex flex-col justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-tertiary uppercase tracking-wider">
-                  {magazine.badge || 'Quarterly Issue'}
-                </span>
-                <h3 className="text-base font-heading font-bold text-primary">
-                  {magazine.title}
-                </h3>
-                <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                  {magazine.description}
-                </p>
-              </div>
-              <div className="flex items-center justify-between mt-3">
-                <span className="text-xs text-muted-foreground">
-                  {magazine.issue}
-                </span>
-                <Link
-                  href={magazine.readLink || '/magazines'}
-                  className="text-xs font-bold text-primary hover:text-tertiary transition-colors"
-                >
-                  Read Online
-                </Link>
               </div>
             </div>
           </div>

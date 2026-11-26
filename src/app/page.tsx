@@ -15,13 +15,13 @@ import { resolveFeaturedVideos } from '@/lib/featuredVideos';
 import { resolveFeaturedLessons } from '@/lib/featuredLessons';
 import { resolveLatestReferences } from '@/lib/latestReferences';
 import { resolveLatestImages } from '@/lib/latestImages';
-import { resolveFeaturedBooks, resolveFeaturedMagazines } from '@/lib/featuredPublications';
+import { resolveFeaturedBooks } from '@/lib/featuredPublications';
 import { client } from "../../tina/__generated__/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [homeData, zoomInfoData, videoConnectionData, lessonConnectionData, bibleReferenceConnectionData, bibleImageConnectionData, bookConnectionData, magazineConnectionData] = await Promise.all([
+  const [homeData, zoomInfoData, videoConnectionData, lessonConnectionData, bibleReferenceConnectionData, bibleImageConnectionData, bookConnectionData] = await Promise.all([
     client.queries.home(
       { relativePath: "index.md" },
       { fetchOptions: { cache: "no-store" } }
@@ -50,10 +50,6 @@ export default async function Home() {
       {},
       { fetchOptions: { cache: "no-store" } }
     ).catch(() => null),
-    client.queries.magazineConnection(
-      {},
-      { fetchOptions: { cache: "no-store" } }
-    ).catch(() => null),
   ]);
   const data = homeData.data.home;
   const seminar = resolveUpcomingZoomSeminar(zoomInfoData?.data?.zoomInfo);
@@ -78,16 +74,6 @@ export default async function Home() {
     description: b.description as string,
     coverImage: b.coverImage as string,
     downloadLink: (b.pdfFile as string) || `/books/${b._sys?.filename}`,
-  }));
-  const featuredMags = resolveFeaturedMagazines(
-    magazineConnectionData?.data?.magazineConnection?.edges?.map((edge) => edge?.node)
-  ).map((m) => ({
-    badge: (m.badge as string) || 'Quarterly Issue',
-    title: m.title,
-    issue: m.issue as string,
-    description: m.description as string,
-    coverImage: m.coverImage as string,
-    readLink: `/magazines/${m._sys?.filename}`,
   }));
 
   return (
@@ -134,7 +120,7 @@ export default async function Home() {
           items={galleryImages}
         />
         <FeaturedPublicationsSection
-          data={{ ...data.featuredPublications, books: featuredBooks, magazines: featuredMags }}
+          data={{ ...data.featuredPublications, books: featuredBooks }}
         />
         <ZoomMeetingCard seminar={seminar} />
       </main>

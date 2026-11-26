@@ -139,7 +139,7 @@ export default defineConfig({
             label: "Featured",
             options: ["yes", "no"],
             description:
-              "Set to 'yes' to show this book in 'Featured Books & Magazines' on the home page.",
+              "Set to 'yes' to show this book in 'Featured Books' on the home page.",
           },
           {
             type: "string",
@@ -379,169 +379,6 @@ export default defineConfig({
             required: true,
             description:
               "Shown as the category tag on lesson cards, e.g. 'Pentateuch'.",
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            ui: {
-              component: "textarea",
-            },
-          },
-        ],
-      },
-      {
-        name: "magazine",
-        label: "Magazines",
-        path: "content/magazines",
-        format: "mdx",
-        match: {
-          include: "*",
-          exclude: "index",
-        },
-        ui: {
-          filename: {
-            slugify: (values: any) => {
-              const base = String(values?.title || "magazine").toLowerCase();
-              const slug = base
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "")
-                .slice(0, 80);
-              return slug || "magazine";
-            },
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            required: true,
-            description: 'The issue theme shown on the card and detail page, e.g. "Ecclesiology".',
-          },
-          {
-            type: "string",
-            name: "issue",
-            label: "Issue",
-            required: true,
-            description: 'The display label for this issue, e.g. "Summer 2024".',
-          },
-          {
-            type: "string",
-            name: "season",
-            label: "Season / Issue",
-            options: ["Spring", "Summer", "Fall", "Winter"],
-            description: "Pick the season — powers the 'All Issues' filter on the Magazines page.",
-          },
-          {
-            type: "string",
-            name: "year",
-            label: "Year",
-            description:
-              "Type the publication year, e.g. '2024'. Whatever you enter automatically appears in the website's Year filter.",
-          },
-          {
-            type: "reference",
-            name: "topic",
-            label: "Topic",
-            collections: ["topic"],
-            description:
-              "Pick the magazine topic. To add or remove options, open the 'Magazine Topics' collection in the left sidebar and create or delete a topic.",
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            required: true,
-            description: 'Short summary shown on the magazine card, e.g. "The nature and mission of the church".',
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
-            type: "image",
-            name: "coverImage",
-            label: "Cover Image",
-            description: "Cover shown on cards and the detail page — portrait images (e.g. 3:4) work best.",
-          },
-          {
-            type: "string",
-            name: "publishDate",
-            label: "Publish Date",
-            description: 'e.g. "June 2024". When two featured issues claim the same home-page position, the one with the newer Publish Date wins.',
-          },
-          {
-            type: "number",
-            name: "articlesCount",
-            label: "Articles Count",
-            description: "Number of articles in this issue, e.g. 8 — shown in the issue stats.",
-          },
-          {
-            type: "number",
-            name: "contributorsCount",
-            label: "Contributors Count",
-            description: "Number of contributors, e.g. 5 — shown in the issue stats.",
-          },
-          {
-            type: "number",
-            name: "pagesCount",
-            label: "Pages Count",
-            description: "Total page count, e.g. 64 — shown in the issue stats.",
-          },
-          {
-            type: "string",
-            name: "badge",
-            label: "Badge / Tag",
-            description: 'Optional tag on the card, e.g. "Latest Issue". Issues marked "Previous Issue" are hidden from the archive grid — use it for the featured hero issue.',
-          },
-          {
-            type: "string",
-            name: "featured",
-            label: "Featured on Home Page",
-            options: ["no", "yes"],
-            description:
-              "Set to 'Yes' to show this issue in 'Featured Books & Magazines' on the home page.",
-          },
-          {
-            type: "string",
-            name: "featuredPosition",
-            label: "Home Page Position",
-            options: ["1", "2"],
-            description:
-              "Only needed when Featured is 'Yes'. 1 = left card, 2 = right card. Position 1 also becomes the hero at the top of the Magazines page. If two featured issues claim one position, the one with the newer Publish Date wins.",
-          },
-          {
-            type: "image",
-            name: "pdfFile",
-            label: "Magazine Issue PDF",
-            description: "Upload or select a PDF magazine issue file for digital download",
-            ui: {
-              validate: validatePdfField,
-            },
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Issue Content / Overview",
-            isBody: true,
-            description: "The editorial overview rendered on the issue detail page — headings, paragraphs, quotes and lists all display.",
-          },
-        ],
-      },
-
-      {
-        name: "topic",
-        label: "Magazine Topics",
-        path: "content/magazine-topics",
-        format: "md",
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Topic Name",
-            required: true,
-            description:
-              "Shown on magazine cards and in the Topic filter, e.g. 'Systematic Theology'.",
           },
           {
             type: "string",
@@ -1189,7 +1026,7 @@ export default defineConfig({
             name: "featuredPublications",
             label: "Featured Publications Section",
             description:
-              "Books and magazines are chosen per document: set Featured to Yes and pick a position (1-2). This block only controls the section heading.",
+              "Books are chosen per document: set Featured to Yes and pick a position (1-2). This block only controls the section heading.",
             fields: [
               {
                 type: "string",
@@ -2187,97 +2024,6 @@ export default defineConfig({
           },
         ],
       },
-      {
-        name: "magazines",
-        label: "Magazines Directory",
-        path: "content/magazines",
-        format: "md",
-        match: {
-          include: "index",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "announcementText",
-            label: "Announcement Bar Message",
-            description: "Main message on the announcement bar at the top of this page. Each page keeps its own copy of the bar text.",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "announcementSubtext",
-            label: "Announcement Bar Zoom Text (clickable)",
-            description: "This text becomes the clickable Zoom link on the bar. The link itself is NOT set on this page: go to Seminars & Zoom > Featured Meeting Card > Zoom Meeting Link. Changing it there updates every page.",
-          },
-          {
-            type: "object",
-            name: "hero",
-            label: "Hero Section",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "headline",
-                label: "Headline",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "subheadline",
-                label: "Subheadline",
-                required: true,
-              },
-            ],
-          },
-          {
-                        type: "object",
-            name: "featuredIssue",
-            label: "Featured Issue Hero",
-            description:
-              "The hero shows the magazine set to Featured position 1 on its document. This block only controls the badge, tag and button text.",
-            fields: [
-              {
-                type: "string",
-                name: "badge",
-                label: "Badge Text",
-              },
-              {
-                type: "string",
-                name: "tag",
-                label: "Tag",
-              },
-              {
-                type: "string",
-                name: "readButtonText",
-                label: "Read Button Text",
-              },
-              {
-                type: "string",
-                name: "downloadButtonText",
-                label: "Download Button Text",
-              },
-            ],
-          },
-          {
-            type: "string",
-            name: "spotlightTitle",
-            label: "Spotlight Section Title",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "archiveTitle",
-            label: "Archive Section Title",
-            required: true,
-          },
-        ],
-      },
-
       {
         name: "references",
         label: "References Directory",

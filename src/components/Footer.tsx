@@ -4,10 +4,10 @@ import { globalSettings } from '@/lib/navConfig';
 export default function Footer() {
   const quickLinksTitle = globalSettings.footerQuickLinksTitle || 'Quick Links';
   const quickLinks = globalSettings.footerQuickLinks || [
-    { label: 'Digital Library', href: '/library' },
+    { label: 'Digital Library', href: '/books' },
     { label: 'Bible Lessons', href: '/lessons' },
-    { label: 'Books Collection', href: '/books' },
-    { label: 'Magazines', href: '/magazines' },
+    { label: 'Scripture References', href: '/references' },
+    { label: 'Bible Videos', href: '/videos' },
   ];
 
   const resourcesTitle = globalSettings.footerResourcesTitle || 'Resources';

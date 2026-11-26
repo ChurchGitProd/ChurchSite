@@ -40,6 +40,6 @@ featuredVideos:
 galleryPreview:
   sectionTitle: Bible Image Gallery Preview
 featuredPublications:
-  sectionTitle: Featured Books & Magazines
+  sectionTitle: Featured Books
 ---
 

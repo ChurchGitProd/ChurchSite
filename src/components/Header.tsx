@@ -12,7 +12,6 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>({
     bible: false,
-    hub: false,
     connect: false,
   });
 

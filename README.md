@@ -102,5 +102,5 @@ This project is platform-agnostic and can be deployed to any modern Node.js host
   - `/archives/[slug]`: 3 Historical Archival Documents
   - `/resources/[slug]`: 8 Canonical Scholarly Resources
   - `/quick-links/[slug]`: 8 Quick Navigation Shortcuts
-  - `/lessons/[slug]`, `/references/[slug]`, `/videos/[slug]`, `/images/[slug]`, `/books/[slug]`, `/library/[slug]`, `/magazines/[slug]`
+  - `/lessons/[slug]`, `/references/[slug]`, `/videos/[slug]`, `/images/[slug]`, `/books/[slug]`, `/library/[slug]`
 - **CMS Admin**: Accessible in browser at `/admin/index.html`.

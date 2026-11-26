@@ -15,7 +15,7 @@ const QUICK_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/lessons', label: 'Lessons' },
   { href: '/books', label: 'Books' },
-  { href: '/magazines', label: 'Magazines' },
+  { href: '/references', label: 'References' },
   { href: '/videos', label: 'Videos' },
   { href: '/contact', label: 'Contact' },
 ];

@@ -13,7 +13,6 @@ const STATIC_ROUTES = [
   '/images',
   '/videos',
   '/books',
-  '/magazines',
   '/contact',
   '/zoom-info',
 ];
@@ -24,7 +23,6 @@ const COLLECTIONS: Array<[string, string]> = [
   ['bibleImageConnection', '/images'],
   ['videoConnection', '/videos'],
   ['bookConnection', '/books'],
-  ['magazineConnection', '/magazines'],
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

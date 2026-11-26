@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Jesus Loves Ministry Digital Library',
     short_name: 'Jesus Loves Ministry',
     description:
-      'Exploring the Sacred Texts with Scholarly Precision & Reverence — lessons, books, magazines, images, and video lectures.',
+      'Exploring the Sacred Texts with Scholarly Precision & Reverence — lessons, books, images, and video lectures.',
     start_url: '/',
     scope: '/',
     display: 'standalone',
@@ -13,8 +13,13 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#163B6C',
     icons: [
       {
-        src: '/favicon.png',
-        sizes: '523x477',
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/android-chrome-512x512.png',
+        sizes: '512x512',
         type: 'image/png',
       },
     ],
