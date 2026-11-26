@@ -1,10 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { wrapFieldsWithMeta } from 'tinacms';
 
+function getQuickYtId(url: string): string | null {
+  if (!url || typeof url !== 'string') return null;
+  const trimmed = url.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+  try {
+    const parsed = new URL(trimmed);
+    const host = parsed.hostname.toLowerCase();
+    if (host.includes('youtu.be')) {
+      const id = parsed.pathname.slice(1).split('/')[0];
+      return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+    }
+    if (host.includes('youtube.com') || host.includes('youtube-nocookie.com')) {
+      const v = parsed.searchParams.get('v');
+      if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
+      if (parsed.pathname.startsWith('/embed/') || parsed.pathname.startsWith('/shorts/')) {
+        const id = parsed.pathname.split('/')[2];
+        return id && /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Custom TinaCMS field component for YouTube Video URL.
  * Automatically fetches the video duration via /api/youtube/duration and updates
  * the 'duration' field in the same video document.
+ * Also previews the live YouTube thumbnail.
  */
 export const YouTubeUrlField = wrapFieldsWithMeta((props: any) => {
   const { input, field, form } = props;
@@ -12,6 +38,8 @@ export const YouTubeUrlField = wrapFieldsWithMeta((props: any) => {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<'info' | 'success' | 'warning' | 'error'>('info');
   const lastFetchedUrlRef = useRef<string>('');
+
+  const currentVideoId = getQuickYtId(input.value || '');
 
   const fetchDuration = async (urlToFetch: string, force = false) => {
     const trimmed = (urlToFetch || '').trim();
@@ -169,6 +197,42 @@ export const YouTubeUrlField = wrapFieldsWithMeta((props: any) => {
           {loading ? 'Detecting...' : 'Detect Duration'}
         </button>
       </div>
+
+      {currentVideoId && (
+        <div
+          style={{
+            marginTop: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            backgroundColor: '#f8fafc',
+            padding: '10px 12px',
+            borderRadius: '6px',
+            border: '1px solid #e2e8f0',
+          }}
+        >
+          <img
+            src={`https://img.youtube.com/vi/${currentVideoId}/hqdefault.jpg`}
+            alt="YouTube Video Thumbnail"
+            style={{
+              width: '100px',
+              height: '56px',
+              objectFit: 'cover',
+              borderRadius: '4px',
+              border: '1px solid #cbd5e1',
+              flexShrink: 0,
+            }}
+          />
+          <div style={{ fontSize: '12px', color: '#475569', lineHeight: '1.4' }}>
+            <strong style={{ display: 'block', color: '#0f172a', marginBottom: '2px' }}>
+              YouTube Thumbnail Auto-Detected
+            </strong>
+            <span>
+              This thumbnail will automatically appear on the website if no custom image is uploaded.
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

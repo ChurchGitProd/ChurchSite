@@ -1397,12 +1397,339 @@ export function setupAdminEnhancements() {
     });
   }
 
+  function injectAddPlaylistButton() {
+    const hash = window.location.hash || '';
+    if (!hash.startsWith('#/collections/video') || hash.includes('/new') || hash.includes('.md')) {
+      return;
+    }
+
+    const allButtons = Array.from(document.querySelectorAll('a, button'));
+    const addFileBtn = allButtons.find((el) => {
+      const text = el.textContent || '';
+      const href = (el as HTMLAnchorElement).href || '';
+      return /add file/i.test(text) || href.includes('/collections/video/new');
+    });
+
+    if (!addFileBtn || !addFileBtn.parentElement) return;
+    if (document.getElementById('tina-add-playlist-btn')) return;
+
+    const btnContainer = addFileBtn.parentElement;
+    const playlistBtn = document.createElement('button');
+    playlistBtn.id = 'tina-add-playlist-btn';
+    playlistBtn.type = 'button';
+    playlistBtn.innerHTML = `
+      <svg style="width: 14px; height: 14px; fill: currentColor; margin-right: 6px; display: inline-block; vertical-align: -2px;" viewBox="0 0 24 24">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+      Add Playlist
+    `;
+    playlistBtn.title = 'Import all videos from a YouTube Playlist';
+    playlistBtn.style.cssText = `
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1d4b8a;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid #163b6c;
+      cursor: pointer;
+      margin-right: 8px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    `;
+
+    playlistBtn.addEventListener('mouseenter', () => {
+      playlistBtn.style.backgroundColor = '#163b6c';
+    });
+    playlistBtn.addEventListener('mouseleave', () => {
+      playlistBtn.style.backgroundColor = '#1d4b8a';
+    });
+
+    playlistBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPlaylistImportModal();
+    });
+
+    btnContainer.insertBefore(playlistBtn, addFileBtn);
+  }
+
+  function openPlaylistImportModal() {
+    if (document.getElementById('tina-playlist-import-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'tina-playlist-import-modal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: inherit;
+      box-sizing: border-box;
+    `;
+
+    modal.innerHTML = `
+      <div style="
+        background: #ffffff;
+        border-radius: 12px;
+        max-width: 520px;
+        width: 100%;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border: 1px solid #cbd5e1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      ">
+        <div style="
+          background: linear-gradient(135deg, #0e2646 0%, #163b6c 100%);
+          padding: 20px 24px;
+          color: #ffffff;
+          position: relative;
+          border-bottom: 2px solid #c8a46a;
+        ">
+          <h3 style="margin: 0 0 4px 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+            <span>▶</span> Import YouTube Playlist
+          </h3>
+          <p style="margin: 0; font-size: 12px; color: #dfbe87; line-height: 1.4;">
+            Automatically imports all videos, durations, and thumbnails from a YouTube playlist into your website.
+          </p>
+          <button id="close-playlist-modal-btn" type="button" style="
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">✕</button>
+        </div>
+
+        <div style="padding: 24px; box-sizing: border-box;">
+          <form id="playlist-import-form" style="display: flex; flex-direction: column; gap: 16px; margin: 0;">
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
+                YouTube Playlist Link <span style="color: #e11d48;">*</span>
+              </label>
+              <input
+                type="url"
+                id="playlist-url-input"
+                required
+                placeholder="https://www.youtube.com/playlist?list=PL..."
+                style="
+                  width: 100%;
+                  padding: 10px 12px;
+                  font-size: 13px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  box-sizing: border-box;
+                  outline: none;
+                "
+              />
+              <span style="display: block; font-size: 11px; color: #64748b; margin-top: 4px;">
+                Paste the public playlist link from the YouTube channel.
+              </span>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
+                Playlist / Series Name <span style="font-weight: 400; color: #64748b;">(Optional)</span>
+              </label>
+              <input
+                type="text"
+                id="playlist-name-input"
+                placeholder="Leave blank to use the YouTube playlist title"
+                style="
+                  width: 100%;
+                  padding: 10px 12px;
+                  font-size: 13px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  box-sizing: border-box;
+                  outline: none;
+                "
+              />
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
+                Language <span style="font-weight: 400; color: #64748b;">(Optional)</span>
+              </label>
+              <select
+                id="playlist-lang-input"
+                style="
+                  width: 100%;
+                  padding: 10px 12px;
+                  font-size: 13px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  box-sizing: border-box;
+                  outline: none;
+                  background: #ffffff;
+                  cursor: pointer;
+                "
+              >
+                <option value="">-- No Language Tag (Optional) --</option>
+                <option value="Kannada">Kannada</option>
+                <option value="English">English</option>
+                <option value="Tamil">Tamil</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Malayalam">Malayalam</option>
+              </select>
+              <span style="display: block; font-size: 11px; color: #64748b; margin-top: 4px;">
+                Used for language category filter on the website.
+              </span>
+            </div>
+
+            <div id="playlist-import-status" style="display: none; padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.4;"></div>
+
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+              <button
+                type="button"
+                id="cancel-playlist-modal-btn"
+                style="
+                  padding: 9px 16px;
+                  font-size: 13px;
+                  font-weight: 500;
+                  color: #475569;
+                  background: #f1f5f9;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  cursor: pointer;
+                "
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                id="submit-playlist-modal-btn"
+                style="
+                  padding: 9px 18px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #ffffff;
+                  background: #1d4b8a;
+                  border: 1px solid #163b6c;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                "
+              >
+                Import Playlist 🚀
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeModal = () => modal.remove();
+    modal.querySelector('#close-playlist-modal-btn')?.addEventListener('click', closeModal);
+    modal.querySelector('#cancel-playlist-modal-btn')?.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    const form = modal.querySelector('#playlist-import-form') as HTMLFormElement;
+    const urlInput = modal.querySelector('#playlist-url-input') as HTMLInputElement;
+    const nameInput = modal.querySelector('#playlist-name-input') as HTMLInputElement;
+    const langInput = modal.querySelector('#playlist-lang-input') as HTMLSelectElement;
+    const submitBtn = modal.querySelector('#submit-playlist-modal-btn') as HTMLButtonElement;
+    const cancelBtn = modal.querySelector('#cancel-playlist-modal-btn') as HTMLButtonElement;
+    const statusDiv = modal.querySelector('#playlist-import-status') as HTMLDivElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const playlistUrl = urlInput.value.trim();
+      const playlistName = nameInput.value.trim();
+      const language = langInput.value.trim();
+
+      if (!playlistUrl) return;
+
+      submitBtn.disabled = true;
+      cancelBtn.disabled = true;
+      urlInput.disabled = true;
+      nameInput.disabled = true;
+      langInput.disabled = true;
+      submitBtn.textContent = 'Importing... ⏳';
+
+      statusDiv.style.display = 'block';
+      statusDiv.style.backgroundColor = '#eff6ff';
+      statusDiv.style.color = '#1d4ed8';
+      statusDiv.style.border = '1px solid #bfdbfe';
+      statusDiv.textContent = 'Connecting to YouTube, fetching videos and creating records...';
+
+      try {
+        const res = await fetch('/api/youtube/playlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ playlistUrl, playlistName, language }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          statusDiv.style.backgroundColor = '#f0fdf4';
+          statusDiv.style.color = '#15803d';
+          statusDiv.style.border = '1px solid #bbf7d0';
+          statusDiv.textContent = `🎉 Success! Imported ${data.importedCount} videos into "${data.playlistName}". Reloading...`;
+
+          setTimeout(() => {
+            closeModal();
+            window.location.reload();
+          }, 1500);
+        } else {
+          statusDiv.style.backgroundColor = '#fef2f2';
+          statusDiv.style.color = '#b91c1c';
+          statusDiv.style.border = '1px solid #fecaca';
+          statusDiv.textContent = `❌ Error: ${data.error || 'Failed to import playlist'}`;
+          submitBtn.disabled = false;
+          cancelBtn.disabled = false;
+          urlInput.disabled = false;
+          nameInput.disabled = false;
+          langInput.disabled = false;
+          submitBtn.textContent = 'Try Again';
+        }
+      } catch (err: any) {
+        statusDiv.style.backgroundColor = '#fef2f2';
+        statusDiv.style.color = '#b91c1c';
+        statusDiv.style.border = '1px solid #fecaca';
+        statusDiv.textContent = `❌ Network Error: ${err.message || 'Could not reach server'}`;
+        submitBtn.disabled = false;
+        cancelBtn.disabled = false;
+        urlInput.disabled = false;
+        nameInput.disabled = false;
+        langInput.disabled = false;
+        submitBtn.textContent = 'Try Again';
+      }
+    });
+  }
+
   function checkUI() {
     injectMobileBarAndOverlay();
     injectSidebarHeader();
     injectSidebarCategories();
     renderCustomDashboard();
     attachYouTubeDurationSafeguard();
+    injectAddPlaylistButton();
   }
 
   window.addEventListener("keydown", function (e) {

@@ -545,11 +545,18 @@ export default defineConfig({
           {
             type: "reference",
             name: "series",
-            label: "Series Tag",
+            label: "Series / Playlist",
             collections: ["series"],
             required: true,
             description:
-              "Pick the video's series. To add or remove options, open the 'Video Series' collection in the left sidebar and create or delete a series.",
+              "Pick the video's playlist/series. To add or remove options, open the 'Video Series' collection in the left sidebar and create or delete a series.",
+          },
+          {
+            type: "string",
+            name: "language",
+            label: "Language",
+            options: ["Kannada", "English", "Tamil", "Telugu", "Hindi", "Malayalam"],
+            description: "Select the primary language of this video (Kannada, English, Tamil, Telugu, Hindi, Malayalam).",
           },
           {
             type: "reference",

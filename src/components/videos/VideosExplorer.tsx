@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Globe, ListVideo } from 'lucide-react';
 import VideoCard, { VideoCardData } from './VideoCard';
 
 interface VideosExplorerProps {
@@ -11,6 +11,7 @@ interface VideosExplorerProps {
 }
 
 const ITEMS_PER_PAGE = 6;
+const MINISTRY_LANGUAGES = ['Kannada', 'English', 'Tamil', 'Telugu', 'Hindi', 'Malayalam'] as const;
 
 export default function VideosExplorer({
   videos,
@@ -19,7 +20,8 @@ export default function VideosExplorer({
 }: VideosExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSpeaker, setSelectedSpeaker] = useState('All Speakers');
-  const [selectedSeries, setSelectedSeries] = useState('All Series');
+  const [selectedSeries, setSelectedSeries] = useState('All Playlists');
+  const [selectedLanguage, setSelectedLanguage] = useState('All Languages');
   const [currentPage, setCurrentPage] = useState(1);
 
   const displayLecturesTitle = lecturesTitle || 'All Lectures & Seminars';
@@ -35,16 +37,23 @@ export default function VideosExplorer({
   );
   const seriesOptions = useMemo(
     () => [
-      'All Series',
+      'All Playlists',
       ...Array.from(new Set(videos.map((v) => v.series).filter(Boolean))).sort(),
     ],
     [videos]
   );
 
-  // Filter videos based on search and dropdown selections
+  // Filter videos based on search, language, playlist, and speaker
   const filteredVideos = useMemo(() => {
     return videos.filter((item) => {
-      // 1. Search Query
+      // 1. Language Filter
+      if (selectedLanguage !== 'All Languages') {
+        if (item.language !== selectedLanguage) {
+          return false;
+        }
+      }
+
+      // 2. Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesTitle = item.title.toLowerCase().includes(q);
@@ -52,27 +61,29 @@ export default function VideosExplorer({
         const matchesScripture = item.scripture.toLowerCase().includes(q);
         const matchesSeries = item.series.toLowerCase().includes(q);
         const matchesDescription = item.description.toLowerCase().includes(q);
+        const matchesLanguage = item.language ? item.language.toLowerCase().includes(q) : false;
 
         if (
           !matchesTitle &&
           !matchesSpeaker &&
           !matchesScripture &&
           !matchesSeries &&
-          !matchesDescription
+          !matchesDescription &&
+          !matchesLanguage
         ) {
           return false;
         }
       }
 
-      // 2. Speaker Filter
+      // 3. Speaker Filter
       if (selectedSpeaker !== 'All Speakers') {
         if (item.speaker !== selectedSpeaker) {
           return false;
         }
       }
 
-      // 3. Series Filter
-      if (selectedSeries !== 'All Series') {
+      // 4. Playlist / Series Filter
+      if (selectedSeries !== 'All Playlists') {
         if (item.series !== selectedSeries) {
           return false;
         }
@@ -80,7 +91,7 @@ export default function VideosExplorer({
 
       return true;
     });
-  }, [videos, searchQuery, selectedSpeaker, selectedSeries]);
+  }, [videos, searchQuery, selectedSpeaker, selectedSeries, selectedLanguage]);
 
   const totalPages = Math.max(1, Math.ceil(filteredVideos.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
@@ -107,21 +118,82 @@ export default function VideosExplorer({
     setCurrentPage(1);
   };
 
+  const handleLanguageSelect = (lang: string) => {
+    setSelectedLanguage(lang);
+    setCurrentPage(1);
+  };
+
   const resetAllFilters = () => {
     setSearchQuery('');
     setSelectedSpeaker('All Speakers');
-    setSelectedSeries('All Series');
+    setSelectedSeries('All Playlists');
+    setSelectedLanguage('All Languages');
     setCurrentPage(1);
   };
 
   const hasActiveFilters =
     Boolean(searchQuery.trim()) ||
     selectedSpeaker !== 'All Speakers' ||
-    selectedSeries !== 'All Series';
+    selectedSeries !== 'All Playlists' ||
+    selectedLanguage !== 'All Languages';
 
   return (
-    <>
-      {/* Search & Filter Toolbar */}
+    <div className="space-y-4">
+      {/* 1. Categorization by 6 Languages Bar */}
+      <section className="bg-card border border-border rounded-xl p-3.5 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Globe className="w-4 h-4 text-tertiary shrink-0" />
+            <span className="text-xs font-bold text-primary uppercase tracking-wider">
+              Filter by Language:
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleLanguageSelect('All Languages')}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
+                selectedLanguage === 'All Languages'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'bg-muted/70 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/60'
+              }`}
+            >
+              All Languages ({videos.length})
+            </button>
+            {MINISTRY_LANGUAGES.map((lang) => {
+              const count = videos.filter((v) => v.language === lang).length;
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => handleLanguageSelect(lang)}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${
+                    selectedLanguage === lang
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-muted/70 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/60'
+                  }`}
+                >
+                  <span>{lang}</span>
+                  {count > 0 && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        selectedLanguage === lang
+                          ? 'bg-primary-foreground/20 text-primary-foreground'
+                          : 'bg-card text-muted-foreground border border-border/50'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Search & Playlist / Speaker Filter Toolbar */}
       <section className="bg-card border border-border rounded-xl p-4 shadow-sm">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -131,34 +203,38 @@ export default function VideosExplorer({
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder={searchPlaceholder || 'Search videos...'}
+                placeholder={searchPlaceholder || 'Search videos, playlists, languages...'}
                 className="w-full sm:w-72 pl-9 pr-4 py-2 text-xs rounded border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
               />
               <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
+            </div>
+
+            {/* Playlist / Series Filter Select */}
+            <div className="relative">
+              <select
+                value={selectedSeries}
+                onChange={handleSeriesChange}
+                aria-label="Filter by Playlist"
+                className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
+              >
+                {seriesOptions.map((ser) => (
+                  <option key={ser} value={ser}>
+                    {ser === 'All Playlists' ? 'All Playlists / Series' : `Playlist: ${ser}`}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Speaker Filter Select */}
             <select
               value={selectedSpeaker}
               onChange={handleSpeakerChange}
+              aria-label="Filter by Speaker"
               className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
             >
               {speakers.map((s) => (
                 <option key={s} value={s}>
                   {s}
-                </option>
-              ))}
-            </select>
-
-            {/* Series Filter Select */}
-            <select
-              value={selectedSeries}
-              onChange={handleSeriesChange}
-              className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
-            >
-              {seriesOptions.map((ser) => (
-                <option key={ser} value={ser}>
-                  {ser}
                 </option>
               ))}
             </select>
@@ -186,9 +262,27 @@ export default function VideosExplorer({
 
       {/* Video Grid Section */}
       <section className="space-y-6 pt-4">
-        <h3 className="text-xl font-heading font-bold text-primary border-b border-border pb-2">
-          {displayLecturesTitle}
-        </h3>
+        <div className="flex items-center justify-between border-b border-border pb-2">
+          <h3 className="text-xl font-heading font-bold text-primary flex items-center gap-2">
+            <ListVideo className="w-5 h-5 text-tertiary" />
+            <span>{displayLecturesTitle}</span>
+          </h3>
+          {(selectedLanguage !== 'All Languages' || selectedSeries !== 'All Playlists') && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Filtering by:</span>
+              {selectedLanguage !== 'All Languages' && (
+                <span className="px-2 py-0.5 bg-primary/10 text-primary font-bold rounded">
+                  {selectedLanguage}
+                </span>
+              )}
+              {selectedSeries !== 'All Playlists' && (
+                <span className="px-2 py-0.5 bg-tertiary/15 text-tertiary font-bold rounded">
+                  {selectedSeries}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {paginatedVideos.length > 0 ? (
@@ -201,7 +295,7 @@ export default function VideosExplorer({
                 No lecture videos match your criteria.
               </p>
               <p className="text-xs text-muted-foreground">
-                Try adjusting your search terms or clearing selected speaker and series filters.
+                Try selecting a different language, playlist, or clearing the search terms.
               </p>
               <button
                 type="button"
@@ -305,6 +399,6 @@ export default function VideosExplorer({
           </div>
         </nav>
       )}
-    </>
+    </div>
   );
 }

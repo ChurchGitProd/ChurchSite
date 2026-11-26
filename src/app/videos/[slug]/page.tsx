@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/home/AnnouncementBar';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowLeft, User, BookOpen, Clock, Calendar, VideoOff } from 'lucide-react';
-import { getYouTubeEmbedUrl } from '@/lib/youtube';
+import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl } from '@/lib/youtube';
 import { client } from '../../../../tina/__generated__/client';
 import { JsonLd, SITE_URL, absUrl } from '@/components/common/JsonLd';
 import { sanitizeImageUrl } from '@/lib/media';
@@ -40,11 +40,12 @@ export async function generateMetadata({
       relativePath: `${params.slug}.mdx`,
     });
     const d = res.data.video;
+    const ogImg = d?.thumbnail || getYouTubeThumbnailUrl(d?.videoUrl);
     return {
-        title: d?.title,
-        description: d?.description,
-        openGraph: d?.thumbnail ? { images: [absUrl(d.thumbnail) as string] } : undefined,
-      };
+      title: d?.title,
+      description: d?.description,
+      openGraph: ogImg ? { images: [absUrl(ogImg) as string] } : undefined,
+    };
   } catch {
     return {};
   }
@@ -164,7 +165,7 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
               /* Honest Archived Video Placeholder (no fake player or invented URL) */
               <div className="relative aspect-video w-full overflow-hidden bg-primary">
                 <img
-                  src={sanitizeImageUrl(video.thumbnail || fallbackThumbnail)}
+                  src={sanitizeImageUrl(video.thumbnail || getYouTubeThumbnailUrl(video.videoUrl) || fallbackThumbnail)}
                   alt={video.title}
                   className="w-full h-full object-cover opacity-60 filter blur-[1px]"
                 />
@@ -194,9 +195,16 @@ export default async function VideoDetailPage({ params }: VideoPageProps) {
           {/* Lecture Metadata Information */}
           <div className="p-6 sm:p-8 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest px-2.5 py-1 bg-tertiary/10 rounded">
-                {refTitle(video.series)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest px-2.5 py-1 bg-tertiary/10 rounded">
+                  {refTitle(video.series)}
+                </span>
+                {(video as any).language && (
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest px-2.5 py-1 bg-muted rounded border border-border">
+                    {(video as any).language}
+                  </span>
+                )}
+              </div>
               <span className="text-xs font-semibold text-primary px-2.5 py-0.5 border border-border rounded">
                 {video.scripture}
               </span>

@@ -37,6 +37,7 @@ export default async function Videos() {
       thumbnail: node.thumbnail,
       recordedDate: node.recordedDate,
       videoUrl: node.videoUrl,
+      language: (node as any).language || null,
     }));
 
   // Preserve canonical display order from the original HTML reference

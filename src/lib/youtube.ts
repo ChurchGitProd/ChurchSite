@@ -1,13 +1,18 @@
 /**
  * Safe YouTube URL utilities for SCRIPTURA Digital Library.
  * Enforces strict YouTube host validation, extracts canonical 11-char video IDs,
- * and generates privacy-enhanced embed URLs.
+ * and generates privacy-enhanced embed URLs and thumbnails.
  */
 
 export function extractYouTubeId(url?: string | null): string | null {
   if (!url || typeof url !== 'string') return null;
   const trimmed = url.trim();
   if (!trimmed) return null;
+
+  // Direct 11-character video ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    return trimmed;
+  }
 
   try {
     const parsed = new URL(trimmed);
@@ -51,6 +56,57 @@ export function extractYouTubeId(url?: string | null): string | null {
 }
 
 /**
+ * Extracts a YouTube playlist ID from a URL or raw ID string.
+ * Supports standard URLs (e.g. https://www.youtube.com/playlist?list=PL...),
+ * watch URLs with &list=, youtu.be?list=, and direct IDs (e.g. PL...).
+ */
+export function extractYouTubePlaylistId(url?: string | null): string | null {
+  if (!url || typeof url !== 'string') return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  // Direct playlist ID format (typically starts with PL, UU, LL, FL, RD, etc. and is 12+ chars)
+  if (/^(?:PL|UU|LL|FL|RD|OLAK5uy_)[a-zA-Z0-9_-]{10,}$/.test(trimmed)) {
+    return trimmed;
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    const hostname = parsed.hostname.toLowerCase();
+    const isYouTubeHost =
+      hostname === 'youtube.com' ||
+      hostname.endsWith('.youtube.com') ||
+      hostname === 'youtu.be' ||
+      hostname === 'youtube-nocookie.com' ||
+      hostname.endsWith('.youtube-nocookie.com');
+
+    if (!isYouTubeHost) return null;
+
+    const listParam = parsed.searchParams.get('list');
+    if (listParam && /^[a-zA-Z0-9_-]{10,}$/.test(listParam)) {
+      return listParam;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Returns a high-quality direct YouTube thumbnail URL for a given video URL or ID.
+ * Returns null if the URL or video ID is invalid.
+ */
+export function getYouTubeThumbnailUrl(
+  url?: string | null,
+  quality: 'hq' | 'maxres' = 'hq'
+): string | null {
+  const videoId = extractYouTubeId(url);
+  if (!videoId) return null;
+  return `https://img.youtube.com/vi/${videoId}/${quality === 'maxres' ? 'maxresdefault.jpg' : 'hqdefault.jpg'}`;
+}
+
+/**
  * Generates an official, privacy-enhanced YouTube embed URL from an editor-supplied URL.
  * Returns null if the URL is missing, invalid, or belongs to an unauthorized domain.
  */
@@ -83,4 +139,5 @@ export function formatIsoDuration(iso?: string | null): string | null {
   }
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
+
 

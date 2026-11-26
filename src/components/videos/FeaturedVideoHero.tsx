@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Play, VideoOff } from 'lucide-react';
-import { getYouTubeEmbedUrl } from '@/lib/youtube';
+import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl } from '@/lib/youtube';
 import { sanitizeImageUrl } from '@/lib/media';
 
 interface FeaturedVideoData {
@@ -39,7 +39,10 @@ export default function FeaturedVideoHero({ data }: FeaturedVideoHeroProps) {
 
   const fallbackThumbnail =
     'https://uxmagic.blob.core.windows.net/public/agent-images/library_shelf-1782719371570-ajnz70oz8sg.png';
-  const coverImage = data?.coverImage || fallbackThumbnail;
+  const coverImage =
+    data?.coverImage ||
+    getYouTubeThumbnailUrl(data?.videoUrl) ||
+    fallbackThumbnail;
 
   const handlePlayAction = () => {
     if (embedUrl) {

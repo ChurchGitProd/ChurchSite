@@ -14,6 +14,8 @@ export interface FeaturedVideoItem {
   description?: string | null;
   duration?: string | null;
   thumbnail?: string | null;
+  videoUrl?: string | null;
+  language?: string | null;
 }
 
 export interface FeaturedVideoNode {
@@ -23,6 +25,8 @@ export interface FeaturedVideoNode {
   description?: string | null;
   duration?: string | null;
   thumbnail?: string | null;
+  videoUrl?: string | null;
+  language?: string | null;
   recordedDate?: string | null;
   featured?: string | null;
   featuredPosition?: string | null;
@@ -47,5 +51,7 @@ export function resolveFeaturedVideos(
     description: node.description,
     duration: node.duration,
     thumbnail: node.thumbnail,
+    videoUrl: node.videoUrl,
+    language: node.language,
   }));
 }
