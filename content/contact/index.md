@@ -4,10 +4,7 @@ announcementSubtext: Join our next live Zoom Seminar this Thursday
 hero:
   badge: Get in Touch
   headline: Contact Our Office
-  subheadline: >-
-    We welcome your questions, feedback, and partnership inquiries. Whether
-    you're seeking theological resources, interested in our research programs,
-    or wish to support our mission, our team is here to assist you.
+  subheadline: 'We welcome your questions, feedback, and partnership inquiries. Whether you''re seeking theological resources, interested in our research programs, or wish to support our mission, our team is here to assist you.'
 emailCard:
   title: Email Us
   description: For general inquiries and support
@@ -19,7 +16,7 @@ phoneCard:
 locationCard:
   title: Visit Us
   description: Our main office location
-  address: '123 Theology Lane, Scholar''s Quarter, ST 40012'
+  address: '#1, "Bethesda", 1st Cross, Janani Enclave, Andrahalli Main Rd, Karihobanahalli, Thigalarapalya, Bengaluru, Karnataka 560058'
 officeHours:
   title: Office Hours
   weekdayHours: '9:00 AM - 5:00 PM'
@@ -27,21 +24,14 @@ officeHours:
   sundayHours: Closed
   note: Holiday hours may vary. Check our announcements for any schedule changes.
 mapLocation:
-  embedCode: >-
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d687.1858526283827!2d77.48005902155039!3d13.015906903256017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d8e9266f50d%3A0x19042fa105a12bb6!2sRaju%20%2F%20Usha%20%2F%20Joshua%20Kevin%20house!5e0!3m2!1sen!2sin!4v1794237427695!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  embedCode: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d687.1858526283827!2d77.48005902155039!3d13.015906903256017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d8e9266f50d%3A0x19042fa105a12bb6!2sRaju%20%2F%20Usha%20%2F%20Joshua%20Kevin%20house!5e0!3m2!1sen!2sin!4v1794237427695!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>'
   address: '45 , subramaninagar , chinnavedampatti , coimbatore - 641049'
   addressText: '123 Theology Lane, Scholar''s Quarter, ST 40012'
 additionalInfo:
   title: Additional Information
   items:
-    - >-
-      For urgent matters outside office hours, please email us and we'll respond
-      the next business day.
-    - >-
-      Researchers and scholars interested in accessing our archives should
-      contact us at least 2 weeks in advance.
-    - >-
-      Donation inquiries can be directed to our development team via the main
-      contact form.
+    - 'For urgent matters outside office hours, please email us and we''ll respond the next business day.'
+    - Researchers and scholars interested in accessing our archives should contact us at least 2 weeks in advance.
+    - Donation inquiries can be directed to our development team via the main contact form.
 ---
 
