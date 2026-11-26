@@ -1501,7 +1501,7 @@ export function setupAdminEnhancements() {
             <span>▶</span> Import YouTube Playlist
           </h3>
           <p style="margin: 0; font-size: 12px; color: #dfbe87; line-height: 1.4;">
-            Automatically imports all videos, durations, and thumbnails from a YouTube playlist into your website.
+            Automatically creates a dedicated folder for this playlist and generates all video records inside it.
           </p>
           <button id="close-playlist-modal-btn" type="button" style="
             position: absolute;
@@ -1549,7 +1549,7 @@ export function setupAdminEnhancements() {
 
             <div>
               <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
-                Playlist / Series Name <span style="font-weight: 400; color: #64748b;">(Optional)</span>
+                Playlist Name <span style="font-weight: 400; color: #64748b;">(Optional)</span>
               </label>
               <input
                 type="text"
@@ -1690,10 +1690,13 @@ export function setupAdminEnhancements() {
           statusDiv.style.backgroundColor = '#f0fdf4';
           statusDiv.style.color = '#15803d';
           statusDiv.style.border = '1px solid #bbf7d0';
-          statusDiv.textContent = `🎉 Success! Imported ${data.importedCount} videos into "${data.playlistName}". Reloading...`;
+          statusDiv.textContent = `🎉 Success! Created playlist folder "${data.folder || data.playlistName}" with ${data.importedCount} videos. Opening folder...`;
 
           setTimeout(() => {
             closeModal();
+            if (data.folder) {
+              window.location.hash = `#/collections/video/~${data.folder}`;
+            }
             window.location.reload();
           }, 1500);
         } else {

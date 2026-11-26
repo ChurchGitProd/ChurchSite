@@ -19,23 +19,14 @@ export default function VideosExplorer({
   lecturesTitle,
 }: VideosExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSpeaker, setSelectedSpeaker] = useState('All Speakers');
-  const [selectedSeries, setSelectedSeries] = useState('All Playlists');
+  const [selectedPlaylist, setSelectedPlaylist] = useState('All Playlists');
   const [selectedLanguage, setSelectedLanguage] = useState('All Languages');
   const [currentPage, setCurrentPage] = useState(1);
 
   const displayLecturesTitle = lecturesTitle || 'All Lectures & Seminars';
 
-  // Filter options are derived from the videos themselves so new series and
-  // speakers added in the CMS appear here automatically.
-  const speakers = useMemo(
-    () => [
-      'All Speakers',
-      ...Array.from(new Set(videos.map((v) => v.speaker).filter(Boolean))).sort(),
-    ],
-    [videos]
-  );
-  const seriesOptions = useMemo(
+  // Playlist options derived dynamically from videos
+  const playlistOptions = useMemo(
     () => [
       'All Playlists',
       ...Array.from(new Set(videos.map((v) => v.series).filter(Boolean))).sort(),
@@ -43,7 +34,7 @@ export default function VideosExplorer({
     [videos]
   );
 
-  // Filter videos based on search, language, playlist, and speaker
+  // Filter videos based on search, playlist, and language
   const filteredVideos = useMemo(() => {
     return videos.filter((item) => {
       // 1. Language Filter
@@ -53,21 +44,26 @@ export default function VideosExplorer({
         }
       }
 
-      // 2. Search Query
+      // 2. Playlist Filter
+      if (selectedPlaylist !== 'All Playlists') {
+        if (item.series !== selectedPlaylist) {
+          return false;
+        }
+      }
+
+      // 3. Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesTitle = item.title.toLowerCase().includes(q);
-        const matchesSpeaker = item.speaker.toLowerCase().includes(q);
         const matchesScripture = item.scripture.toLowerCase().includes(q);
-        const matchesSeries = item.series.toLowerCase().includes(q);
+        const matchesPlaylist = item.series.toLowerCase().includes(q);
         const matchesDescription = item.description.toLowerCase().includes(q);
         const matchesLanguage = item.language ? item.language.toLowerCase().includes(q) : false;
 
         if (
           !matchesTitle &&
-          !matchesSpeaker &&
           !matchesScripture &&
-          !matchesSeries &&
+          !matchesPlaylist &&
           !matchesDescription &&
           !matchesLanguage
         ) {
@@ -75,23 +71,9 @@ export default function VideosExplorer({
         }
       }
 
-      // 3. Speaker Filter
-      if (selectedSpeaker !== 'All Speakers') {
-        if (item.speaker !== selectedSpeaker) {
-          return false;
-        }
-      }
-
-      // 4. Playlist / Series Filter
-      if (selectedSeries !== 'All Playlists') {
-        if (item.series !== selectedSeries) {
-          return false;
-        }
-      }
-
       return true;
     });
-  }, [videos, searchQuery, selectedSpeaker, selectedSeries, selectedLanguage]);
+  }, [videos, searchQuery, selectedPlaylist, selectedLanguage]);
 
   const totalPages = Math.max(1, Math.ceil(filteredVideos.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
@@ -108,13 +90,13 @@ export default function VideosExplorer({
     setCurrentPage(1);
   };
 
-  const handleSpeakerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSpeaker(e.target.value);
+  const handlePlaylistChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPlaylist(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleSeriesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSeries(e.target.value);
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(e.target.value);
     setCurrentPage(1);
   };
 
@@ -125,16 +107,14 @@ export default function VideosExplorer({
 
   const resetAllFilters = () => {
     setSearchQuery('');
-    setSelectedSpeaker('All Speakers');
-    setSelectedSeries('All Playlists');
+    setSelectedPlaylist('All Playlists');
     setSelectedLanguage('All Languages');
     setCurrentPage(1);
   };
 
   const hasActiveFilters =
     Boolean(searchQuery.trim()) ||
-    selectedSpeaker !== 'All Speakers' ||
-    selectedSeries !== 'All Playlists' ||
+    selectedPlaylist !== 'All Playlists' ||
     selectedLanguage !== 'All Languages';
 
   return (
@@ -209,35 +189,38 @@ export default function VideosExplorer({
               <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
             </div>
 
-            {/* Playlist / Series Filter Select */}
+            {/* 1. Playlist Filter Dropdown */}
             <div className="relative">
               <select
-                value={selectedSeries}
-                onChange={handleSeriesChange}
+                value={selectedPlaylist}
+                onChange={handlePlaylistChange}
                 aria-label="Filter by Playlist"
                 className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
               >
-                {seriesOptions.map((ser) => (
-                  <option key={ser} value={ser}>
-                    {ser === 'All Playlists' ? 'All Playlists / Series' : `Playlist: ${ser}`}
+                {playlistOptions.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Speaker Filter Select */}
-            <select
-              value={selectedSpeaker}
-              onChange={handleSpeakerChange}
-              aria-label="Filter by Speaker"
-              className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
-            >
-              {speakers.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+            {/* 2. Language Filter Dropdown */}
+            <div className="relative">
+              <select
+                value={selectedLanguage}
+                onChange={handleLanguageChange}
+                aria-label="Filter by Language"
+                className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
+              >
+                <option value="All Languages">All Languages</option>
+                {MINISTRY_LANGUAGES.map((lang) => (
+                  <option key={lang} value={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Clear Filters Button */}
             {hasActiveFilters && (
@@ -267,7 +250,7 @@ export default function VideosExplorer({
             <ListVideo className="w-5 h-5 text-tertiary" />
             <span>{displayLecturesTitle}</span>
           </h3>
-          {(selectedLanguage !== 'All Languages' || selectedSeries !== 'All Playlists') && (
+          {(selectedLanguage !== 'All Languages' || selectedPlaylist !== 'All Playlists') && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>Filtering by:</span>
               {selectedLanguage !== 'All Languages' && (
@@ -275,9 +258,9 @@ export default function VideosExplorer({
                   {selectedLanguage}
                 </span>
               )}
-              {selectedSeries !== 'All Playlists' && (
+              {selectedPlaylist !== 'All Playlists' && (
                 <span className="px-2 py-0.5 bg-tertiary/15 text-tertiary font-bold rounded">
-                  {selectedSeries}
+                  {selectedPlaylist}
                 </span>
               )}
             </div>

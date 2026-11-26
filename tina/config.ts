@@ -520,7 +520,7 @@ export default defineConfig({
         path: "content/videos",
         format: "mdx",
         match: {
-          include: "*",
+          include: "**/*",
           exclude: "index",
         },
         ui: {
@@ -545,11 +545,11 @@ export default defineConfig({
           {
             type: "reference",
             name: "series",
-            label: "Series / Playlist",
+            label: "Playlist",
             collections: ["series"],
             required: true,
             description:
-              "Pick the video's playlist/series. To add or remove options, open the 'Video Series' collection in the left sidebar and create or delete a series.",
+              "Pick which playlist this video belongs to. To manage playlists, open 'Playlists' in the sidebar.",
           },
           {
             type: "string",
@@ -638,17 +638,17 @@ export default defineConfig({
       },
       {
         name: "series",
-        label: "Video Series",
+        label: "Playlists",
         path: "content/video-series",
         format: "md",
         fields: [
           {
             type: "string",
             name: "title",
-            label: "Series Name",
+            label: "Playlist Name",
             required: true,
             description:
-              "Shown as the small tag on video cards, e.g. 'Hermeneutics Series'.",
+              "Shown as the tag on video cards, e.g. 'Daily Heavenly Manna Nepali'.",
           },
           {
             type: "string",

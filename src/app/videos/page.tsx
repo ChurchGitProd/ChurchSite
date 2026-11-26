@@ -27,7 +27,7 @@ export default async function Videos() {
     .map((edge) => edge?.node)
     .filter((node): node is NonNullable<typeof node> => Boolean(node))
     .map((node) => ({
-      slug: node._sys.filename,
+      slug: node._sys.relativePath.replace(/\.mdx?$/, ''),
       title: node.title,
       series: refTitle(node.series),
       speaker: refTitle(node.speaker),
@@ -47,8 +47,10 @@ export default async function Videos() {
     'the-abrahamic-promise-explored',
   ];
   allVideos.sort((a, b) => {
-    const idxA = canonicalOrder.indexOf(a.slug);
-    const idxB = canonicalOrder.indexOf(b.slug);
+    const leafA = a.slug.split('/').pop() || a.slug;
+    const leafB = b.slug.split('/').pop() || b.slug;
+    const idxA = canonicalOrder.indexOf(leafA);
+    const idxB = canonicalOrder.indexOf(leafB);
     if (idxA !== -1 && idxB !== -1) return idxA - idxB;
     if (idxA !== -1) return -1;
     if (idxB !== -1) return 1;

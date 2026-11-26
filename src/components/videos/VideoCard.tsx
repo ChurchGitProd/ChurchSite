@@ -77,7 +77,7 @@ export default function VideoCard({ video }: VideoCardProps) {
 
         <div className="pt-3 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="font-semibold text-primary">
-            {video.speaker} <span className="text-border">|</span> {video.scripture}
+            {video.scripture}
           </span>
           <Link
             href={`/videos/${video.slug}`}

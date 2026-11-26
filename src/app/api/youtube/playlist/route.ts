@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import dns from 'dns';
 import { extractYouTubePlaylistId, formatIsoDuration } from '@/lib/youtube';
+
+// Prioritize IPv4 to avoid Undici IPv6 connect timeouts on Windows networks
+if (typeof dns.setDefaultResultOrder === 'function') {
+  try {
+    dns.setDefaultResultOrder('ipv4first');
+  } catch {
+    // Ignore
+  }
+}
 
 interface ExtractedVideo {
   id: string;
@@ -290,12 +300,13 @@ bio: Proclaiming the Gospel and biblical truth through scripture lessons, teachi
       'Add Jesus Loves Ministry speaker profile'
     );
 
-    // 6. Create Video MDX Documents
-    const importedVideos: { slug: string; title: string; videoUrl: string }[] = [];
-    const videosDir = path.join(process.cwd(), 'content', 'videos');
+    // 6. Create Video MDX Documents inside the Playlist Folder
+    const importedVideos: { slug: string; title: string; videoUrl: string; folder: string }[] = [];
+    const playlistFolder = seriesSlug;
+    const playlistDir = path.join(process.cwd(), 'content', 'videos', playlistFolder);
     try {
-      if (!fs.existsSync(videosDir)) {
-        fs.mkdirSync(videosDir, { recursive: true });
+      if (!fs.existsSync(playlistDir)) {
+        fs.mkdirSync(playlistDir, { recursive: true });
       }
     } catch {
       // Non-blocking
@@ -312,8 +323,8 @@ bio: Proclaiming the Gospel and biblical truth through scripture lessons, teachi
       }
 
       const filename = `${videoSlug}.mdx`;
-      const diskPath = path.join(videosDir, filename);
-      const relPath = `content/videos/${filename}`;
+      const diskPath = path.join(playlistDir, filename);
+      const relPath = `content/videos/${playlistFolder}/${filename}`;
 
       const videoMdx = `---
 title: "${cleanYamlString(v.title)}"
@@ -345,9 +356,10 @@ Video presentation from the **${cleanYamlString(resolvedTitle)}** playlist.
       );
 
       importedVideos.push({
-        slug: videoSlug,
+        slug: `${playlistFolder}/${videoSlug}`,
         title: v.title,
         videoUrl: v.videoUrl,
+        folder: playlistFolder,
       });
     }
 
@@ -355,6 +367,7 @@ Video presentation from the **${cleanYamlString(resolvedTitle)}** playlist.
       success: true,
       importedCount: importedVideos.length,
       playlistName: resolvedTitle,
+      folder: playlistFolder,
       seriesSlug,
       language: cleanLang || null,
       videos: importedVideos,

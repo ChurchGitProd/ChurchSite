@@ -13,8 +13,14 @@ import { refTitle, formatRecordedDate } from '@/lib/featuredVideos';
 
 interface VideoPageProps {
   params: {
-    slug: string;
+    slug: string[] | string;
   };
+}
+
+function resolveRelativePath(slug: string[] | string): string {
+  const parts = Array.isArray(slug) ? slug : [slug];
+  const joined = parts.join('/');
+  return joined.endsWith('.mdx') ? joined : `${joined}.mdx`;
 }
 
 export async function generateStaticParams() {
@@ -22,9 +28,13 @@ export async function generateStaticParams() {
     const res = await client.queries.videoConnection();
     const edges = res.data.videoConnection.edges || [];
     return edges
-      .map((edge) => edge?.node?._sys.filename)
-      .filter((filename): filename is string => Boolean(filename))
-      .map((slug) => ({ slug }));
+      .map((edge) => {
+        const rel = edge?.node?._sys.relativePath;
+        if (!rel) return null;
+        const slug = rel.replace(/\.mdx?$/, '').split('/');
+        return { slug };
+      })
+      .filter((item): item is { slug: string[] } => Boolean(item));
   } catch {
     return [];
   }
@@ -33,13 +43,31 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string[] | string };
 }) {
   try {
-    const res = await client.queries.video({
-      relativePath: `${params.slug}.mdx`,
-    });
-    const d = res.data.video;
+    const relPath = resolveRelativePath(params.slug);
+    let d: any;
+    try {
+      const res = await client.queries.video({
+        relativePath: relPath,
+      });
+      d = res.data.video;
+    } catch {
+      const targetFilename = Array.isArray(params.slug)
+        ? params.slug[params.slug.length - 1]
+        : params.slug;
+      const conn = await client.queries.videoConnection();
+      const match = conn.data.videoConnection.edges?.find(
+        (e) => e?.node?._sys.filename === targetFilename
+      );
+      if (match?.node?._sys.relativePath) {
+        const res = await client.queries.video({
+          relativePath: match.node._sys.relativePath,
+        });
+        d = res.data.video;
+      }
+    }
     const ogImg = d?.thumbnail || getYouTubeThumbnailUrl(d?.videoUrl);
     return {
       title: d?.title,
@@ -54,13 +82,34 @@ export async function generateMetadata({
 export default async function VideoDetailPage({ params }: VideoPageProps) {
   let videoRes;
   let pageRes;
+  const relPath = resolveRelativePath(params.slug);
 
   try {
     [videoRes, pageRes] = await Promise.all([
-      client.queries.video(
-        { relativePath: `${params.slug}.mdx` },
-        { fetchOptions: { cache: 'no-store' } }
-      ),
+      client.queries
+        .video(
+          { relativePath: relPath },
+          { fetchOptions: { cache: 'no-store' } }
+        )
+        .catch(async () => {
+          const targetFilename = Array.isArray(params.slug)
+            ? params.slug[params.slug.length - 1]
+            : params.slug;
+          const conn = await client.queries.videoConnection(
+            {},
+            { fetchOptions: { cache: 'no-store' } }
+          );
+          const match = conn.data.videoConnection.edges?.find(
+            (e) => e?.node?._sys.filename === targetFilename
+          );
+          if (match?.node?._sys.relativePath) {
+            return client.queries.video(
+              { relativePath: match.node._sys.relativePath },
+              { fetchOptions: { cache: 'no-store' } }
+            );
+          }
+          throw new Error('Video not found');
+        }),
       client.queries.videos(
         { relativePath: 'index.md' },
         { fetchOptions: { cache: 'no-store' } }
