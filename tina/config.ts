@@ -1,6 +1,7 @@
 import { defineConfig } from "tinacms";
 import { scripturaCmsCallback, nextFreeScriptureDay } from "./adminCustomizer";
 import YouTubeUrlField from "./components/YouTubeUrlField";
+import LanguageField from "./components/LanguageField";
 
 // Validation helper ensuring uploaded/selected document has .pdf extension
 const validatePdfField = (val?: string) => {
@@ -555,8 +556,10 @@ export default defineConfig({
             type: "string",
             name: "language",
             label: "Language",
-            options: ["Kannada", "English", "Tamil", "Telugu", "Hindi", "Malayalam"],
-            description: "Select the primary language of this video (Kannada, English, Tamil, Telugu, Hindi, Malayalam).",
+            ui: {
+              component: LanguageField,
+            },
+            description: "Select from suggestions or type any custom language (e.g. Nepali, Kannada, etc.).",
           },
           {
             type: "reference",

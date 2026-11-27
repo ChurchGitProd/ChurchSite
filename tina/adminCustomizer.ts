@@ -1571,8 +1571,11 @@ export function setupAdminEnhancements() {
               <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
                 Language <span style="font-weight: 400; color: #64748b;">(Optional)</span>
               </label>
-              <select
+              <input
+                type="text"
+                list="playlist-modal-languages-list"
                 id="playlist-lang-input"
+                placeholder="Select suggestion or type any language (e.g. Nepali, Kannada...)"
                 style="
                   width: 100%;
                   padding: 10px 12px;
@@ -1582,19 +1585,19 @@ export function setupAdminEnhancements() {
                   box-sizing: border-box;
                   outline: none;
                   background: #ffffff;
-                  cursor: pointer;
                 "
-              >
-                <option value="">-- No Language Tag (Optional) --</option>
-                <option value="Kannada">Kannada</option>
-                <option value="English">English</option>
-                <option value="Tamil">Tamil</option>
-                <option value="Telugu">Telugu</option>
-                <option value="Hindi">Hindi</option>
-                <option value="Malayalam">Malayalam</option>
-              </select>
+              />
+              <datalist id="playlist-modal-languages-list">
+                <option value="Nepali">
+                <option value="Kannada">
+                <option value="English">
+                <option value="Tamil">
+                <option value="Telugu">
+                <option value="Hindi">
+                <option value="Malayalam">
+              </datalist>
               <span style="display: block; font-size: 11px; color: #64748b; margin-top: 4px;">
-                Used for language category filter on the website.
+                Select from suggestions or type any custom language. Leave blank to auto-detect from title.
               </span>
             </div>
 

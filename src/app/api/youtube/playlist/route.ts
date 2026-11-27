@@ -35,6 +35,22 @@ function cleanYamlString(str: string): string {
 }
 
 /**
+ * Auto-detects language from playlist or video title in English or native script
+ */
+function detectLanguageFromText(text?: string | null): string | null {
+  if (!text || typeof text !== 'string') return null;
+  const lower = text.toLowerCase();
+  if (lower.includes('nepali') || text.includes('नेपाली')) return 'Nepali';
+  if (lower.includes('kannada') || text.includes('ಕನ್ನಡ')) return 'Kannada';
+  if (lower.includes('tamil') || text.includes('தமிழ்')) return 'Tamil';
+  if (lower.includes('telugu') || text.includes('తెలుగు')) return 'Telugu';
+  if (lower.includes('hindi') || text.includes('हिंदी') || text.includes('हिन्दी')) return 'Hindi';
+  if (lower.includes('malayalam') || text.includes('മലയാളം')) return 'Malayalam';
+  if (lower.includes('english')) return 'English';
+  return null;
+}
+
+/**
  * Commits a file to GitHub repository if GITHUB_TOKEN is available.
  */
 async function commitToGitHubIfConfigured(
@@ -313,10 +329,17 @@ bio: Proclaiming the Gospel and biblical truth through scripture lessons, teachi
     }
 
     const recordedDate = new Date().toISOString();
-    const cleanLang = (language || '').trim();
+    let defaultLang = (language || '').trim();
+    if (!defaultLang) {
+      defaultLang =
+        detectLanguageFromText(resolvedTitle) ||
+        detectLanguageFromText(extractedVideos[0]?.title || '') ||
+        '';
+    }
 
     for (let index = 0; index < extractedVideos.length; index++) {
       const v = extractedVideos[index];
+      const videoLang = defaultLang || detectLanguageFromText(v.title) || '';
       let videoSlug = slugify(v.title);
       if (!videoSlug || videoSlug.length < 3) {
         videoSlug = `video-${v.id}`;
@@ -335,7 +358,7 @@ duration: '${v.duration}'
 recordedDate: ${recordedDate}
 description: "${cleanYamlString(v.title)}"
 thumbnail: '${v.thumbnail}'
-videoUrl: '${v.videoUrl}'${cleanLang ? `\nlanguage: ${cleanLang}` : ''}
+videoUrl: '${v.videoUrl}'${videoLang ? `\nlanguage: ${videoLang}` : ''}
 ---
 
 ## ${v.title}
@@ -369,7 +392,7 @@ Video presentation from the **${cleanYamlString(resolvedTitle)}** playlist.
       playlistName: resolvedTitle,
       folder: playlistFolder,
       seriesSlug,
-      language: cleanLang || null,
+      language: defaultLang || null,
       videos: importedVideos,
     });
   } catch (error: any) {

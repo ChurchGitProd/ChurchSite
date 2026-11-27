@@ -11,7 +11,15 @@ interface VideosExplorerProps {
 }
 
 const ITEMS_PER_PAGE = 6;
-const MINISTRY_LANGUAGES = ['Kannada', 'English', 'Tamil', 'Telugu', 'Hindi', 'Malayalam'] as const;
+const BASE_MINISTRY_LANGUAGES = [
+  'Nepali',
+  'Kannada',
+  'English',
+  'Tamil',
+  'Telugu',
+  'Hindi',
+  'Malayalam',
+] as const;
 
 export default function VideosExplorer({
   videos,
@@ -33,6 +41,12 @@ export default function VideosExplorer({
     ],
     [videos]
   );
+
+  // Available languages dynamically derived from base list + whatever languages exist in videos
+  const availableLanguages = useMemo(() => {
+    const fromVideos = videos.map((v) => v.language).filter(Boolean) as string[];
+    return Array.from(new Set([...BASE_MINISTRY_LANGUAGES, ...fromVideos])).filter(Boolean);
+  }, [videos]);
 
   // Filter videos based on search, playlist, and language
   const filteredVideos = useMemo(() => {
@@ -141,7 +155,7 @@ export default function VideosExplorer({
             >
               All Languages ({videos.length})
             </button>
-            {MINISTRY_LANGUAGES.map((lang) => {
+            {availableLanguages.map((lang) => {
               const count = videos.filter((v) => v.language === lang).length;
               return (
                 <button
@@ -214,7 +228,7 @@ export default function VideosExplorer({
                 className="px-3 py-2 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
               >
                 <option value="All Languages">All Languages</option>
-                {MINISTRY_LANGUAGES.map((lang) => (
+                {availableLanguages.map((lang) => (
                   <option key={lang} value={lang}>
                     {lang}
                   </option>
